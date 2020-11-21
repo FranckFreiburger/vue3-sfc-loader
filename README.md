@@ -3,11 +3,6 @@ Vue3 Single File Component loader
 
 Quick example ...
 ```html
-# vue3-sfc-loader
-Vue3 Single File Component loader
-
-Quick example ...
-```js
 <!DOCTYPE html>
 <html>
 <body>
