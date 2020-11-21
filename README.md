@@ -1,9 +1,8 @@
 # vue3-sfc-loader
 Vue3 Single File Component loader
 
-quick example
-```
-
+Quick example ...
+```js
 <!DOCTYPE html>
 <html>
 <body>
