@@ -144,7 +144,7 @@ ${ pkg.name }
 				} : {},
 
 				...isProd ? {
-					'debug': Path.resolve(__dirname, 'dummyDebug.mjs'),
+					'debug': Path.resolve(__dirname, 'noopDebug.mjs'),
 				} : {},
 			},
 
