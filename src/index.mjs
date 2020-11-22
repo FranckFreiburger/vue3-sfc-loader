@@ -224,7 +224,7 @@ async function createJSModule(source, moduleSourceType, filename, options) {
 }
 
 
-export async function createSFCModule(source, filename, options) {
+async function createSFCModule(source, filename, options) {
 
 	const { moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [] } = options;
 
