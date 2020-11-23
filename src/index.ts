@@ -4,10 +4,11 @@ import { createHash } from 'crypto'
 // astexplorer: https://astexplorer.net/
 // babel-core doc: https://babeljs.io/docs/en/babel-core
 
-import * as t from '@babel/types';
-
 import {
-	transformFromAstAsync as babel_transformFromAstAsync
+	transformFromAstAsync as babel_transformFromAstAsync,
+	traverse,
+	NodePath,
+	types as t
 } from '@babel/core';
 
 import {
@@ -15,12 +16,6 @@ import {
 	ParserPlugin as babel_ParserPlugin
 } from '@babel/parser';
 
-//import babel_traverse from '@babel/traverse';
-//const { 'default': babel_traverse } : { default: any } = babel_babelTraverse;
-//import { NodePath } from '@babel/traverse';
-
-import traverse from '@babel/traverse';
-import { NodePath } from '@babel/traverse';
 
 // @ts-ignore
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
@@ -58,12 +53,12 @@ interface Cache {
 interface Options {
 	// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
 	moduleCache: Record<string, Module>,
-	additionalBabelPlugins: any[],
-	additionalModuleHandlers: Record<string, ModuleHandler>,
-	compiledCache: Cache,
-	addStyle(style : string, scopeId : string) : void,
-	log(type : string, ...data : any[]) : void,
 	getFile(path : string) : Promise<string>,
+	addStyle(style : string, scopeId : string) : void,
+	additionalBabelPlugins?: any[],
+	additionalModuleHandlers?: Record<string, ModuleHandler>,
+	compiledCache?: Cache,
+	log?(type : string, ...data : any[]) : void,
 }
 
 interface Module {
@@ -99,8 +94,6 @@ function interopRequireDefault(obj : any) : any {
 // node types: https://babeljs.io/docs/en/babel-types
 // handbook: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md
 
-
-//type CallValue = t.CallExpression["arguments"][0];
 
 // import is a reserved keyword, then rename
 function renameDynamicImport(fileAst : t.File) : void {
