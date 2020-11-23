@@ -25,7 +25,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 	return {
 		entry: [
 			'regenerator-runtime',
-			Path.resolve(__dirname, '../src/index.mjs'),
+			Path.resolve(__dirname, '../src/index.ts'),
 		],
 
 		output: {
@@ -165,13 +165,16 @@ ${ pkg.name }
 		module: {
 			rules: [
 				{
-					test: /\.tsx?$/,
+					test: /\.ts$/,
 					use: {
 						loader: 'ts-loader',
 						options: {
 							// doc: https://github.com/TypeStrong/ts-loader#loader-options
 							configFile: Path.resolve(__dirname, 'tsconfig.json'),
 							onlyCompileBundledFiles: true,
+							compilerOptions: {
+								sourceMap: false,
+							}
 						}
 					}
 				},

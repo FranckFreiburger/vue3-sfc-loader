@@ -11,12 +11,18 @@ import {
 } from '@babel/core';
 
 import {
-	parse as babel_parse
+	parse as babel_parse,
+	ParserPlugin as babel_ParserPlugin
 } from '@babel/parser';
 
-import babel_babelTraverse from '@babel/traverse';
-const { 'default': babel_traverse } = babel_babelTraverse;
+//import babel_traverse from '@babel/traverse';
+//const { 'default': babel_traverse } : { default: any } = babel_babelTraverse;
+//import { NodePath } from '@babel/traverse';
 
+import traverse from '@babel/traverse';
+import { NodePath } from '@babel/traverse';
+
+// @ts-ignore
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
 // compiler-sfc src: https://github.com/vuejs/vue-next/blob/master/packages/compiler-sfc/src/index.ts#L1
@@ -34,14 +40,47 @@ import {
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
 
+interface ValueFactoryApi {
+	preventCache() : void,
+}
+
+interface ValueFactory {
+	(api : ValueFactoryApi): Promise<any>;
+}
+
+interface Cache {
+	get(key : string) : string,
+	set(key : string, value : string) : void,
+}
+
+interface Options {
+	// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
+	moduleCache: Record<string, Module>,
+	additionalBabelPlugins: any[],
+	additionalModuleHandlers: Record<string, ModuleHandler>,
+	compiledCache: Cache,
+	addStyle(style : string, scopeId : string) : void,
+	log(type : string, ...data : any[]) : void,
+	getFile(path : string) : Promise<string>,
+}
+
+interface Module {
+}
+
+interface ModuleHandler {
+	(source : string, path : string, options : Options) : Promise<Module>;
+}
+
+
+
 // config (see DefinePlugin)
-const genSourcemap = !!process.env.GEN_SOURCEMAP;
-const version = process.env.VERSION;
+const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
+const version : string = process.env.VERSION;
 
 
 // tools
 
-function hash(...valueList) {
+function hash(...valueList : any[]) : string {
 
 	const hashInstance = createHash('md5');
 	for ( const val of valueList )
@@ -50,7 +89,7 @@ function hash(...valueList) {
 }
 
 
-function interopRequireDefault(obj) {
+function interopRequireDefault(obj : any) : any {
 
   return obj && obj.__esModule ? obj : { default: obj };
 }
@@ -58,11 +97,14 @@ function interopRequireDefault(obj) {
 // node types: https://babeljs.io/docs/en/babel-types
 // handbook: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md
 
-// import is a reserved keyword, then rename
-function renameDynamicImport(fileAst) {
 
-	babel_traverse(fileAst, {
-		CallExpression(path) {
+//type CallValue = t.CallExpression["arguments"][0];
+
+// import is a reserved keyword, then rename
+function renameDynamicImport(fileAst : t.File) : void {
+
+	traverse(fileAst, {
+		CallExpression(path : NodePath<t.CallExpression>) {
 
 			if ( path.node.callee.type === 'Import' )
 				path.replaceWith(t.callExpression(t.identifier('import_'), path.node.arguments))
@@ -71,19 +113,26 @@ function renameDynamicImport(fileAst) {
 }
 
 
-function parseDeps(fileAst) {
+function parseDeps(fileAst : t.File) : string[] {
 
-	const requireList = [];
+	const requireList : string[] = [];
 
-	babel_traverse(fileAst, {
-		ImportDeclaration(path) {
+	traverse(fileAst, {
+		ImportDeclaration(path : NodePath<t.ImportDeclaration>) {
 
 			requireList.push(path.node.source.value);
 		},
-		CallExpression(path) {
+		CallExpression(path : NodePath<t.CallExpression>) {
 
-			if ( path.node.callee.name === 'require' && path.node.arguments.length === 1 && t.isStringLiteral(path.node.arguments[0]) )
+			if (
+					// @ts-ignore
+				   path.node.callee.name === 'require'
+				&& path.node.arguments.length === 1
+				&& t.isStringLiteral(path.node.arguments[0])
+			) {
+
 				requireList.push(path.node.arguments[0].value)
+			}
 		}
 	});
 
@@ -91,7 +140,8 @@ function parseDeps(fileAst) {
 }
 
 
-function resolvePath(path, depPath) {
+
+function resolvePath(path : string, depPath : string) {
 
 	if ( depPath[0] !== '.' )
 		return depPath;
@@ -101,7 +151,7 @@ function resolvePath(path, depPath) {
 
 
 // just load and cache deps
-async function loadDeps(filename, deps, options) {
+async function loadDeps(filename : string, deps : string[], options : Options) {
 
 	const { moduleCache } = options;
 
@@ -116,12 +166,14 @@ async function loadDeps(filename, deps, options) {
 	}
 }
 
+
+
 // create a cjs module
-function createModule(filePath, source, options) {
+function createModule(filePath : string, source : string, options : Options) {
 
 	const { moduleCache } = options;
 
-	const require = function(path) {
+	const require = function(path : string) {
 
 		const absPath = resolvePath(filePath, path);
 		if ( absPath in moduleCache )
@@ -130,7 +182,7 @@ function createModule(filePath, source, options) {
 		throw new Error(`${ absPath } not found`);
 	}
 
-	const import_ = async function(path) {
+	const import_ = async function(path : string) {
 
 		const absPath = resolvePath(filePath, path);
 		if ( absPath in moduleCache )
@@ -157,7 +209,7 @@ function createModule(filePath, source, options) {
 }
 
 // simple cache helper
-async function withCache( cacheInstance, key, valueFactory ) {
+async function withCache( cacheInstance : Cache, key : any[], valueFactory: ValueFactory ) {
 
 	let cachePrevented = false;
 
@@ -182,7 +234,7 @@ async function withCache( cacheInstance, key, valueFactory ) {
 }
 
 
-async function transformJSCode(source, moduleSourceType, filename, options) {
+async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
 	const { additionalBabelPlugins = [] } = options;
 
@@ -210,7 +262,7 @@ async function transformJSCode(source, moduleSourceType, filename, options) {
 
 
 
-async function createJSModule(source, moduleSourceType, filename, options) {
+async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
 	const { moduleCache, compiledCache } = options;
 
@@ -224,7 +276,7 @@ async function createJSModule(source, moduleSourceType, filename, options) {
 }
 
 
-async function createSFCModule(source, filename, options) {
+async function createSFCModule(source : string, filename : string, options : Options) {
 
 	const { moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [] } = options;
 
@@ -248,7 +300,7 @@ async function createSFCModule(source, filename, options) {
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script.content ], async ({ preventCache }) => {
 
-			const babelParserPlugins = [];
+			const babelParserPlugins : babel_ParserPlugin[] = [];
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const script = sfc_compileScript(descriptor, {
@@ -346,6 +398,7 @@ async function createSFCModule(source, filename, options) {
 				scoped: e.scoped,
 				vars: false,
 				trim: true,
+				// @ts-ignore
 				preprocessLang: e.lang,
 				preprocessCustomRequire: id => moduleCache[id],
 			});
@@ -367,14 +420,14 @@ async function createSFCModule(source, filename, options) {
 }
 
 
-const defaultModuleHandlers = {
+const defaultModuleHandlers : Record<string, ModuleHandler> = {
 	'.vue': (source, path, options) => createSFCModule(source, path, options),
 	'.js': (source, path, options) => createJSModule(source, false, path, options),
 	'.mjs': (source, path, options) => createJSModule(source, true, path, options),
 };
 
 
-export async function loadModule(path, options) {
+export async function loadModule(path : string, options : Options) {
 
 	const { getFile, additionalModuleHandlers = {} } = options;
 
