@@ -35,6 +35,8 @@
     "process": "^0.11.10",
     "safe-buffer": "^5.2.1",
     "stream-browserify": "^3.0.0",
+    "ts-loader": "^8.0.11",
+    "typescript": "^4.1.2",
     "url": "^0.11.0",
     "util": "^0.12.3",
     "vm-browserify": "^1.1.2",
