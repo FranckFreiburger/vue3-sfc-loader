@@ -28,7 +28,7 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 // compiler-sfc src: https://github.com/vuejs/vue-next/blob/master/packages/compiler-sfc/src/index.ts#L1
 import {
 	parse as sfc_parse,
-	compileStyle as sfc_compileStyle,
+	compileStyleAsync as sfc_compileStyleAsync,
 	compileScript as sfc_compileScript,
 	compileTemplate as sfc_compileTemplate,
 	SFCAsyncStyleCompileOptions
@@ -393,7 +393,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 		const style = await withCache(compiledCache, [ componentHash, e.content ], async ({ preventCache }) => {
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
-			const compiledStyle = sfc_compileStyle({
+			const compiledStyle = await sfc_compileStyleAsync({
 				filename: descriptor.filename,
 				source: e.content,
 				id: scopeId,
