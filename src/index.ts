@@ -30,7 +30,8 @@ import {
 	parse as sfc_parse,
 	compileStyle as sfc_compileStyle,
 	compileScript as sfc_compileScript,
-	compileTemplate as sfc_compileTemplate
+	compileTemplate as sfc_compileTemplate,
+	SFCAsyncStyleCompileOptions
 } from '@vue/compiler-sfc'
 
 import {
@@ -39,6 +40,7 @@ import {
 
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
+type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
 interface ValueFactoryApi {
 	preventCache() : void,
@@ -390,7 +392,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 		const style = await withCache(compiledCache, [ componentHash, e.content ], async ({ preventCache }) => {
 
-			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L61
+			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 			const compiledStyle = sfc_compileStyle({
 				filename: descriptor.filename,
 				source: e.content,
@@ -398,8 +400,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				scoped: e.scoped,
 				vars: false,
 				trim: true,
-				// @ts-ignore
-				preprocessLang: e.lang,
+				preprocessLang: e.lang as PreprocessLang,
 				preprocessCustomRequire: id => moduleCache[id],
 			});
 
