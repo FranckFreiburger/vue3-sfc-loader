@@ -12,6 +12,8 @@ const caniuse = require('caniuse-api')
 const pkg = require('../package.json');
 
 
+const distPath = Path.resolve(__dirname, '..', 'dist');
+
 module.exports = (env = {}, { mode = 'production' }) => {
 
 	// doc: https://github.com/browserslist/browserslist#full-list
@@ -29,7 +31,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 		],
 
 		output: {
-			path: Path.resolve(__dirname, '..', 'dist'),
+			path: distPath,
 			filename: 'vue3-sfc-loader.js',
 			library: {
 				type: 'umd',
@@ -164,23 +166,8 @@ ${ pkg.name }
 
 		module: {
 			rules: [
-				{
-					test: /\.ts$/,
-					use: {
-						loader: 'ts-loader',
-						options: {
-							// doc: https://github.com/TypeStrong/ts-loader#loader-options
-							configFile: Path.resolve(__dirname, 'tsconfig.json'),
-							onlyCompileBundledFiles: true,
-							compilerOptions: {
-								sourceMap: false,
-							}
-						}
-					}
-				},
-
 				isProd ? {
-					test: /\.m?js$/,
+					test: /\.(mjs|js|ts)$/,
 					use: {
 						loader: 'babel-loader',
 						options: {
@@ -206,7 +193,24 @@ ${ pkg.name }
 							],
 						}
 					}
-				} : {}
+				} : {},
+
+				{
+					test: /\.(ts)$/,
+					use: {
+						loader: 'ts-loader',
+						options: {
+							// doc: https://github.com/TypeStrong/ts-loader#loader-options
+							configFile: Path.resolve(__dirname, 'tsconfig.json'),
+							onlyCompileBundledFiles: true,
+							compilerOptions: {
+								sourceMap: false,
+								outDir: distPath,
+							}
+						}
+					}
+				},
+
 
 			]
 		},
