@@ -49,6 +49,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 </html>
 ```
 
+
 ### try it
 
   https://jsfiddle.net/Lvx97c6d/2/
@@ -56,45 +57,15 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ## API
 
-  `loadModule(path: string, options: object): object`
+> [Globals](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/globals.md)
 
-
-```
-  options = {
-
-      // mandatory
-      moduleCache: {
-        vue: Vue, // mandatory
-      },
-
-      // mandatory
-      getFile(path: string): Promise<string>
-
-      // mandatory
-      addStyle(styleStr: string): void
-
-      // optional
-      log(type: string, ...args: any[]): void
-
-
-      // optional
-      compiledCache: {
-        set(key: string, str: string): void
-        get(key: string): string
-
-      // optional
-      additionalModuleHandlers: {
-        '.json': (source, path, options) => JSON.parse(source),
-      }
-
-  }
-```
 
 ## Build
 
   default (`npm run build`):
 
     `webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 2 versions, Firefox ESR, not dead, not ie 11"`
+
 
 ### targetsBrowsers
   see https://github.com/browserslist/browserslist#queries
@@ -103,6 +74,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 ## How it works
 
   `Webpack`( `@vue/compiler-sfc` + `@babel` ) = `vue3-sfc-loader.js`
+
 
 ### More details
 
@@ -225,6 +197,3 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 </body>
 </html>
 ```
-
-
-
