@@ -57,7 +57,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ## API
 
-> [Globals](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/globals.md)
+> [Globals](docs/globals.md)
 
 
 ## Build
