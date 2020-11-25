@@ -46,8 +46,8 @@ interface ValueFactory {
 }
 
 interface Cache {
-	get(key : string) : string,
-	set(key : string, value : string) : void,
+	get(key : string) : Promise<string>,
+	set(key : string, value : string) : Promise<void>,
 }
 
 interface Options {
@@ -216,14 +216,14 @@ async function withCache( cacheInstance : Cache, key : any[], valueFactory: Valu
 		return await valueFactory(api);
 
 	const hashedKey = hash(...key);
-	const valueStr = cacheInstance.get(hashedKey);
+	const valueStr = await cacheInstance.get(hashedKey);
 	if ( valueStr )
 		return JSON.parse(valueStr);
 
 	const value = await valueFactory(api);
 
 	if ( !cachePrevented )
-		cacheInstance.set(hashedKey, JSON.stringify(value));
+		await cacheInstance.set(hashedKey, JSON.stringify(value));
 
 	return value;
 }
