@@ -1,4 +1,4 @@
-> [Globals](../globals.md) / ModuleHandler
+> [Globals](../README.md) / ModuleHandler
 
 # Interface: ModuleHandler
 
@@ -12,7 +12,7 @@ A callback that loow
 
 ▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<Module>
 
-*Defined in [index.ts:193](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L193)*
+*Defined in [index.ts:213](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L213)*
 
 A callback that loow
 

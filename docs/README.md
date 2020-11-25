@@ -12,7 +12,7 @@
 
 ### Functions
 
-* [loadModule](globals.md#loadmodule)
+* [loadModule](README.md#loadmodule)
 
 ## Functions
 
@@ -20,7 +20,7 @@
 
 ▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<Module>
 
-*Defined in [index.ts:625](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L625)*
+*Defined in [index.ts:646](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L646)*
 
 #### Parameters:
 
@@ -34,7 +34,7 @@ Name | Type | Description |
 A Promise of the component
 This is the main function
 
-* example using `Vue.defineAsyncComponent`: *
+**example using `Vue.defineAsyncComponent`:**
 ```javascript
 
   const app = Vue.createApp({
@@ -46,7 +46,7 @@ This is the main function
 
 ```
 
-* example using await: *
+**example using await:**
 _the followint core require to be placed in an async function_
 
 ```javascript

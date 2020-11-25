@@ -1,4 +1,4 @@
-> [Globals](../globals.md) / Options
+> [Globals](../README.md) / Options
 
 # Interface: Options
 
@@ -27,17 +27,14 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:116](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L116)*
+*Defined in [index.ts:133](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L133)*
 
-TBD
+	Additional babel plugins
 
-```javascript
-	...
-additionalModuleHandlers: {
-		'.json': (source, path, options) => JSON.parse(source),
-	}
-...
-```
+	```javascript
+		...
+		...
+	```
 
 ___
 
@@ -45,16 +42,16 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](modulehandler.md)>
 
-*Defined in [index.ts:130](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L130)*
+*Defined in [index.ts:148](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L148)*
 
-TBD
+	Additional module type handlers
 
 ```javascript
 	...
-additionalModuleHandlers: {
+	additionalModuleHandlers: {
 		'.json': (source, path, options) => JSON.parse(source),
 	}
-...
+	...
 ```
 
 ___
@@ -63,37 +60,37 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:166](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L166)*
+*Defined in [index.ts:185](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L185)*
 
 Functions of this object are called when tle lib need to save or load already compiled code. [get](cache.md#get)() and [set](cache.md#set)() functions must return a `Promise`, or can be `async`.
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
 
-* example: *
+**example:**
 In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place, here we handle this in a very basic way.
 Maybe (not tested), the following lib may help you [pako](https://github.com/nodeca/pako)
 ```javascript
 	...
 	compiledCache: {
-	  set(key, str) {
+		set(key, str) {
 
-	    // naive storage space management
-	    for (;;) {
+			// naive storage space management
+			for (;;) {
 
-	      try {
+				try {
 
-	        // doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
-	        window.localStorage.setItem(key, str);
-	        break;
-	      } catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
+					// doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
+					window.localStorage.setItem(key, str);
+					break;
+				} catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
 
-	        window.localStorage.removeItem(window.localStorage.key(0));
-	      }
-	    }
-	  },
-	  get(key) {
+					window.localStorage.removeItem(window.localStorage.key(0));
+				}
+			}
+		},
+		get(key) {
 
-	    return window.localStorage.getItem(key);
-	  },
+			return window.localStorage.getItem(key);
+		},
 	},
 	...
 ```
@@ -104,14 +101,18 @@ ___
 
 •  **moduleCache**: Record\<string, Module>
 
-*Defined in [index.ts:76](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L76)*
+*Defined in [index.ts:84](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L84)*
 
-TBD
+Initial cache that will contain resolved dependencies.
+`vue` must initially be contained in this object.
 
+**example:**
 ```javascript
 	...
-
-...
+	moduleCache: {
+		vue: Vue,
+	},
+	...
 ```
 
 ## Methods
@@ -120,22 +121,16 @@ TBD
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:102](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L102)*
+*Defined in [index.ts:123](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L123)*
 
-TBD
-
-```javascript
-	...
-
-...
-```
+Called by the library when CSS style must be added in the HTML document.
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`style` | string |
-`scopeId` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`style` | string | The CSS style chunk |
+`scopeId` | string | The scope ID of the CSS style chunk  **example:** ```javascript  ...  addStyle(styleStr) {    const style = document.createElement('style');   style.textContent = styleStr;   const ref = document.head.getElementsByTagName('style')[0] || null;   document.head.insertBefore(style, ref);  },  ... ```  |
 
 **Returns:** void
 
@@ -145,23 +140,28 @@ ___
 
 ▸ **getFile**(`path`: string): Promise\<string>
 
-*Defined in [index.ts:89](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L89)*
+*Defined in [index.ts:101](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L101)*
 
-TBD
-
-```javascript
-	...
-
-...
-```
+Called by the library when it needs a file.
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`path` | string |
+Name | Type | Description |
+------ | ------ | ------ |
+`path` | string | The path of the file |
 
 **Returns:** Promise\<string>
+
+a Promise of the file content (UTF-8)
+
+**example:**
+```javascript
+	...
+	getFile(url) {
+		return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+	},
+	...
+```
 
 ___
 
@@ -169,11 +169,9 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:181](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L181)*
+*Defined in [index.ts:199](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L199)*
 
-Specify this function Allow to cache compiled code. [get](cache.md#get)() and [set](cache.md#set)() functions must return a `Promise`, or can be `async`.
-* example: *
-In the following example, we cache the code in the browser's local storage.
+Called by the library when there is somthing to log (eg. )
 ```javascript
 	...
 	log(type, ...args) {

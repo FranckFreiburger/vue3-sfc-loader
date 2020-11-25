@@ -35,143 +35,162 @@ import {
 
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
+
 /**
  * @ignore
  */
 type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
+
 /**
- * @ignore
+ * @internal
  */
 interface ValueFactoryApi {
 	preventCache() : void,
 }
 
+
 /**
- * @ignore
+ * @internal
  */
 interface ValueFactory {
 	(api : ValueFactoryApi): Promise<any>;
 }
+
 
 interface Cache {
 	get(key : string) : Promise<string>,
 	set(key : string, value : string) : Promise<void>,
 }
 
+
 interface Options {
 	// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
 
 /**
- * TBD
+ * Initial cache that will contain resolved dependencies.
+ * `vue` must initially be contained in this object.
  *
+ * **example:**
  * ```javascript
  *	...
- *
- *
- * ...
+ *	moduleCache: {
+ *		vue: Vue,
+ *	},
+ *	...
  * ```
  *
 */
 	moduleCache: Record<string, Module>,
 
+
 /**
- * TBD
+ * Called by the library when it needs a file.
+ * @param path  The path of the file
+ * @returns a Promise of the file content (UTF-8)
  *
+ * **example:**
  * ```javascript
  *	...
- *
- *
- * ...
+ *	getFile(url) {
+ *		return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+ *	},
+ *	...
  * ```
- *
 */
 	getFile(path : string) : Promise<string>,
 
+
 /**
- * TBD
+ * Called by the library when CSS style must be added in the HTML document.
  *
+ * @param style The CSS style chunk
+ * @param scopeId The scope ID of the CSS style chunk
+ *
+ * **example:**
  * ```javascript
  *	...
+ *	addStyle(styleStr) {
  *
- *
- * ...
+ *		const style = document.createElement('style');
+ *		style.textContent = styleStr;
+ *		const ref = document.head.getElementsByTagName('style')[0] || null;
+ *		document.head.insertBefore(style, ref);
+ *	},
+ *	...
  * ```
- *
 */
 	addStyle(style : string, scopeId : string) : void,
 
 /**
- * TBD
+ *	Additional babel plugins
  *
- * ```javascript
- *	...
- *
- *
- * ...
- * ```
- *
+ *	```javascript
+ *		...
+ *		...
+ *	```
 */
 	additionalBabelPlugins?: any[],
 
+
 /**
- * TBD
+ *	Additional module type handlers
  *
  * ```javascript
  *	...
- * additionalModuleHandlers: {
+ *	additionalModuleHandlers: {
  *		'.json': (source, path, options) => JSON.parse(source),
  *	}
- * ...
+ *	...
  * ```
  *
 */
 	additionalModuleHandlers?: Record<string, ModuleHandler>,
 
+
 /**
  * Functions of this object are called when tle lib need to save or load already compiled code. [[get]]() and [[set]]() functions must return a `Promise`, or can be `async`.
  * Since compilation consume a lot of CPU, is is always a good idea to provide this object.
  *
- * * example: *
+ * **example:**
  * In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place, here we handle this in a very basic way.
  * Maybe (not tested), the following lib may help you [pako](https://github.com/nodeca/pako)
  * ```javascript
  *	...
  *	compiledCache: {
- *	  set(key, str) {
- *
- *	    // naive storage space management
- *	    for (;;) {
- *
- *	      try {
- *
- *	        // doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
- *	        window.localStorage.setItem(key, str);
- *	        break;
- *	      } catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
- *
- *	        window.localStorage.removeItem(window.localStorage.key(0));
- *	      }
- *	    }
- *	  },
- *	  get(key) {
- *
- *	    return window.localStorage.getItem(key);
- *	  },
+ *		set(key, str) {
+ *	
+ *			// naive storage space management
+ *			for (;;) {
+ *	
+ *				try {
+ *	
+ *					// doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
+ *					window.localStorage.setItem(key, str);
+ *					break;
+ *				} catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
+ *	
+ *					window.localStorage.removeItem(window.localStorage.key(0));
+ *				}
+ *			}
+ *		},
+ *		get(key) {
+ *	
+ *			return window.localStorage.getItem(key);
+ *		},
  *	},
  *	...
  * ```
  */
 	compiledCache?: Cache,
 
+
 /**
- * Specify this function Allow to cache compiled code. [[get]]() and [[set]]() functions must return a `Promise`, or can be `async`.
- * * example: *
- * In the following example, we cache the code in the browser's local storage.
+ * Called by the library when there is somthing to log (eg. )
  * ```javascript
  *	...
  *	log(type, ...args) {
- *
+ *		
  *		console.log(type, ...args);
  *	},
  *	...
@@ -179,6 +198,8 @@ interface Options {
  */
 	log?(type : string, ...data : any[]) : void,
 }
+
+
 
 /**
  * @ignore
@@ -198,12 +219,12 @@ interface ModuleHandler {
 // config (see DefinePlugin)
 
 /**
- * @ignore
+ * @internal
  */
 const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 
 /**
- * @ignore
+ * @internal
  */
  const version : string = process.env.VERSION;
 
@@ -211,7 +232,7 @@ const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 // tools
 
 /**
- * @ignore
+ * @internal
  */
 function hash(...valueList : any[]) : string {
 
@@ -223,7 +244,7 @@ function hash(...valueList : any[]) : string {
 
 
 /**
- * @ignore
+ * @internal
  */
 function interopRequireDefault(obj : any) : any {
 
@@ -236,7 +257,7 @@ function interopRequireDefault(obj : any) : any {
 
 /**
  * import is a reserved keyword, then rename
- * @ignore
+ * @internal
  */
 function renameDynamicImport(fileAst : t.File) : void {
 
@@ -251,7 +272,7 @@ function renameDynamicImport(fileAst : t.File) : void {
 
 
 /**
- * @ignore
+ * @internal
  */
 function parseDeps(fileAst : t.File) : string[] {
 
@@ -281,7 +302,7 @@ function parseDeps(fileAst : t.File) : string[] {
 
 
 /**
- * @ignore
+ * @internal
  */
 function resolvePath(path : string, depPath : string) {
 
@@ -294,7 +315,7 @@ function resolvePath(path : string, depPath : string) {
 
 /**
  * Just load and cache deps
- * @ignore
+ * @internal
  */
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
@@ -312,10 +333,9 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
 }
 
 
-
 /**
  * Create a cjs module
- * @ignore
+ * @internal
  */
 function createModule(filePath : string, source : string, options : Options) {
 
@@ -356,9 +376,10 @@ function createModule(filePath : string, source : string, options : Options) {
 	return module;
 }
 
+
 /**
  * Simple cache helper
- * @ignore
+ * @internal
  */
 async function withCache( cacheInstance : Cache, key : any[], valueFactory: ValueFactory ) {
 
@@ -384,8 +405,9 @@ async function withCache( cacheInstance : Cache, key : any[], valueFactory: Valu
 	return value;
 }
 
+
 /**
- * @ignore
+ * @internal
  */
 async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
@@ -415,7 +437,7 @@ async function transformJSCode(source : string, moduleSourceType : boolean, file
 
 
 /**
- * @ignore
+ * @internal
  */
 async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
@@ -432,7 +454,7 @@ async function createJSModule(source : string, moduleSourceType : boolean, filen
 
 
 /**
- * @ignore
+ * @internal
  */
 async function createSFCModule(source : string, filename : string, options : Options) {
 
@@ -578,7 +600,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 
 /**
- * @ignore
+ * @internal
  */
 const defaultModuleHandlers : Record<string, ModuleHandler> = {
 	'.vue': (source, path, options) => createSFCModule(source, path, options),
@@ -594,7 +616,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * @returns A Promise of the component
  * This is the main function
  *
- * * example using `Vue.defineAsyncComponent`: *
+ * **example using `Vue.defineAsyncComponent`:**
  * ```javascript
  *
  *   const app = Vue.createApp({
@@ -606,7 +628,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  * ```
  *
- * * example using await: *
+ * **example using await:**
  * _the followint core require to be placed in an async function_
  *
  * ```javascript

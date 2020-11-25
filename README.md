@@ -17,13 +17,16 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   <script>
 
     const options = {
+
       moduleCache: {
         vue: Vue
       },
+
       getFile(url) {
 
         return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
       },
+
       addStyle(styleStr) {
 
         const style = document.createElement('style');
@@ -31,6 +34,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
         const ref = document.head.getElementsByTagName('style')[0] || null;
         document.head.insertBefore(style, ref);
       }
+
     }
 
     const { loadModule } = window['vue3-sfc-loader'];
@@ -50,15 +54,14 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 ```
 
 
-### try it
+### Try it
 
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
 ## API
 
-public API
-  [loadModule](docs/globals.md#loadmodule)
+  [loadModule](docs/README.md#loadmodule)
 
 
 ## Build your own version
