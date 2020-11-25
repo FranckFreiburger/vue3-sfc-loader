@@ -35,6 +35,9 @@ import {
 
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
+/**
+ * @ignore
+ */
 type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
 interface ValueFactoryApi {
@@ -56,14 +59,81 @@ interface Options {
 	getFile(path : string) : Promise<string>,
 	addStyle(style : string, scopeId : string) : void,
 	additionalBabelPlugins?: any[],
+
+/**
+ * TBD
+ *
+ * ```javascript
+ *	...
+ * additionalModuleHandlers: {
+ *		'.json': (source, path, options) => JSON.parse(source),
+ *	}
+ * ...
+ *
+*/
 	additionalModuleHandlers?: Record<string, ModuleHandler>,
+
+/**
+ * Functions of this object are called when tle lib need to save or load already compiled code. [[get]]() and [[set]]() functions must return a `Promise`, or can be `async`.
+ * Since compilation consume a lot of CPU, is is always a good idea to provide this object.
+ *
+ * * example: *
+ * In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place, here we handle this in a very basic way.
+ * Maybe (not tested), the following lib may help you [pako](https://github.com/nodeca/pako)
+ * ```javascript
+ *	...
+ *	compiledCache: {
+ *	  set(key, str) {
+ *
+ *	    // naive storage space management
+ *	    for (;;) {
+ *
+ *	      try {
+ *
+ *	        // doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
+ *	        window.localStorage.setItem(key, str);
+ *	        break;
+ *	      } catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
+ *
+ *	        window.localStorage.removeItem(window.localStorage.key(0));
+ *	      }
+ *	    }
+ *	  },
+ *	  get(key) {
+ *
+ *	    return window.localStorage.getItem(key);
+ *	  },
+ *	},
+ *	...
+ * ```
+ */
 	compiledCache?: Cache,
+
+/**
+ * Specify this function Allow to cache compiled code. [[get]]() and [[set]]() functions must return a `Promise`, or can be `async`.
+ * * example: *
+ * In the following example, we cache the code in the browser's local storage.
+ * ```javascript
+ *	...
+ *	log(type, ...args) {
+ *
+ *		console.log(type, ...args);
+ *	},
+ *	...
+ * ```
+ */
 	log?(type : string, ...data : any[]) : void,
 }
 
+/**
+ * A module
+ */
 interface Module {
 }
 
+/**
+ * A callback that loow
+ */
 interface ModuleHandler {
 	(source : string, path : string, options : Options) : Promise<Module>;
 }
@@ -71,12 +141,23 @@ interface ModuleHandler {
 
 
 // config (see DefinePlugin)
+
+/**
+ * @ignore
+ */
 const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
-const version : string = process.env.VERSION;
+
+/**
+ * @ignore
+ */
+ const version : string = process.env.VERSION;
 
 
 // tools
 
+/**
+ * @ignore
+ */
 function hash(...valueList : any[]) : string {
 
 	const hashInstance = createHash('md5');
@@ -86,6 +167,9 @@ function hash(...valueList : any[]) : string {
 }
 
 
+/**
+ * @ignore
+ */
 function interopRequireDefault(obj : any) : any {
 
   return obj && obj.__esModule ? obj : { default: obj };
@@ -95,7 +179,10 @@ function interopRequireDefault(obj : any) : any {
 // handbook: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md
 
 
-// import is a reserved keyword, then rename
+/**
+ * import is a reserved keyword, then rename
+ * @ignore
+ */
 function renameDynamicImport(fileAst : t.File) : void {
 
 	traverse(fileAst, {
@@ -108,6 +195,9 @@ function renameDynamicImport(fileAst : t.File) : void {
 }
 
 
+/**
+ * @ignore
+ */
 function parseDeps(fileAst : t.File) : string[] {
 
 	const requireList : string[] = [];
@@ -135,7 +225,9 @@ function parseDeps(fileAst : t.File) : string[] {
 }
 
 
-
+/**
+ * @ignore
+ */
 function resolvePath(path : string, depPath : string) {
 
 	if ( depPath[0] !== '.' )
@@ -145,7 +237,10 @@ function resolvePath(path : string, depPath : string) {
 }
 
 
-// just load and cache deps
+/**
+ * Just load and cache deps
+ * @ignore
+ */
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
 	const { moduleCache } = options;
@@ -163,7 +258,10 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
 
 
 
-// create a cjs module
+/**
+ * Create a cjs module
+ * @ignore
+ */
 function createModule(filePath : string, source : string, options : Options) {
 
 	const { moduleCache } = options;
@@ -203,7 +301,10 @@ function createModule(filePath : string, source : string, options : Options) {
 	return module;
 }
 
-// simple cache helper
+/**
+ * Simple cache helper
+ * @ignore
+ */
 async function withCache( cacheInstance : Cache, key : any[], valueFactory: ValueFactory ) {
 
 	let cachePrevented = false;
@@ -228,7 +329,9 @@ async function withCache( cacheInstance : Cache, key : any[], valueFactory: Valu
 	return value;
 }
 
-
+/**
+ * @ignore
+ */
 async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
 	const { additionalBabelPlugins = [] } = options;
@@ -256,7 +359,9 @@ async function transformJSCode(source : string, moduleSourceType : boolean, file
 }
 
 
-
+/**
+ * @ignore
+ */
 async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
 	const { moduleCache, compiledCache } = options;
@@ -271,6 +376,9 @@ async function createJSModule(source : string, moduleSourceType : boolean, filen
 }
 
 
+/**
+ * @ignore
+ */
 async function createSFCModule(source : string, filename : string, options : Options) {
 
 	const { moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [] } = options;
@@ -414,6 +522,9 @@ async function createSFCModule(source : string, filename : string, options : Opt
 }
 
 
+/**
+ * @ignore
+ */
 const defaultModuleHandlers : Record<string, ModuleHandler> = {
 	'.vue': (source, path, options) => createSFCModule(source, path, options),
 	'.js': (source, path, options) => createJSModule(source, false, path, options),
@@ -421,6 +532,39 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 };
 
 
+/**
+ * This is the main function
+ *
+ * * example using `Vue.defineAsyncComponent`: *
+ * ```javascript
+ *
+ *   const app = Vue.createApp({
+ *     components: {
+ *       'my-component': Vue.defineAsyncComponent( () => loadModule('./myComponent.vue', options) )
+ *     },
+ *     template: '<my-component></my-component>'
+ *   });
+ *
+ * ```
+ *
+ * * example using await: *
+ * _the followint core require to be placed in an async function_
+ *
+ * ```javascript
+ *
+ *   const app = Vue.createApp({
+ *     components: {
+ *       'my-component': await loadModule('./myComponent.vue', options)
+ *     },
+ *     template: '<my-component></my-component>'
+ *   });
+ *
+ * ```
+ *
+ * @param path  The path of the .vue file
+ * @param options  The options
+ * @returns A Promise of the component
+ */
 export async function loadModule(path : string, options : Options) {
 
 	const { getFile, additionalModuleHandlers = {} } = options;

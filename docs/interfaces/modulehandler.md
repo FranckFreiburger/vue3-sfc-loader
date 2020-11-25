@@ -2,6 +2,8 @@
 
 # Interface: ModuleHandler
 
+A callback that loow
+
 ## Hierarchy
 
 * **ModuleHandler**
@@ -10,7 +12,9 @@
 
 ▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<[Module](module.md)>
 
-*Defined in [index.ts:67](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L67)*
+*Defined in [index.ts:137](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L137)*
+
+A callback that loow
 
 #### Parameters:
 

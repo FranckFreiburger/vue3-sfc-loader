@@ -2,6 +2,8 @@
 
 # Interface: Module
 
+A module
+
 ## Hierarchy
 
 * **Module**

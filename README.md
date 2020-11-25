@@ -57,7 +57,8 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ## API
 
-> [Globals](docs/globals.md)
+public API
+  [loadModule](docs/globals.md#loadmodule)
 
 
 ## Build

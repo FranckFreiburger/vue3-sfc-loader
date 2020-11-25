@@ -10,7 +10,7 @@
 
 ▸ (`api`: [ValueFactoryApi](valuefactoryapi.md)): Promise\<any>
 
-*Defined in [index.ts:44](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L44)*
+*Defined in [index.ts:47](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L47)*
 
 #### Parameters:
 

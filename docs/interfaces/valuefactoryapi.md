@@ -18,6 +18,6 @@
 
 ▸ **preventCache**(): void
 
-*Defined in [index.ts:41](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L41)*
+*Defined in [index.ts:44](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L44)*
 
 **Returns:** void
