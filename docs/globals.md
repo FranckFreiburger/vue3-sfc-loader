@@ -7,11 +7,8 @@
 ### Interfaces
 
 * [Cache](interfaces/cache.md)
-* [Module](interfaces/module.md)
 * [ModuleHandler](interfaces/modulehandler.md)
 * [Options](interfaces/options.md)
-* [ValueFactory](interfaces/valuefactory.md)
-* [ValueFactoryApi](interfaces/valuefactoryapi.md)
 
 ### Functions
 
@@ -21,10 +18,20 @@
 
 ### loadModule
 
-▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<[Module](interfaces/module.md)>
+▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<Module>
 
-*Defined in [index.ts:568](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L568)*
+*Defined in [index.ts:625](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L625)*
 
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`path` | string | The path of the .vue file |
+`options` | [Options](interfaces/options.md) | The options |
+
+**Returns:** Promise\<Module>
+
+A Promise of the component
 This is the main function
 
 * example using `Vue.defineAsyncComponent`: *
@@ -52,14 +59,3 @@ _the followint core require to be placed in an async function_
   });
 
 ```
-
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`path` | string | The path of the .vue file |
-`options` | [Options](interfaces/options.md) | The options |
-
-**Returns:** Promise\<[Module](interfaces/module.md)>
-
-A Promise of the component

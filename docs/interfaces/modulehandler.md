@@ -10,9 +10,9 @@ A callback that loow
 
 ## Callable
 
-▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<[Module](module.md)>
+▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<Module>
 
-*Defined in [index.ts:137](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L137)*
+*Defined in [index.ts:193](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L193)*
 
 A callback that loow
 
@@ -24,4 +24,4 @@ Name | Type |
 `path` | string |
 `options` | [Options](options.md) |
 
-**Returns:** Promise\<[Module](module.md)>
+**Returns:** Promise\<Module>

@@ -40,10 +40,16 @@ import * as vue_CompilerDOM from '@vue/compiler-dom'
  */
 type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
+/**
+ * @ignore
+ */
 interface ValueFactoryApi {
 	preventCache() : void,
 }
 
+/**
+ * @ignore
+ */
 interface ValueFactory {
 	(api : ValueFactoryApi): Promise<any>;
 }
@@ -55,9 +61,58 @@ interface Cache {
 
 interface Options {
 	// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
+
+/**
+ * TBD
+ *
+ * ```javascript
+ *	...
+ *
+ *
+ * ...
+ * ```
+ *
+*/
 	moduleCache: Record<string, Module>,
+
+/**
+ * TBD
+ *
+ * ```javascript
+ *	...
+ *
+ *
+ * ...
+ * ```
+ *
+*/
 	getFile(path : string) : Promise<string>,
+
+/**
+ * TBD
+ *
+ * ```javascript
+ *	...
+ *
+ *
+ * ...
+ * ```
+ *
+*/
 	addStyle(style : string, scopeId : string) : void,
+
+/**
+ * TBD
+ *
+ * ```javascript
+ *	...
+ * additionalModuleHandlers: {
+ *		'.json': (source, path, options) => JSON.parse(source),
+ *	}
+ * ...
+ * ```
+ *
+*/
 	additionalBabelPlugins?: any[],
 
 /**
@@ -69,6 +124,7 @@ interface Options {
  *		'.json': (source, path, options) => JSON.parse(source),
  *	}
  * ...
+ * ```
  *
 */
 	additionalModuleHandlers?: Record<string, ModuleHandler>,
@@ -126,7 +182,7 @@ interface Options {
 }
 
 /**
- * A module
+ * @ignore
  */
 interface Module {
 }
@@ -533,6 +589,10 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 
 
 /**
+ *
+ * @param path  The path of the .vue file
+ * @param options  The options
+ * @returns A Promise of the component
  * This is the main function
  *
  * * example using `Vue.defineAsyncComponent`: *
@@ -561,9 +621,6 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  * ```
  *
- * @param path  The path of the .vue file
- * @param options  The options
- * @returns A Promise of the component
  */
 export async function loadModule(path : string, options : Options) {
 

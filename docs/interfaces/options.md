@@ -27,15 +27,7 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:61](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L61)*
-
-___
-
-### additionalModuleHandlers
-
-• `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](modulehandler.md)>
-
-*Defined in [index.ts:74](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L74)*
+*Defined in [index.ts:116](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L116)*
 
 TBD
 
@@ -45,6 +37,25 @@ additionalModuleHandlers: {
 		'.json': (source, path, options) => JSON.parse(source),
 	}
 ...
+```
+
+___
+
+### additionalModuleHandlers
+
+• `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](modulehandler.md)>
+
+*Defined in [index.ts:130](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L130)*
+
+TBD
+
+```javascript
+	...
+additionalModuleHandlers: {
+		'.json': (source, path, options) => JSON.parse(source),
+	}
+...
+```
 
 ___
 
@@ -52,7 +63,7 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:110](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L110)*
+*Defined in [index.ts:166](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L166)*
 
 Functions of this object are called when tle lib need to save or load already compiled code. [get](cache.md#get)() and [set](cache.md#set)() functions must return a `Promise`, or can be `async`.
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
@@ -91,9 +102,17 @@ ___
 
 ### moduleCache
 
-•  **moduleCache**: Record\<string, [Module](module.md)>
+•  **moduleCache**: Record\<string, Module>
 
-*Defined in [index.ts:58](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L58)*
+*Defined in [index.ts:76](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L76)*
+
+TBD
+
+```javascript
+	...
+
+...
+```
 
 ## Methods
 
@@ -101,7 +120,15 @@ ___
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:60](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L60)*
+*Defined in [index.ts:102](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L102)*
+
+TBD
+
+```javascript
+	...
+
+...
+```
 
 #### Parameters:
 
@@ -118,7 +145,15 @@ ___
 
 ▸ **getFile**(`path`: string): Promise\<string>
 
-*Defined in [index.ts:59](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L59)*
+*Defined in [index.ts:89](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L89)*
+
+TBD
+
+```javascript
+	...
+
+...
+```
 
 #### Parameters:
 
@@ -134,7 +169,7 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:125](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed81bb/src/index.ts#L125)*
+*Defined in [index.ts:181](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/a9f0d3d/src/index.ts#L181)*
 
 Specify this function Allow to cache compiled code. [get](cache.md#get)() and [set](cache.md#set)() functions must return a `Promise`, or can be `async`.
 * example: *
