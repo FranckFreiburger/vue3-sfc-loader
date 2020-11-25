@@ -52,7 +52,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ### try it
 
-  https://jsfiddle.net/Lvx97c6d/2/
+  https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
 ## API
