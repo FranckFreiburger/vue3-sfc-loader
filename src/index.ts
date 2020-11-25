@@ -106,9 +106,8 @@ interface Options {
  *
  * ```javascript
  *	...
- * additionalModuleHandlers: {
- *		'.json': (source, path, options) => JSON.parse(source),
- *	}
+ *
+ *
  * ...
  * ```
  *

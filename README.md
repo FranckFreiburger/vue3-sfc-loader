@@ -61,7 +61,7 @@ public API
   [loadModule](docs/globals.md#loadmodule)
 
 
-## Build
+## Build your own version
 
   default (`npm run build`):
 
@@ -81,10 +81,15 @@ public API
 
   1. load the `.vue` file
   1. parse and compile template, script and style sections (`@vue/compiler-sfc`)
-  1. transpile to cjs script and compiled template (`@babel`)
+  1. transpile script and compiled template to es5 (`@babel`)
   1. parse scripts for dependencies (`@babel/traverse`)
   1. recursively resolve dependencies
   1. merge all and return the component
+
+
+### Bundle size
+- 1600 Kb minified
+- 380 KB bz2
 
 
 ### More complete example
