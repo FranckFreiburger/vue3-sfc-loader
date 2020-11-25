@@ -1,4 +1,4 @@
-> [Globals](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/globals.md) / Options
+> [Globals](../globals.md) / Options
 
 # Interface: Options
 
@@ -10,16 +10,16 @@
 
 ### Properties
 
-* [additionalBabelPlugins](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#additionalbabelplugins)
-* [additionalModuleHandlers](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#additionalmodulehandlers)
-* [compiledCache](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#compiledcache)
-* [moduleCache](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#modulecache)
+* [additionalBabelPlugins](options.md#additionalbabelplugins)
+* [additionalModuleHandlers](options.md#additionalmodulehandlers)
+* [compiledCache](options.md#compiledcache)
+* [moduleCache](options.md#modulecache)
 
 ### Methods
 
-* [addStyle](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#addstyle)
-* [getFile](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#getfile)
-* [log](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md#log)
+* [addStyle](options.md#addstyle)
+* [getFile](options.md#getfile)
+* [log](options.md#log)
 
 ## Properties
 
@@ -27,31 +27,31 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:58](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L58)*
+*Defined in [index.ts:58](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L58)*
 
 ___
 
 ### additionalModuleHandlers
 
-• `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/modulehandler.md)>
+• `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](modulehandler.md)>
 
-*Defined in [index.ts:59](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L59)*
+*Defined in [index.ts:59](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L59)*
 
 ___
 
 ### compiledCache
 
-• `Optional` **compiledCache**: [Cache](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/cache.md)
+• `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:60](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L60)*
+*Defined in [index.ts:60](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L60)*
 
 ___
 
 ### moduleCache
 
-•  **moduleCache**: Record\<string, [Module](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/module.md)>
+•  **moduleCache**: Record\<string, [Module](module.md)>
 
-*Defined in [index.ts:55](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L55)*
+*Defined in [index.ts:55](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L55)*
 
 ## Methods
 
@@ -59,7 +59,7 @@ ___
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:57](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L57)*
+*Defined in [index.ts:57](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L57)*
 
 #### Parameters:
 
@@ -76,7 +76,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise\<string>
 
-*Defined in [index.ts:56](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L56)*
+*Defined in [index.ts:56](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L56)*
 
 #### Parameters:
 
@@ -92,7 +92,7 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:61](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L61)*
+*Defined in [index.ts:61](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L61)*
 
 #### Parameters:
 

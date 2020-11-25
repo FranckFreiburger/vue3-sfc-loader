@@ -1,4 +1,4 @@
-> [Globals](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/globals.md) / ModuleHandler
+> [Globals](../globals.md) / ModuleHandler
 
 # Interface: ModuleHandler
 
@@ -8,9 +8,9 @@
 
 ## Callable
 
-▸ (`source`: string, `path`: string, `options`: [Options](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md)): Promise\<[Module](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/module.md)>
+▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<[Module](module.md)>
 
-*Defined in [index.ts:67](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L67)*
+*Defined in [index.ts:67](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L67)*
 
 #### Parameters:
 
@@ -18,6 +18,6 @@ Name | Type |
 ------ | ------ |
 `source` | string |
 `path` | string |
-`options` | [Options](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/options.md) |
+`options` | [Options](options.md) |
 
-**Returns:** Promise\<[Module](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/module.md)>
+**Returns:** Promise\<[Module](module.md)>

@@ -13,7 +13,7 @@
   "scripts": {
     "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
-    "doc": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --hideProjectName true --hideBreadcrumbs false --namedAnchors true --publicPath https://github.com/FranckFreiburger/vue3-sfc-loader/docs/"
+    "doc": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --hideProjectName true --hideBreadcrumbs false --namedAnchors true"
   },
   "dependencies": {},
   "devDependencies": {

@@ -1,4 +1,4 @@
-> [Globals](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/globals.md) / ValueFactoryApi
+> [Globals](../globals.md) / ValueFactoryApi
 
 # Interface: ValueFactoryApi
 
@@ -10,7 +10,7 @@
 
 ### Methods
 
-* [preventCache](https://github.com/FranckFreiburger/vue3-sfc-loader/docs/interfaces/valuefactoryapi.md#preventcache)
+* [preventCache](valuefactoryapi.md#preventcache)
 
 ## Methods
 
@@ -18,6 +18,6 @@
 
 ▸ **preventCache**(): void
 
-*Defined in [index.ts:41](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/3359f02/src/index.ts#L41)*
+*Defined in [index.ts:41](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/7a06fcc/src/index.ts#L41)*
 
 **Returns:** void
