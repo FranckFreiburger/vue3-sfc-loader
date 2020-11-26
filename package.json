@@ -11,10 +11,11 @@
   "version": "0.2.0",
   "main": "dist/vue3-sfc-loader.js",
   "scripts": {
-    "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
+    "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
     "doc": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --readme none --stripInternal --hideProjectName true --hideBreadcrumbs false --namedAnchors true",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "postbump": "npm run doc && npm run build",
+    "release": "standard-version"
   },
   "dependencies": {},
   "devDependencies": {
@@ -39,6 +40,7 @@
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "safe-buffer": "^5.2.1",
+    "standard-version": "^9.0.0",
     "stream-browserify": "^3.0.0",
     "ts-loader": "^8.0.11",
     "typedoc": "^0.19.2",
