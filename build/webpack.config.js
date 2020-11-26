@@ -113,7 +113,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 			] : [],
 
 			new Webpack.BannerPlugin(`
-${ pkg.name }
+${ pkg.name } v${ pkg.version }
 
 @description ${ pkg.description }.
 @author      ${ pkg.author.name } <${ pkg.author.email }>
