@@ -231,7 +231,13 @@ const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 /**
  * @internal
  */
- const version : string = process.env.VERSION;
+const version : string = process.env.VERSION;
+
+
+/**
+ * @internal
+ */
+const isProd = process.env.NODE_ENV === 'production';
 
 
 // tools
@@ -489,6 +495,8 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const script = sfc_compileScript(descriptor, {
+				isProd,
+				id: scopeId,
 				babelParserPlugins,
 			});
 
@@ -545,6 +553,8 @@ async function createSFCModule(source : string, filename : string, options : Opt
 			compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
 			source: descriptor.template.content,
 			filename: descriptor.filename,
+			isProd,
+			id: scopeId,
 			compilerOptions: {
 				scopeId,
 				mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
@@ -579,9 +589,9 @@ async function createSFCModule(source : string, filename : string, options : Opt
 			const compiledStyle = await sfc_compileStyleAsync({
 				filename: descriptor.filename,
 				source: e.content,
+				isProd,
 				id: scopeId,
 				scoped: e.scoped,
-				vars: false,
 				trim: true,
 				preprocessLang: e.lang as PreprocessLang,
 				preprocessCustomRequire: id => moduleCache[id],
