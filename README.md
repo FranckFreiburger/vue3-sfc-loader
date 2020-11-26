@@ -13,8 +13,10 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/gh/FranckFreiburger/vue3-sfc-loader@main/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js"></script>
   <script>
+
+    const { loadModule } = window['vue3-sfc-loader'];
 
     const options = {
 
@@ -37,8 +39,6 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
     }
 
-    const { loadModule } = window['vue3-sfc-loader'];
-
     const app = Vue.createApp({
       components: {
         'my-component': Vue.defineAsyncComponent( () => loadModule('./myComponent.vue', options) )
@@ -59,9 +59,14 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
+## dist
+
+  at jsDelivr CDN: `https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js`
+
+
 ## API
 
-  [loadModule](docs/README.md#loadmodule)
+  **[loadModule](docs/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/interfaces/options.md)): Promise\<Module>
 
 
 ## Build your own version
@@ -103,7 +108,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/gh/FranckFreiburger/vue3-sfc-loader@main/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js"></script>
 
   <script>
 

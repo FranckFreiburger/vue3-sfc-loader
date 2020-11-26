@@ -20,7 +20,7 @@
     "scripts": {
       "postbump": "npm run docs && git add docs/ && git commit -m \"chore(docs) build docs\" docs",
       "postcommit": "npm run build",
-      "posttag": "git push origin --tags && npm publish"
+      "posttag": "git push --follow-tags \"origin\" main:main && npm publish"
     }
   },
   "dependencies": {},
