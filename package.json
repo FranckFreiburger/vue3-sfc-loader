@@ -14,7 +14,7 @@
     "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "doc": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --readme none --stripInternal --hideProjectName true --hideBreadcrumbs false --namedAnchors true",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "dependencies": {},
   "devDependencies": {
