@@ -20,7 +20,7 @@
 
 ▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<Module>
 
-*Defined in [index.ts:650](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L650)*
+*Defined in [index.ts:660](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/484f83e/src/index.ts#L660)*
 
 This is the main function.
 

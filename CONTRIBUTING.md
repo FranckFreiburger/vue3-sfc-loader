@@ -13,10 +13,13 @@
 
 `<type>(<scope>): <subject>`
 
-type: `feat|fix|perf|docs|refactor|test|chore|...`
+type: `feat|fix|perf|docs|refactor|test|chore|wip|...`
 scope: `core|build|docs|...`
 subject: Use the imperative, present tense: "change" not "changed" nor "changes". Don't capitalize the first letter. Do dot (.) at the end
 
+#### Revert
+If the commit reverts a previous commit, it should begin with `revert:`, followed by the header of the reverted commit.
+In the body, it should say: `This reverts commit <hash>`, where the hash is the SHA of the commit being reverted.
 
 ### Body
 
