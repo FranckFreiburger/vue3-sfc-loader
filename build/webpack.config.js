@@ -206,6 +206,8 @@ ${ pkg.name }
 							compilerOptions: {
 								sourceMap: false,
 								outDir: distPath,
+								declaration: true,
+								declarationDir: Path.resolve(distPath, 'types'),
 							}
 						}
 					}
