@@ -49,7 +49,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 		},
 
 		// doc: https://webpack.js.org/configuration/devtool/#devtool
-		devtool: isProd ? false : 'cheap-source-map',
+		devtool: isProd ? 'cheap-source-map' : 'cheap-source-map',
 
 		performance: { hints: false },
 
