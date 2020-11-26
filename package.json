@@ -13,12 +13,14 @@
   "scripts": {
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
-    "doc": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --readme none --stripInternal --hideProjectName true --hideBreadcrumbs false --namedAnchors true",
+    "docs": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --readme none --stripInternal --hideProjectName true --hideBreadcrumbs false --namedAnchors true",
     "release": "standard-version"
   },
   "standard-version": {
     "scripts": {
-      "postbump": "npm run doc && npm run build"
+      "postbump": "npm run docs && git add docs/ && git commit -m \"chore(docs) build docs\" docs",
+      "postcommit": "npm run build",
+      "posttag": "git push origin --tags && npm publish"
     }
   },
   "dependencies": {},
