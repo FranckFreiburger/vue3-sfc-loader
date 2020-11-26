@@ -104,4 +104,5 @@ dist
 .tern-port
 
 
+**/node_modules/
 misc/
