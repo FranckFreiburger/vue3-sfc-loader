@@ -103,9 +103,9 @@ interface Options {
 
 /**
  * Called by the library when CSS style must be added in the HTML document.
- *
  * @param style The CSS style chunk
  * @param scopeId The scope ID of the CSS style chunk
+ * @return
  *
  * **example:**
  * ```javascript
@@ -122,8 +122,9 @@ interface Options {
 */
 	addStyle(style : string, scopeId : string) : void,
 
+
 /**
- *	Additional babel plugins
+ * Additional babel plugins
  *
  *	```javascript
  *		...
@@ -134,7 +135,7 @@ interface Options {
 
 
 /**
- *	Additional module type handlers
+ * Additional module type handlers
  *
  * ```javascript
  *	...
@@ -187,6 +188,10 @@ interface Options {
 
 /**
  * Called by the library when there is somthing to log (eg. )
+ * @param type the type of the notification
+ * @param args the values to log
+ * @return
+ *
  * ```javascript
  *	...
  *	log(type, ...args) {
@@ -610,11 +615,10 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 
 
 /**
- *
+ * This is the main function.
  * @param path  The path of the .vue file
  * @param options  The options
  * @returns A Promise of the component
- * This is the main function
  *
  * **example using `Vue.defineAsyncComponent`:**
  * ```javascript
@@ -629,7 +633,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * ```
  *
  * **example using await:**
- * _the followint core require to be placed in an async function_
+ * _the following code requires to be placed in an async function_
  *
  * ```javascript
  *
@@ -656,3 +660,4 @@ export async function loadModule(path : string, options : Options) {
 	const source = await getFile(path);
 	return moduleHandlers[ext](source, path, options);
 }
+

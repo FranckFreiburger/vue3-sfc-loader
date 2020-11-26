@@ -27,9 +27,9 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:133](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L133)*
+*Defined in [index.ts:134](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L134)*
 
-	Additional babel plugins
+Additional babel plugins
 
 	```javascript
 		...
@@ -42,9 +42,9 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](modulehandler.md)>
 
-*Defined in [index.ts:148](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L148)*
+*Defined in [index.ts:149](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L149)*
 
-	Additional module type handlers
+Additional module type handlers
 
 ```javascript
 	...
@@ -60,7 +60,7 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:185](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L185)*
+*Defined in [index.ts:186](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L186)*
 
 Functions of this object are called when tle lib need to save or load already compiled code. [get](cache.md#get)() and [set](cache.md#set)() functions must return a `Promise`, or can be `async`.
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
@@ -101,7 +101,7 @@ ___
 
 •  **moduleCache**: Record\<string, Module>
 
-*Defined in [index.ts:84](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L84)*
+*Defined in [index.ts:84](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L84)*
 
 Initial cache that will contain resolved dependencies.
 `vue` must initially be contained in this object.
@@ -121,7 +121,7 @@ Initial cache that will contain resolved dependencies.
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:123](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L123)*
+*Defined in [index.ts:123](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L123)*
 
 Called by the library when CSS style must be added in the HTML document.
 
@@ -130,9 +130,22 @@ Called by the library when CSS style must be added in the HTML document.
 Name | Type | Description |
 ------ | ------ | ------ |
 `style` | string | The CSS style chunk |
-`scopeId` | string | The scope ID of the CSS style chunk  **example:** ```javascript  ...  addStyle(styleStr) {    const style = document.createElement('style');   style.textContent = styleStr;   const ref = document.head.getElementsByTagName('style')[0] || null;   document.head.insertBefore(style, ref);  },  ... ```  |
+`scopeId` | string | The scope ID of the CSS style chunk |
 
 **Returns:** void
+
+**example:**
+```javascript
+	...
+	addStyle(styleStr) {
+
+		const style = document.createElement('style');
+		style.textContent = styleStr;
+		const ref = document.head.getElementsByTagName('style')[0] || null;
+		document.head.insertBefore(style, ref);
+	},
+	...
+```
 
 ___
 
@@ -140,7 +153,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise\<string>
 
-*Defined in [index.ts:101](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L101)*
+*Defined in [index.ts:101](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L101)*
 
 Called by the library when it needs a file.
 
@@ -169,9 +182,19 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:199](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f931ed4/src/index.ts#L199)*
+*Defined in [index.ts:204](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e44839/src/index.ts#L204)*
 
 Called by the library when there is somthing to log (eg. )
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`type` | string | the type of the notification |
+`...data` | any[] | - |
+
+**Returns:** void
+
 ```javascript
 	...
 	log(type, ...args) {
@@ -180,12 +203,3 @@ Called by the library when there is somthing to log (eg. )
 	},
 	...
 ```
-
-#### Parameters:
-
-Name | Type |
------- | ------ |
-`type` | string |
-`...data` | any[] |
-
-**Returns:** void
