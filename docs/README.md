@@ -24,7 +24,7 @@
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:234](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6b50954/src/index.ts#L234)*
+*Defined in [index.ts:234](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L234)*
 
 the version of the library
 
@@ -34,7 +34,7 @@ the version of the library
 
 ▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<Module>
 
-*Defined in [index.ts:660](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6b50954/src/index.ts#L660)*
+*Defined in [index.ts:660](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L660)*
 
 This is the main function.
 

@@ -12,7 +12,7 @@ A callback that loow
 
 ▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<Module>
 
-*Defined in [index.ts:218](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6b50954/src/index.ts#L218)*
+*Defined in [index.ts:218](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L218)*
 
 A callback that loow
 
