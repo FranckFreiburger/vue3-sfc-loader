@@ -63,8 +63,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
   latest minified version:
   - at jsDelivr CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js
-  - at UNPKG CDN: https://unpkg.com/browse/vue3-sfc-loader/dist/vue3-sfc-loader.js
-
+  - at UNPKG CDN: https://unpkg.com/vue3-sfc-loader/dist/vue3-sfc-loader.js
 
 ### Bundle size
 - \~380 kB minified + bz2
@@ -159,7 +158,9 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
               // doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
               window.localStorage.setItem(key, str);
               break;
-            } catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
+            } catch(ex) {
+
+              // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
 
               window.localStorage.removeItem(window.localStorage.key(0));
             }
