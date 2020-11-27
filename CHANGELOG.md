@@ -1,6 +1,11 @@
-# Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+### [0.2.8](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.7...v0.2.8) (2020-11-27)
+
+
+### Bug Fixes
+
+* **core:** add missing scoped option in sfc_compileTemplate() call ([ed99480](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/ed994807f3b294a2fd9a5b98cfd9ac993ffb2fe8))
+* **docs:** unpkg.com CDN url ([06f0378](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/06f0378e27d7e03eeac16558d8b8bfcc3d82c584))
 
 ### [0.2.7](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.3...v0.2.7) (2020-11-27)
 
