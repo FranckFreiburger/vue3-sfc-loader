@@ -1,3 +1,5 @@
+**[vue3-sfc-loader](README.md)**
+
 > Globals
 
 # vue3-sfc-loader
@@ -7,6 +9,7 @@
 ### Interfaces
 
 * [Cache](interfaces/cache.md)
+* [Module](interfaces/module.md)
 * [ModuleHandler](interfaces/modulehandler.md)
 * [Options](interfaces/options.md)
 
@@ -24,17 +27,17 @@
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:234](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L234)*
+*Defined in [index.ts:244](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L244)*
 
-the version of the library
+the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
 ## Functions
 
 ### loadModule
 
-▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<Module>
+▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<[Module](interfaces/module.md)>
 
-*Defined in [index.ts:660](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L660)*
+*Defined in [index.ts:672](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L672)*
 
 This is the main function.
 
@@ -45,19 +48,19 @@ Name | Type | Description |
 `path` | string | The path of the .vue file |
 `options` | [Options](interfaces/options.md) | The options |
 
-**Returns:** Promise\<Module>
+**Returns:** Promise\<[Module](interfaces/module.md)>
 
 A Promise of the component
 
 **example using `Vue.defineAsyncComponent`:**
 ```javascript
 
-  const app = Vue.createApp({
-    components: {
-      'my-component': Vue.defineAsyncComponent( () => loadModule('./myComponent.vue', options) )
-    },
-    template: '<my-component></my-component>'
-  });
+	const app = Vue.createApp({
+		components: {
+			'my-component': Vue.defineAsyncComponent( () => loadModule('./myComponent.vue', options) )
+		},
+		template: '<my-component></my-component>'
+	});
 
 ```
 
@@ -66,11 +69,11 @@ _the following code requires to be placed in an async function_
 
 ```javascript
 
-  const app = Vue.createApp({
-    components: {
-      'my-component': await loadModule('./myComponent.vue', options)
-    },
-    template: '<my-component></my-component>'
-  });
+	const app = Vue.createApp({
+		components: {
+			'my-component': await loadModule('./myComponent.vue', options)
+		},
+		template: '<my-component></my-component>'
+	});
 
 ```

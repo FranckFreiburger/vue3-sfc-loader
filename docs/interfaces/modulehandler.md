@@ -1,8 +1,11 @@
+**[vue3-sfc-loader](../README.md)**
+
 > [Globals](../README.md) / ModuleHandler
 
 # Interface: ModuleHandler
 
-A callback that loow
+Called by the library when it does not handle a loaded file type (eg. .json files).
+see [additionalModuleHandlers](options.md#additionalmodulehandlers)
 
 ## Hierarchy
 
@@ -10,18 +13,19 @@ A callback that loow
 
 ## Callable
 
-▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<Module>
+▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<[Module](module.md)>
 
-*Defined in [index.ts:218](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L218)*
+*Defined in [index.ts:227](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L227)*
 
-A callback that loow
+Called by the library when it does not handle a loaded file type (eg. .json files).
+see [additionalModuleHandlers](options.md#additionalmodulehandlers)
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`source` | string |
-`path` | string |
-`options` | [Options](options.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`source` | string | The content of the file |
+`path` | string | The path of the file |
+`options` | [Options](options.md) | The options  ```javascript  ...  additionalModuleHandlers: {   '.json': (source, path, options) => JSON.parse(source),  }  ... ```  |
 
-**Returns:** Promise\<Module>
+**Returns:** Promise\<[Module](module.md)>

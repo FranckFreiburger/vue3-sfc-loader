@@ -1,3 +1,5 @@
+**[vue3-sfc-loader](../README.md)**
+
 > [Globals](../README.md) / Options
 
 # Interface: Options
@@ -27,9 +29,9 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:134](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L134)*
+*Defined in [index.ts:136](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L136)*
 
-Additional babel plugins
+Additional babel plugins. [TBD]
 
 	```javascript
 		...
@@ -42,17 +44,9 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record\<string, [ModuleHandler](modulehandler.md)>
 
-*Defined in [index.ts:149](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L149)*
+*Defined in [index.ts:143](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L143)*
 
-Additional module type handlers
-
-```javascript
-	...
-	additionalModuleHandlers: {
-		'.json': (source, path, options) => JSON.parse(source),
-	}
-	...
-```
+Additional module type handlers. see [ModuleHandler](modulehandler.md)
 
 ___
 
@@ -60,14 +54,16 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:186](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L186)*
+*Defined in [index.ts:182](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L182)*
 
 [get](cache.md#get)() and [set](cache.md#set)() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
 
 **example:**
-In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place, here we handle this in a very basic way.
-Maybe (not tested), the following lib may help you [pako](https://github.com/nodeca/pako)
+
+In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place (usually 5MB).
+Here we handle space limitation in a very basic way.
+Maybe (not tested), the following lib may help you to gain more space [pako](https://github.com/nodeca/pako)
 ```javascript
 	...
 	compiledCache: {
@@ -99,9 +95,9 @@ ___
 
 ### moduleCache
 
-•  **moduleCache**: Record\<string, Module>
+•  **moduleCache**: Record\<string, [Module](module.md)>
 
-*Defined in [index.ts:84](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L84)*
+*Defined in [index.ts:85](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L85)*
 
 Initial cache that will contain resolved dependencies.
 `vue` must initially be contained in this object.
@@ -121,7 +117,7 @@ Initial cache that will contain resolved dependencies.
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:123](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L123)*
+*Defined in [index.ts:125](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L125)*
 
 Called by the library when CSS style must be added in the HTML document.
 
@@ -153,7 +149,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise\<string>
 
-*Defined in [index.ts:101](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L101)*
+*Defined in [index.ts:103](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L103)*
 
 Called by the library when it needs a file.
 
@@ -171,6 +167,7 @@ a Promise of the file content (UTF-8)
 ```javascript
 	...
 	getFile(url) {
+
 		return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
 	},
 	...
@@ -182,9 +179,9 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:204](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L204)*
+*Defined in [index.ts:200](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L200)*
 
-Called by the library when there is somthing to log (eg. )
+Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
 
 #### Parameters:
 

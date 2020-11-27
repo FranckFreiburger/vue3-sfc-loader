@@ -1,3 +1,5 @@
+**[vue3-sfc-loader](../README.md)**
+
 > [Globals](../README.md) / Cache
 
 # Interface: Cache
@@ -19,7 +21,7 @@
 
 ▸ **get**(`key`: string): Promise\<string>
 
-*Defined in [index.ts:62](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L62)*
+*Defined in [index.ts:63](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L63)*
 
 #### Parameters:
 
@@ -35,7 +37,7 @@ ___
 
 ▸ **set**(`key`: string, `value`: string): Promise\<void>
 
-*Defined in [index.ts:63](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cca6af9/src/index.ts#L63)*
+*Defined in [index.ts:64](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L64)*
 
 #### Parameters:
 
