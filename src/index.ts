@@ -150,7 +150,7 @@ interface Options {
 
 
 /**
- * Functions of this object are called when tle lib need to save or load already compiled code. [[get]]() and [[set]]() functions must return a `Promise`, or can be `async`.
+ * [[get]]() and [[set]]() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
  * Since compilation consume a lot of CPU, is is always a good idea to provide this object.
  *
  * **example:**
@@ -670,4 +670,3 @@ export async function loadModule(path : string, options : Options) {
 	const source = await getFile(path);
 	return moduleHandlers[ext](source, path, options);
 }
-
