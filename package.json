@@ -14,16 +14,15 @@
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
     "docs": "typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs --readme none --stripInternal --hideProjectName true --hideBreadcrumbs false --namedAnchors true",
-    "pushDocs": "npm run docs && git add docs/ && git commit -m \"chore(docs) build docs\" docs",
+    "pushDocs": "cross-env-shell yarn run docs && git add docs/ && git commit -m \"chore(docs) build docs v$npm_package_version\" docs",
     "release": "standard-version"
   },
   "standard-version": {
     "scripts": {
-      "postbump": "npm run pushDocs",
-      "postcommit": "npm run build"
+      "postbump": "yarn run pushDocs",
+      "postcommit": "yarn run build"
     }
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-dynamic-import": "^7.12.1",
@@ -39,8 +38,8 @@
     "bn.js": "^5.1.3",
     "buffer": "^6.0.3",
     "caniuse-api": "^3.0.0",
-    "conventional-changelog-cli": "^2.1.1",
     "core-js": "^3.8.0",
+    "cross-env": "^7.0.2",
     "crypto-browserify": "^3.12.0",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "path-browserify": "^1.0.1",
@@ -55,6 +54,7 @@
     "url": "^0.11.0",
     "util": "^0.12.3",
     "vm-browserify": "^1.1.2",
+    "vue": "^3.0.0",
     "webpack": "^5.8.0",
     "webpack-bundle-analyzer": "^4.1.0",
     "webpack-cli": "^4.2.0"
