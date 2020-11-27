@@ -14,7 +14,7 @@
 `<type>(<scope>): <subject>`
 
 type: `feat|fix|perf|docs|refactor|test|chore|wip|...`
-scope: `core|build|docs|...`
+scope: `core|build|docs|bumpdeps|workflow|...`
 subject: Use the imperative, present tense: "change" not "changed" nor "changes". Don't capitalize the first letter. Do dot (.) at the end
 
 #### Revert
