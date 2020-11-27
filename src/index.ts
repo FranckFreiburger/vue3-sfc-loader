@@ -510,33 +510,22 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				babelParserPlugins,
 			});
 
-			if ( script.scriptAst === undefined ) { // if error
+			const ast = babel_parse(script.content, {
+				// doc: https://babeljs.io/docs/en/babel-parser#options
+				plugins: [
+				 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
+					...vue_babelParserDefaultPlugins,
+					'jsx',
+					...babelParserPlugins
+				],
+				sourceType: 'module',
+				sourceFilename: filename,
+			});
 
-				try {
+			renameDynamicImport(ast);
+			const depsList = parseDeps(ast);
 
-					// get the error
-					const ast = babel_parse(descriptor.script.content, {
-						// doc: https://babeljs.io/docs/en/babel-parser#options
-						plugins: [...vue_babelParserDefaultPlugins, 'jsx', ...babelParserPlugins], // see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
-						sourceType: 'module',
-						sourceFilename: filename,
-					});
-
-				} catch (ex) {
-
-					preventCache();
-					log?.('error', 'SFC script', ex);
-				}
-			}
-
-			const program = t.program(script.scriptAst, [], 'module') // doc: https://babeljs.io/docs/en/babel-types#program
-			program.loc = script.loc;
-
-			const file = t.file(program); // doc: https://babeljs.io/docs/en/babel-types#file
-			renameDynamicImport(file);
-			const depsList = parseDeps(file);
-
-			const transformedScript = await babel_transformFromAstAsync(program, script.content, {
+			const transformedScript = await babel_transformFromAstAsync(ast, script.content, {
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
