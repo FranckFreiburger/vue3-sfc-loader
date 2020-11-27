@@ -13,7 +13,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
   <script>
 
     const { loadModule } = window['vue3-sfc-loader'];
@@ -54,30 +54,38 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 ```
 
 
-### Try it
+## Try it
 
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
 ## dist
 
-  at jsDelivr CDN: `https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js`
+  latest minified version:
+  - at jsDelivr CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js
+  - at UNPKG CDN: https://unpkg.com/browse/vue3-sfc-loader/dist/vue3-sfc-loader.js
 
 
-## API
+### Bundle size
+- \~380 kB minified + bz2
+- \~1600 kB minified
+
+
+## Public API
 
   **[loadModule](docs/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/interfaces/options.md)): Promise\<Module>
 
 
 ## Build your own version
 
-  default (`npm run build`):
+  `webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 2 versions, Firefox ESR, not dead, not ie 11"`
 
-    `webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 2 versions, Firefox ESR, not dead, not ie 11"`
+  _see `package.json` "build" script_
 
 
 ### targetsBrowsers
-  see https://github.com/browserslist/browserslist#queries
+
+  see [browserslist queries](https://github.com/browserslist/browserslist#queries)
 
 
 ## How it works
@@ -95,12 +103,14 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   1. merge all and return the component
 
 
-### Bundle size
-- 1600 Kb minified
-- 380 KB bz2
+## Previous version (for vue2)
+
+  see https://github.com/FranckFreiburger/http-vue-loader
 
 
-### More complete example
+## Other examples
+
+### more complete API usage example
 
 ```html
 <!DOCTYPE html>
@@ -108,7 +118,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
 
   <script>
 
@@ -210,4 +220,52 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 </body>
 </html>
+```
+
+
+### using another template language (pug)
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="app"></div>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://pugjs.org/js/pug.js"></script>
+  <script src="vue3-sfc-loader.js"></script>
+  <script>
+
+    /* <!-- */
+    const sfcSontent = `
+<template lang="pug">
+ul
+  each val in ['p', 'u', 'g']
+    li= val
+</template>
+`;
+    /* --> */
+
+    const options = {
+
+      moduleCache: {
+        vue: Vue,
+        pug: require('pug'),
+      },
+
+      getFile(url) {
+
+        if ( url === './myPugComponent.vue' )
+          return Promise.resolve(sfcSontent);
+
+        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+      },
+    }
+
+    const { loadModule } = window["vue3-sfc-loader"];
+    Vue.createApp(Vue.defineAsyncComponent(() => loadModule('./myPugComponent.vue', options))).mount('#app');
+
+  </script>
+</body>
+</html>
+
 ```
