@@ -623,7 +623,27 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 	'.mjs': (source, path, options) => createJSModule(source, true, path, options),
 };
 
+				
+/**
+ * This is the function that .
+ * @param path  The path of the .vue file or just a filename if this function is called directly.
+ * @param source  The source of the .vue template
+ * @param options  The options
+ * @returns A Promise of the component
+ *
+ */
+export async function loadModuleFromString(path : string, source : string, options : Options) {
+	const { additionalModuleHandlers = {} } = options;
+	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
+	const ext = Path.extname(path);
+	if ( !(ext in moduleHandlers) )
+		throw new TypeError(`Unable to handle ${ ext } files (${ path }), see additionalModuleHandlers`);
+	
+	return moduleHandlers[ext](source, path, options);
+}
+
+				
 /**
  * This is the main function.
  * @param path  The path of the .vue file
@@ -658,15 +678,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  */
 export async function loadModule(path : string, options : Options) {
-
-	const { getFile, additionalModuleHandlers = {} } = options;
-
-	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
-
-	const ext = Path.extname(path);
-	if ( !(ext in moduleHandlers) )
-		throw new TypeError(`Unable to handle ${ ext } files (${ path }), see additionalModuleHandlers`);
-
+	const { getFile } = options;
 	const source = await getFile(path);
-	return moduleHandlers[ext](source, path, options);
+	return loadModuleFromString(path, source, options);
 }
