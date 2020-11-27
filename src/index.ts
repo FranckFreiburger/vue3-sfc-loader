@@ -65,7 +65,7 @@ interface Cache {
 
 
 interface Options {
-	// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
+// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
 
 /**
  * Initial cache that will contain resolved dependencies.
@@ -644,12 +644,12 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * **example using `Vue.defineAsyncComponent`:**
  * ```javascript
  *
- *   const app = Vue.createApp({
- *     components: {
- *       'my-component': Vue.defineAsyncComponent( () => loadModule('./myComponent.vue', options) )
- *     },
- *     template: '<my-component></my-component>'
- *   });
+ *	const app = Vue.createApp({
+ *		components: {
+ *			'my-component': Vue.defineAsyncComponent( () => loadModule('./myComponent.vue', options) )
+ *		},
+ *		template: '<my-component></my-component>'
+ *	});
  *
  * ```
  *
@@ -658,12 +658,12 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  * ```javascript
  *
- *   const app = Vue.createApp({
- *     components: {
- *       'my-component': await loadModule('./myComponent.vue', options)
- *     },
- *     template: '<my-component></my-component>'
- *   });
+ *	const app = Vue.createApp({
+ *		components: {
+ *			'my-component': await loadModule('./myComponent.vue', options)
+ *		},
+ *		template: '<my-component></my-component>'
+ *	});
  *
  * ```
  *
