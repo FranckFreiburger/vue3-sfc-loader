@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.7](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.3...v0.2.7) (2020-11-27)
+
+
+### Features
+
+* **core:** export the version of the library ([4e1b1c7](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/4e1b1c705c9454c58783521e877035e93ab19339))
+
 ### [0.2.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.2...v0.2.3) (2020-11-26)
 
 ### [0.2.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.1...v0.2.2) (2020-11-26)
