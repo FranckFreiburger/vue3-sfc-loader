@@ -554,6 +554,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 			source: descriptor.template.content,
 			filename: descriptor.filename,
 			isProd,
+			scoped: hasScoped,
 			id: scopeId,
 			compilerOptions: {
 				scopeId,
