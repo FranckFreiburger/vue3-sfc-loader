@@ -26,7 +26,8 @@ import {
 	compileStyleAsync as sfc_compileStyleAsync,
 	compileScript as sfc_compileScript,
 	compileTemplate as sfc_compileTemplate,
-	SFCAsyncStyleCompileOptions
+	SFCAsyncStyleCompileOptions,
+	SFCTemplateCompileOptions
 } from '@vue/compiler-sfc'
 
 import {
@@ -492,6 +493,25 @@ async function createSFCModule(source : string, filename : string, options : Opt
 	const scopeId = hasScoped ? `data-v-${componentHash}` : null;
 
 
+
+	const compileTemplateOptions : SFCTemplateCompileOptions = {
+		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
+		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
+		source: descriptor.template.content,
+		filename: descriptor.filename,
+		isProd,
+		scoped: hasScoped,
+		id: scopeId,
+		compilerOptions: {
+			scopeId,
+			mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
+		},
+		//	transformAssetUrls
+		preprocessLang: descriptor.template.lang,
+		preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
+	}
+
+
 	const component = {};
 
 
@@ -508,6 +528,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				isProd,
 				id: scopeId,
 				babelParserPlugins,
+				templateOptions: compileTemplateOptions,
 			});
 
 			const ast = babel_parse(script.content, {
@@ -547,22 +568,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 	// compileTemplate eg: https://github.com/vuejs/vue-loader/blob/next/src/templateLoader.ts#L33
 	const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, descriptor.template.content ], async ({ preventCache }) => {
 
-		const template = sfc_compileTemplate({
-			// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-			compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
-			source: descriptor.template.content,
-			filename: descriptor.filename,
-			isProd,
-			scoped: hasScoped,
-			id: scopeId,
-			compilerOptions: {
-				scopeId,
-				mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
-			},
-			//	transformAssetUrls
-			preprocessLang: descriptor.template.lang,
-			preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
-		});
+		const template = sfc_compileTemplate(compileTemplateOptions);
 
 		if ( template.errors.length ) {
 
