@@ -229,9 +229,9 @@ interface ModuleHandler {
 const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 
 /**
- * @internal
+ * the version of the library
  */
-const version : string = process.env.VERSION;
+export const version : string = process.env.VERSION;
 
 
 /**
