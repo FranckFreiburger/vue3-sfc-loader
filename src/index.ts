@@ -93,6 +93,7 @@ interface Options {
  * ```javascript
  *	...
  *	getFile(url) {
+ *	
  *		return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
  *	},
  *	...
@@ -124,7 +125,7 @@ interface Options {
 
 
 /**
- * Additional babel plugins
+ * Additional babel plugins. [TBD]
  *
  *	```javascript
  *		...
@@ -135,15 +136,7 @@ interface Options {
 
 
 /**
- * Additional module type handlers
- *
- * ```javascript
- *	...
- *	additionalModuleHandlers: {
- *		'.json': (source, path, options) => JSON.parse(source),
- *	}
- *	...
- * ```
+ * Additional module type handlers. see [[ModuleHandler]]
  *
 */
 	additionalModuleHandlers?: Record<string, ModuleHandler>,
@@ -154,8 +147,10 @@ interface Options {
  * Since compilation consume a lot of CPU, is is always a good idea to provide this object.
  *
  * **example:**
- * In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place, here we handle this in a very basic way.
- * Maybe (not tested), the following lib may help you [pako](https://github.com/nodeca/pako)
+ *
+ * In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place (usually 5MB).
+ * Here we handle space limitation in a very basic way.
+ * Maybe (not tested), the following lib may help you to gain more space [pako](https://github.com/nodeca/pako)
  * ```javascript
  *	...
  *	compiledCache: {
@@ -187,7 +182,7 @@ interface Options {
 
 
 /**
- * Called by the library when there is somthing to log (eg. )
+ * Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
  * @param type the type of the notification
  * @param args the values to log
  * @return
@@ -207,13 +202,26 @@ interface Options {
 
 
 /**
- * @ignore
+ * This just represents a loaded js module
  */
 interface Module {
 }
 
+
 /**
- * A callback that loow
+ * Called by the library when it does not handle a loaded file type (eg. .json files).
+ * see [[additionalModuleHandlers]]
+ * @param source The content of the file
+ * @param path The path of the file
+ * @param options The options
+ *
+ * ```javascript
+ *	...
+ *	additionalModuleHandlers: {
+ *		'.json': (source, path, options) => JSON.parse(source),
+ *	}
+ *	...
+ * ```
  */
 interface ModuleHandler {
 	(source : string, path : string, options : Options) : Promise<Module>;
@@ -228,8 +236,9 @@ interface ModuleHandler {
  */
 const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 
+
 /**
- * the version of the library
+ * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
 export const version : string = process.env.VERSION;
 
@@ -313,6 +322,7 @@ function parseDeps(fileAst : t.File) : string[] {
 
 
 /**
+ * relative to absolute module path resolution.
  * @internal
  */
 function resolvePath(path : string, depPath : string) {
@@ -325,7 +335,7 @@ function resolvePath(path : string, depPath : string) {
 
 
 /**
- * Just load and cache deps
+ * Just load and cache given dependencies.
  * @internal
  */
 async function loadDeps(filename : string, deps : string[], options : Options) {
@@ -392,7 +402,7 @@ function createModule(filePath : string, source : string, options : Options) {
  * Simple cache helper
  * @internal
  */
-async function withCache( cacheInstance : Cache, key : any[], valueFactory: ValueFactory ) {
+async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) {
 
 	let cachePrevented = false;
 
