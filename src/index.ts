@@ -538,23 +538,22 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				templateOptions: compileTemplateOptions,
 			});
 
-			const startLine = script.loc.start.line;
 			let ast;
 			try {
 
-			ast = babel_parse(script.content, {
-				// doc: https://babeljs.io/docs/en/babel-parser#options
-				// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
-				plugins: [
-				 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
-					...vue_babelParserDefaultPlugins,
-					'jsx',
-					...babelParserPlugins
-				],
-				sourceType: 'module',
-				sourceFilename: filename,
-				startLine,
-			});
+				ast = babel_parse(script.content, {
+					// doc: https://babeljs.io/docs/en/babel-parser#options
+					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
+					plugins: [
+					 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
+						...vue_babelParserDefaultPlugins,
+						'jsx',
+						...babelParserPlugins
+					],
+					sourceType: 'module',
+					sourceFilename: filename,
+					startLine: script.loc.start.line,
+				});
 
 			} catch(ex) {
 
@@ -565,9 +564,11 @@ async function createSFCModule(source : string, filename : string, options : Opt
 					}
 				};
 
-				ex.message = '\n' + codeFrameColumns(source, location, {
+				const formatedMessage = codeFrameColumns(source, location, {
 					message: ex.message,
 				});
+
+				log?.('error', 'SFC script', formatedMessage);
 
 				throw ex;
 			}
