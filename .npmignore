@@ -106,3 +106,5 @@ typings/
 
 **/node_modules/
 misc/
+.github
+.yarn
