@@ -13,7 +13,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
   <script>
 
     const { loadModule } = window['vue3-sfc-loader'];
@@ -62,8 +62,8 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 ## dist
 
   latest minified version:
-  - at jsDelivr CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js
-  - at UNPKG CDN: https://unpkg.com/vue3-sfc-loader/dist/vue3-sfc-loader.js
+  - at jsDelivr CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader
+  - at UNPKG CDN: https://unpkg.com/vue3-sfc-loader
 
 ### Bundle size
 - \~380 kB minified + bz2
@@ -89,7 +89,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ## How it works
 
-  `Webpack`( `@vue/compiler-sfc` + `@babel` ) = `vue3-sfc-loader.js`
+  `vue3-sfc-loader.js` = `Webpack`( `@vue/compiler-sfc` + `@babel` )
 
 
 ### More details
@@ -117,7 +117,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
 
   <script>
 
@@ -284,7 +284,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>

@@ -214,11 +214,13 @@ interface Module {
 
 
 /**
- * Called by the library when it does not handle a loaded file type (eg. .json files).
+ * Used by the library when it does not know how to handle a given file type (eg. `.json` files).
  * see [[additionalModuleHandlers]]
  * @param source The content of the file
  * @param path The path of the file
  * @param options The options
+ *
+ * **example:**
  *
  * ```javascript
  *	...
