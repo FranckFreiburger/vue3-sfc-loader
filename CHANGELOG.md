@@ -1,4 +1,12 @@
 
+### [0.2.10](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.8...v0.2.10) (2020-11-28)
+
+
+### Features
+
+* **core:** add code frame in JS code compilation error reports ([caa2d0d](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/caa2d0ddea2d9ea3000afea83f4d457bbdaf4da7))
+* **core:** report JS code compilation errors through options.log() ([c806016](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/c8060167b9a74f77efc8b1fe9efb0a20135634cc))
+
 ### [0.2.8](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.7...v0.2.8) (2020-11-27)
 
 
