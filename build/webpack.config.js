@@ -139,7 +139,6 @@ ${ pkg.name } v${ pkg.version }
 				// not needed
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
-				'@babel/code-frame': false,
 
 				...!genSourcemap ? {
 					'source-map': false,

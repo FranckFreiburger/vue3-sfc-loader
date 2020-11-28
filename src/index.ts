@@ -5,6 +5,10 @@ import { createHash } from 'crypto'
 // babel-core doc: https://babeljs.io/docs/en/babel-core
 
 import {
+	codeFrameColumns
+} from '@babel/code-frame';
+
+import {
 	transformFromAstAsync as babel_transformFromAstAsync,
 	traverse,
 	NodePath,
@@ -452,7 +456,7 @@ async function transformJSCode(source : string, moduleSourceType : boolean, file
 		],
 		babelrc: false,
 		configFile: false,
-
+		highlightCode: false,
 		// @ts-ignore // not defined in https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/babel__core/index.d.ts
 		cloneInputAst: false, // doc: can improve parsing performance if the input AST is not used elsewhere.
 	});
@@ -534,8 +538,13 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				templateOptions: compileTemplateOptions,
 			});
 
-			const ast = babel_parse(script.content, {
+			const startLine = script.loc.start.line;
+			let ast;
+			try {
+
+			ast = babel_parse(script.content, {
 				// doc: https://babeljs.io/docs/en/babel-parser#options
+				// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
 				plugins: [
 				 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
 					...vue_babelParserDefaultPlugins,
@@ -544,7 +553,25 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				],
 				sourceType: 'module',
 				sourceFilename: filename,
+				startLine,
 			});
+
+			} catch(ex) {
+
+				const location = {
+					start: {
+						line: ex.loc.line,
+						column: ex.loc.column + 1,
+					}
+				};
+
+				ex.message = '\n' + codeFrameColumns(source, location, {
+					message: ex.message,
+				});
+
+				throw ex;
+			}
+
 
 			renameDynamicImport(ast);
 			const depsList = parseDeps(ast);
@@ -557,7 +584,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				],
 				babelrc: false,
 				configFile: false,
-
+				highlightCode: false,
 				// @ts-ignore // not defined in https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/babel__core/index.d.ts
 				cloneInputAst: false, // doc: can improve parsing performance if the input AST is not used elsewhere.
 			});
