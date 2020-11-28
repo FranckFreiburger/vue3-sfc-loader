@@ -233,7 +233,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js"></script>
   <script>
 
     /* <!-- */
@@ -260,6 +260,8 @@ ul
 
         return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
       },
+
+      addStyle: () => {},
     }
 
     const { loadModule } = window["vue3-sfc-loader"];
@@ -269,4 +271,64 @@ ul
 </body>
 </html>
 
+```
+
+
+### SFC style CSS variable injection (new edition)
+
+_see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="app"></div>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
+  <script>
+    const sfcSontent = /* <!-- */`
+      <template>
+        Hello <span class="example">{{ msg }}</span>
+      </template>
+      <script>
+        export default {
+          data () {
+            return {
+              msg: 'world!',
+              color: 'blue',
+            }
+          }
+        }
+      </script>
+      <style scoped>
+        .example {
+          color: v-bind('color')
+        }
+      </style>
+    `/* --> */;
+
+    const options = {
+      moduleCache: {
+        vue: Vue,
+      },
+      getFile(url) {
+
+        if ( url === './myComponent.vue' )
+          return Promise.resolve(sfcSontent);
+        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+      },
+      addStyle(styleStr) {
+
+        const style = document.createElement('style');
+        style.textContent = styleStr;
+        const ref = document.head.getElementsByTagName('style')[0] || null;
+        document.head.insertBefore(style, ref);
+      },
+    }
+
+    const { loadModule } = window["vue3-sfc-loader"];
+    Vue.createApp(Vue.defineAsyncComponent(() => loadModule('./myComponent.vue', options))).mount('#app');
+  </script>
+</body>
+</html>
 ```
