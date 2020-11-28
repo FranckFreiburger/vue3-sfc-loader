@@ -188,7 +188,7 @@ interface Options {
 
 /**
  * Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
- * @param type the type of the notification
+ * @param type the type of the notification, it respects console property names (error, warn, info).
  * @param args the values to log
  * @return
  *
