@@ -15,7 +15,7 @@ see [additionalModuleHandlers](options.md#additionalmodulehandlers)
 
 ▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise\<[Module](module.md)>
 
-*Defined in [index.ts:227](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/8c31317/src/index.ts#L227)*
+*Defined in [index.ts:231](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e6d9175/src/index.ts#L231)*
 
 Called by the library when it does not handle a loaded file type (eg. .json files).
 see [additionalModuleHandlers](options.md#additionalmodulehandlers)
