@@ -1,4 +1,12 @@
 
+### [0.2.11](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.10...v0.2.11) (2020-11-28)
+
+
+### Features
+
+* **core:** loadModule() throw when a mandatory option is not defined. ([1f62eac](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/1f62eac14972e25833eacb5781b7c9ee7283254c))
+* **workflow:** add evalHtmlComments.js tool ([c86208b](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/c86208bb4cd84686d615c74e29977da11c15a9f4))
+
 ### [0.2.10](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.8...v0.2.10) (2020-11-28)
 
 
