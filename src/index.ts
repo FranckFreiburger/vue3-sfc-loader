@@ -259,6 +259,14 @@ const isProd = process.env.NODE_ENV === 'production';
 /**
  * @internal
  */
+function throwNotDefined(details : string) : never {
+
+	throw new ReferenceError(`${ details } is not defined`);
+}
+
+/**
+ * @internal
+ */
 function hash(...valueList : any[]) : string {
 
 	const hashInstance = createHash('md5');
@@ -697,9 +705,14 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * ```
  *
  */
-export async function loadModule(path : string, options : Options) {
+export async function loadModule(path : string, options : Options = throwNotDefined('options')) {
 
-	const { getFile, additionalModuleHandlers = {} } = options;
+	const {
+		moduleCache = throwNotDefined('options.moduleCache'),
+		getFile = throwNotDefined('options.getFile()'),
+		addStyle = throwNotDefined('options.addStyle()'),
+		additionalModuleHandlers = {}
+	} = options;
 
 	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
