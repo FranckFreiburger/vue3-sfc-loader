@@ -27,7 +27,7 @@
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:248](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e6d9175/src/index.ts#L248)*
+*Defined in [index.ts:248](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/af93193/src/index.ts#L248)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -35,18 +35,18 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 ### loadModule
 
-▸ **loadModule**(`path`: string, `options`: [Options](interfaces/options.md)): Promise\<[Module](interfaces/module.md)>
+▸ **loadModule**(`path`: string, `options?`: [Options](interfaces/options.md)): Promise\<[Module](interfaces/module.md)>
 
-*Defined in [index.ts:700](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e6d9175/src/index.ts#L700)*
+*Defined in [index.ts:708](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/af93193/src/index.ts#L708)*
 
 This is the main function.
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`path` | string | The path of the .vue file |
-`options` | [Options](interfaces/options.md) | The options |
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`path` | string | - | The path of the .vue file |
+`options` | [Options](interfaces/options.md) | throwNotDefined('options') | The options |
 
 **Returns:** Promise\<[Module](interfaces/module.md)>
 
