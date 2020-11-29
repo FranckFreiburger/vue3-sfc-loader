@@ -269,6 +269,21 @@ function throwNotDefined(details : string) : never {
 /**
  * @internal
  */
+function formatError(message : string, path : string, source : string, line : number, column : number) : string {
+
+	const location = {
+		start: { line, column },
+	};
+
+	return '\n' + path + '\n' + codeFrameColumns(source, location, {
+		message,
+	}) + '\n';
+}
+
+
+/**
+ * @internal
+ */
 function hash(...valueList : any[]) : string {
 
 	const hashInstance = createHash('md5');
@@ -447,13 +462,21 @@ async function withCache( cacheInstance : Cache, key : any[], valueFactory : Val
  */
 async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
-	const { additionalBabelPlugins = [] } = options;
+	const { additionalBabelPlugins = [], log } = options;
 
-	const ast = babel_parse(source, {
-		// doc: https://babeljs.io/docs/en/babel-parser#options
-		sourceType: moduleSourceType ? 'module' : 'script',
-		sourceFilename: filename,
-	});
+	let ast;
+	try {
+
+		ast = babel_parse(source, {
+			// doc: https://babeljs.io/docs/en/babel-parser#options
+			sourceType: moduleSourceType ? 'module' : 'script',
+			sourceFilename: filename,
+		});
+	} catch(ex) {
+
+		log?.('error', 'dep script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+		throw ex;
+	}
 
 	renameDynamicImport(ast);
 	const depsList = parseDeps(ast);
@@ -567,19 +590,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 			} catch(ex) {
 
-				const location = {
-					start: {
-						line: ex.loc.line,
-						column: ex.loc.column + 1,
-					}
-				};
-
-				const formatedMessage = codeFrameColumns(source, location, {
-					message: ex.message,
-				});
-
-				log?.('error', 'SFC script', formatedMessage);
-
+				log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
 				throw ex;
 			}
 
@@ -617,8 +628,11 @@ async function createSFCModule(source : string, filename : string, options : Opt
 		if ( template.errors.length ) {
 
 			preventCache();
-			for ( const err of template.errors )
-				log?.('warn', 'SFC template', err);
+			for ( const err of template.errors ) {
+
+				// @ts-ignore
+				log?.('error', 'SFC template', formatError(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+			}
 		}
 
 		for ( const err of template.tips )
@@ -631,27 +645,30 @@ async function createSFCModule(source : string, filename : string, options : Opt
 	Object.assign(component, createModule(filename, templateTransformedSource, options).exports);
 
 
-	for ( const e of descriptor.styles ) {
+	for ( const descStyle of descriptor.styles ) {
 
-		const style = await withCache(compiledCache, [ componentHash, e.content ], async ({ preventCache }) => {
+		const style = await withCache(compiledCache, [ componentHash, descStyle.content ], async ({ preventCache }) => {
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 			const compiledStyle = await sfc_compileStyleAsync({
 				filename: descriptor.filename,
-				source: e.content,
+				source: descStyle.content,
 				isProd,
 				id: scopeId,
-				scoped: e.scoped,
+				scoped: descStyle.scoped,
 				trim: true,
-				preprocessLang: e.lang as PreprocessLang,
+				preprocessLang: descStyle.lang as PreprocessLang,
 				preprocessCustomRequire: id => moduleCache[id],
 			});
 
 			if ( compiledStyle.errors.length ) {
 
 				preventCache();
-				for ( const err of compiledStyle.errors )
-					log?.('warn', 'SFC style', err);
+				for ( const err of compiledStyle.errors ) {
+
+					// @ts-ignore (Property 'line' does not exist on type 'Error' and Property 'column' does not exist on type 'Error')
+					log?.('error', 'SFC style', formatError(err.message, filename, source, err.line + descStyle.loc.start.line - 1, err.column) );
+				}
 			}
 
 			return compiledStyle.code;
