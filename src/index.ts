@@ -21,7 +21,7 @@ import {
 } from '@babel/parser';
 
 
-// @ts-ignore
+// @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
 // compiler-sfc src: https://github.com/vuejs/vue-next/blob/master/packages/compiler-sfc/src/index.ts#L1
@@ -336,7 +336,7 @@ function parseDeps(fileAst : t.File) : string[] {
 		CallExpression(path : NodePath<t.CallExpression>) {
 
 			if (
-					// @ts-ignore
+				   // @ts-ignore (Property 'name' does not exist on type 'ArrayExpression')
 				   path.node.callee.name === 'require'
 				&& path.node.arguments.length === 1
 				&& t.isStringLiteral(path.node.arguments[0])
@@ -630,7 +630,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 			preventCache();
 			for ( const err of template.errors ) {
 
-				// @ts-ignore
+				// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
 				log?.('error', 'SFC template', formatError(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
 			}
 		}
