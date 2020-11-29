@@ -1,4 +1,11 @@
 
+### [0.2.12](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.11...v0.2.12) (2020-11-29)
+
+
+### Features
+
+* **core:** add code-frame in compilation errors for template, style, SFC script ad imported scripts ([521bea6](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/521bea6f33f75b256ce2e8c28b0e21c4d023c887))
+
 ### [0.2.11](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.10...v0.2.11) (2020-11-28)
 
 
