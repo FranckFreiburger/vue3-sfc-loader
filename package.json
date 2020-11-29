@@ -47,6 +47,7 @@
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "safe-buffer": "^5.2.1",
+    "source-map-explorer": "^2.5.1",
     "standard-version": "^9.0.0",
     "stream-browserify": "^3.0.0",
     "ts-loader": "^8.0.11",
@@ -60,5 +61,5 @@
     "webpack": "^5.9.0",
     "webpack-bundle-analyzer": "^4.1.0",
     "webpack-cli": "^4.2.0"
-  }
+}
 }
