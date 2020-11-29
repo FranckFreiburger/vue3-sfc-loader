@@ -1,5 +1,7 @@
 # Commit Message Convention
 
+see https://www.conventionalcommits.org/
+
 ## Full Message Format
 ```
 <type>(<scope>): <subject>
@@ -13,9 +15,13 @@
 
 `<type>(<scope>): <subject>`
 
-type: `feat|fix|perf|docs|refactor|test|chore|wip|...`
-scope: `core|build|docs|bumpdeps|workflow|...`
+type: `feat|fix|build|perf|docs|refactor|test|chore|wip|...`
+scope: `core|build|docs|deps|workflow|...`
 subject: Use the imperative, present tense: "change" not "changed" nor "changes". Don't capitalize the first letter. Do dot (.) at the end
+
+fix: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in semantic versioning).
+feat: a commit of the type feat introduces a new feature to the codebase (this correlates with MINOR in semantic versioning).
+
 
 #### Revert
 If the commit reverts a previous commit, it should begin with `revert:`, followed by the header of the reverted commit.
@@ -31,3 +37,4 @@ The footer should contain any information about Breaking Changes and is also the
 
 Breaking Changes should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
 
+BREAKING CHANGE: a commit that has a footer BREAKING CHANGE:, or appends a ! after the type/scope, introduces a breaking API change (correlating with MAJOR in semantic versioning). A BREAKING CHANGE can be part of commits of any type.
