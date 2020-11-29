@@ -146,6 +146,8 @@ ${ pkg.name } v${ pkg.version }
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
 				'@babel/highlight': false,
+				'emojis-list': false,
+				'json5': false,
 
 				...!genSourcemap ? {
 					'source-map': false,
