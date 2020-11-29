@@ -16,11 +16,17 @@ const distPath = Path.resolve(__dirname, '..', 'dist');
 
 module.exports = (env = {}, { mode = 'production' }) => {
 
+	const isProd = mode === 'production';
+
 	// doc: https://github.com/browserslist/browserslist#full-list
 	// eg. '> 0.5%, last 2 versions, Firefox ESR, not dead, not ie 11'
-	const { targetsBrowsers = 'defaults' } = env;
+	const {
+		targetsBrowsers = 'defaults',
+		noPresetEnv = false,
+		noCompress = false,
+	} = env;
 
-	const isProd = mode === 'production';
+	console.log('env', env);
 
 	const genSourcemap = false;
 
@@ -88,7 +94,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 			}),
 
 			// minimize
-			...isProd ? [
+			...(isProd && !noCompress) ? [
 				new TerserPlugin({
 					extractComments: false,
 					terserOptions: {
@@ -174,19 +180,22 @@ ${ pkg.name } v${ pkg.version }
 							compact: true,
 
 							presets: [
-								[
-									'@babel/preset-env',
-									{
-										useBuiltIns: 'entry', // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
-										corejs: {
-											version: 3,
-											proposals: true
-										},
-										targets: {
-											browsers: targetsBrowsers,
-										},
-									}
-								]
+
+								...!noPresetEnv ? [
+									[
+										'@babel/preset-env',
+										{
+											useBuiltIns: 'entry', // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
+											corejs: {
+												version: 3,
+												proposals: true
+											},
+											targets: {
+												browsers: targetsBrowsers,
+											},
+										}
+									]
+								] : [],
 							],
 
 							plugins: [
