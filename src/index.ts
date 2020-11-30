@@ -742,5 +742,8 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 		throw new TypeError(`Unable to handle ${ ext } files (${ path }), see additionalModuleHandlers`);
 
 	const source = await getFile(path);
+	if ( typeof source !== 'string' )
+		throw new TypeError(`Invalid module content (${ path }): ${ source }`);
+
 	return moduleHandlers[ext](source, path, options);
 }
