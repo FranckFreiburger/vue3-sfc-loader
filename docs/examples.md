@@ -1,14 +1,13 @@
 <!--toc-->
-* [examples](#examples)
+* [Examples](#examples)
   * [more complete API usage example](#more-complete-api-usage-example)
-    * [test](#test)
   * [using another template language (pug)](#using-another-template-language-pug)
   * [SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
 <!--/toc-->
 
 # Examples
 
-:warning: beware, the following examples are sticky to version <!--version-->1.2.3<!--/version--> . see [latest versions](../README.md#dist)
+:warning: beware, the following examples are sticky to version <!--version-->0.2.12<!--/version--> . see [latest versions](../README.md#dist)
 
 Since most browsers do not allow you to access local filesystem, you can start a small express server to run these examples.
 
@@ -27,7 +26,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
 
     // window.localStorage.clear();
@@ -142,7 +141,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
 
     /* <!-- */
@@ -193,7 +192,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>
