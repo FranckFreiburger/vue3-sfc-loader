@@ -7,13 +7,13 @@
 
 # Examples
 
-:warning: beware, the following examples are sticky to version <!--version-->0.2.12<!--/version--> . see [latest versions](../README.md#dist)
+:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.12<!--/version-->*, for your use, prefer the [latest versions](../README.md#dist)
 
-Since most browsers do not allow you to access local filesystem, you can start a small express server to run these examples.
+Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.
 
 Run the following commands to start a basic web server:
 ```sh
-npm install express # or yarn add express
+npm install express  # or yarn add express
 node -e "require('express')().use(require('express').static(__dirname, {index:'index.html'})).listen(8181)"
 ```
 
