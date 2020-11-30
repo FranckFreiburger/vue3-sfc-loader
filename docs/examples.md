@@ -1,16 +1,14 @@
 <!--toc-->
 
-###[ more complete API usage example](#more-complete-api-usage-example)
+   * [ more complete API usage example](#more-complete-api-usage-example)
 
-###[ using another template language (pug)](#using-another-template-language-pug)
+   * [ using another template language (pug)](#using-another-template-language-pug)
 
-###[ SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
+   * [ SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
 
 <!--/toc-->
 
-:warning: beware, the following examples are sticky to version <!--version-->0.2.12<!--/version-->
-
-see [latest versions](../README.md#dist)
+:warning: beware, the following examples are sticky to version <!--version-->0.2.12<!--/version--> . see [latest versions](../README.md#dist)
 
 
 ### more complete API usage example
@@ -266,7 +264,7 @@ function ghAnchor(header) {
 const contentWithoutToc = replaceBlock(this, 'toc', ''); // avoid to TOC the TOC
 
 const toc = [...contentWithoutToc.matchAll(/^(#{1,3})([^#].*)$/mg)]
-.map(e => `${ e[1] }[${ e[2] }](#${ ghAnchor(e[2]) })`)
+.map(e => `${ ' '.repeat(e[1].length) }* [${ e[2] }](#${ ghAnchor(e[2]) })`)
 .join('\n\n')
 
 const version = process.argv[3];
