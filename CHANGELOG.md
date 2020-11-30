@@ -1,4 +1,12 @@
 
+### [0.2.14](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.13...v0.2.14) (2020-11-30)
+
+
+### Bug Fixes
+
+* **build:** restore @babel/highlight that is required by @babel/code-frame ([c728343](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/c728343e3494c47edad81c9c090bcdbd5b3d0ff8))
+* **docs:** fix/enhance "more complete API usage example" example ([61cfe04](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/61cfe04aad90f0fee38cb5296a27062cbea787bc))
+
 ### [0.2.13](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.12...v0.2.13) (2020-11-30)
 
 
