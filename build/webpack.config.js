@@ -101,6 +101,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 						// doc: https://github.com/terser/terser#compress-options
 						mangle: true,
 						compress: {
+							passes: 2,
 							drop_console: true,
 							arrows: caniuse.isSupported('arrow-functions', targetsBrowsers),
 							ecma: caniuse.isSupported('es6', targetsBrowsers) ? '2015' : '5', // note ECMAScript 2015 is the sixth edition of the ECMAScript Language Specification standard
