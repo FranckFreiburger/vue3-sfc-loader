@@ -30,7 +30,26 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
   <script>
 
-    // window.localStorage.clear();
+    const componentSource = /* <!-- */`
+      <template>
+        <span class="example">{{ msg }}</span>
+      </template>
+      <script>
+        export default {
+          data () {
+            return {
+              msg: 'world!'
+            }
+          }
+        }
+      </script>
+
+      <style scoped>
+        .example {
+          color: red;
+        }
+      </style>
+    `/* --> */;
 
     const options = {
 
@@ -39,6 +58,9 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
       },
 
       getFile(url) {
+
+        if ( url === './myComponent.vue' )
+          return Promise.resolve(componentSource);
 
         return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
       },
@@ -53,7 +75,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 
       log(type, ...args) {
 
-        console.log(type, ...args);
+        console[type](...args);
       },
 
       compiledCache: {
@@ -86,42 +108,14 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
       }
     }
 
-    // <!--
-    const source = `
-      <template>
-        <div class="example">{{ msg }}</div>
-      </template>
-      <script>
-        export default {
-          data () {
-            return {
-              msg: 'Hello world!'
-            }
-          }
-        }
-      </script>
-
-      <style scoped>
-        .example {
-          color: red;
-        }
-      </style>
-    `;
-    // -->
-
-
-    const { createSFCModule } = window["vue3-sfc-loader"];
-    const myComponent = createSFCModule(source, './myComponent.vue', options);
-
-    // ... or by file:
-    // const { loadModule } = window["vue3-sfc-loader"];
-    // const myComponent = loadModule('./myComponent.vue', options);
+    const { loadModule } = window['vue3-sfc-loader'];
+    const myComponent = loadModule('./myComponent.vue', options);
 
     const app = Vue.createApp({
       components: {
         'my-component': Vue.defineAsyncComponent( () => myComponent ),
       },
-      template: 'root: <my-component></my-component>'
+      template: 'Hello <my-component></my-component>'
     });
 
     app.mount('#app');
