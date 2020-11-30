@@ -7,7 +7,7 @@
 
 # Examples
 
-:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.12<!--/version-->*, for your use, prefer the [latest versions](../README.md#dist)
+:warning: **beware**, the following examples are sticky to version *<!--version-->1.2.3<!--/version-->*, for your use, prefer the [latest versions](../README.md#dist)
 
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.
 
@@ -26,7 +26,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
   <script>
 
     // window.localStorage.clear();
@@ -141,7 +141,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
   <script>
 
     /* <!-- */
@@ -192,7 +192,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>
@@ -244,9 +244,6 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
 <!---
 
-// TOC generation
-
-
 const regexpReservedChars = '\\.+*?^$|[{()';
 
 const regexpReserved = new RegExp('([' + regexpReservedChars.split('').map(char => '\\'+char).join('') + '])', 'gu');
@@ -268,15 +265,18 @@ function ghAnchor(header) {
 	return header.trim().toLowerCase().replace(/[^\w\- ]+/g, '').replace(/\s/g, '-').replace(/\-+$/, '');
 }
 
-const contentWithoutToc = replaceBlock(this, 'toc', ''); // avoid to TOC the TOC
-
-const toc = [...contentWithoutToc.matchAll(/^(#{1,3}) ?([^#].*)$/mg)]
+const toc = [...this.matchAll(/^(#{1,3}) ?([^#].*)$/mg)]
 .map(e => `${ ' '.repeat((e[1].length-1) * 2) }* [${ e[2] }](#${ ghAnchor(e[2]) })`)
 .join('\n')
 
 const version = process.argv[3];
 
-let result = replaceBlock(this, 'toc', `${ toc }`);
+let result = this;
+
+// TOC generation
+result = replaceBlock(result, 'toc', `${ toc }`);
+
+// set current version
 result = replaceBlock(result, 'version', `${ version }`);
 result = result.replace(/(npm\/vue3-sfc-loader@)(.+?)( )/g, `$1${ version }$3`);
 
