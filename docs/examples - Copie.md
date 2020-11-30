@@ -1,25 +1,12 @@
-<!--toc-->
-* [Examples](#examples)
-  * [more complete API usage example](#more-complete-api-usage-example)
-  * [Load a Vue component from a string](#load-a-vue-component-from-a-string)
-  * [using another template language (pug)](#using-another-template-language-pug)
-  * [SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
-<!--/toc-->
+<!--toc
+toc-->
 
-# Examples
+# examples
 
-:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.13<!--/version-->*, for your use, prefer the [latest versions](../README.md#dist)
-
-Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.
-
-Run the following commands to start a basic web server:
-```sh
-npm install express  # or yarn add express
-node -e "require('express')().use(require('express').static(__dirname, {index:'index.html'})).listen(8181)"
-```
+beware, the following examples are sticky to version <!--version version-->
 
 
-## more complete API usage example
+### more complete API usage example
 
 ```html
 <!DOCTYPE html>
@@ -27,8 +14,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "> >
 
     // window.localStorage.clear();
 
@@ -133,46 +119,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 ```
 
 
-## Load a Vue component from a string
-
-```html
-<!DOCTYPE html>
-<html>
-<body>
-  <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
-  <script>
-
-    /* <!-- */
-    const sfcSontent = `
-      <template>
-        Hello World !
-      </template>
-    `;
-    /* --> */
-
-    const options = {
-      moduleCache: {
-        vue: Vue,
-      },
-      getFile(url) {
-
-        if ( url === './myComponent.vue' )
-          return Promise.resolve(sfcSontent);
-      },
-      addStyle() {},
-    }
-
-    const { loadModule } = window['vue3-sfc-loader'];
-    Vue.createApp(Vue.defineAsyncComponent(() => loadModule('./myComponent.vue', options))).mount(document.body);
-
-  </script>
-</body>
-</html>
-```
-
-
-## using another template language (pug)
+### using another template language (pug)
 
 ```html
 <!DOCTYPE html>
@@ -181,7 +128,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
 
     /* <!-- */
@@ -222,7 +169,7 @@ ul
 ```
 
 
-## SFC style CSS variable injection (new edition)
+### SFC style CSS variable injection (new edition)
 
 _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
@@ -232,8 +179,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 ">
     const sfcSontent = /* <!-- */`
       <template>
         Hello <span class="example">{{ msg }}</span>
@@ -284,6 +230,9 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
 <!---
 
+// TOC generation
+
+
 const regexpReservedChars = '\\.+*?^$|[{()';
 
 const regexpReserved = new RegExp('([' + regexpReservedChars.split('').map(char => '\\'+char).join('') + '])', 'gu');
@@ -295,9 +244,9 @@ function regexpQuote(str) {
 
 const replaceBlock = (currentContent, tag, content) => {
 
-	const block = [ `<\!--${ tag }--\>`, `<\!--/${ tag }--\>` ];
-	const regexp = new RegExp(regexpQuote(block[0]) + '([ \\t]*\\r?\\n?)[^]*?(\\s*)' + regexpQuote(block[1]), 'g');
-	return currentContent.replace(regexp, block[0] + '$1' + content + '$2' + block[1]);
+	const block = [ `<\!--${ tag }`, `${ tag }--\>)` ];
+	const regexp = new RegExp(regexpQuote(block[0]) + '[^]*?' + regexpQuote(block[1]))
+	return currentContent.replace(regexp, block[0] + '\n' + content + '\n' + block[1])
 }
 
 function ghAnchor(header) {
@@ -305,19 +254,18 @@ function ghAnchor(header) {
 	return header.trim().toLowerCase().replace(/[^\w\- ]+/g, '').replace(/\s/g, '-').replace(/\-+$/, '');
 }
 
-const toc = [...this.matchAll(/^(#{1,3}) ?([^#].*)$/mg)]
-.map(e => `${ ' '.repeat((e[1].length-1) * 2) }* [${ e[2] }](#${ ghAnchor(e[2]) })`)
-.join('\n')
+const contentWithoutToc = replaceBlock(this, 'toc', ''); // avoid to TOC the TOC
+
+const toc = [...contentWithoutToc.matchAll(/^(#{1,3})([^#].*)$/mg)]
+.map(e => `${ e[1] }[${ e[2] }](#${ ghAnchor(e[2]) })\n\n`)
+.join('')
 
 const version = process.argv[3];
 
-let result = this;
+let result = replaceBlock(this, 'toc', toc);
 
-// TOC generation
-result = replaceBlock(result, 'toc', `${ toc }`);
+result = replaceBlock(result, 'version', version);
 
-// set current version
-result = replaceBlock(result, 'version', `${ version }`);
 result = result.replace(/(npm\/vue3-sfc-loader@)(.+?)( )/g, `$1${ version }$3`);
 
 result;
