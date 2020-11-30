@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="vue3-sfc-loader.js"></script>
+  <script>
+
+;(async () => {
+
+  const { loadModule } = window['vue3-sfc-loader'];
+
+  async function runComponent(source) {
+
+    Vue.createApp(await loadModule('./myComponent.vue', { moduleCache: { vue: Vue }, getFile: () => Promise.resolve(source), addStyle: () => {} })).mount(document.body);
+  }
+
+  /* <!-- */
+  const tests = [
+
+    async function noErrors() {
+      await runComponent(`
+        <template>
+          Hello World !
+        </template>
+      `);
+    },
+    async function errorInTemplate() {
+      await runComponent(`
+        <template>
+          Hello World ! {{ msg }
+        </template>
+      `);
+    },
+
+    async function errorInStyle() {
+      await runComponent(`
+        <template>
+          Hello World !
+        </template>
+        <style>
+        body
+          color: red;
+        }
+        </style>
+      `);
+    },
+
+    async function errorInScript() {
+      await runComponent(`
+        <script>
+          test(
+        </script>
+      `);
+    },
+
+    async function allBlocks() {
+      await runComponent(`
+        <template>
+          <b>Hello {{ msg }} !</b>
+        </template>
+        <style scoped>
+          b { color: red; }
+        </style>
+        <script>
+          export default {
+            data() {
+              return {
+                msg: 'world'
+              }
+            }
+          }
+        </script>
+      `);
+    },
+
+  ]
+
+  for ( const test of tests ) {
+
+    try {
+      await test();
+    } catch(ex) {
+      console.log(ex)
+    }
+  }
+
+  console.log('done');
+
+})()
+.catch(ex => console.error(ex))
+
+  </script>
+</body>
+</html>
