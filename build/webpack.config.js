@@ -145,7 +145,7 @@ ${ pkg.name } v${ pkg.version }
 				// not needed
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
-				'@babel/highlight': false,
+//				'chalk': false,
 				'emojis-list': false,
 				'json5': false,
 
