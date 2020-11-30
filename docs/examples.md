@@ -1,17 +1,25 @@
 <!--toc-->
-
-   * [ more complete API usage example](#more-complete-api-usage-example)
-
-   * [ using another template language (pug)](#using-another-template-language-pug)
-
-   * [ SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
-
+* [examples](#examples)
+  * [more complete API usage example](#more-complete-api-usage-example)
+    * [test](#test)
+  * [using another template language (pug)](#using-another-template-language-pug)
+  * [SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
 <!--/toc-->
 
-:warning: beware, the following examples are sticky to version <!--version-->0.2.12<!--/version--> . see [latest versions](../README.md#dist)
+# Examples
+
+:warning: beware, the following examples are sticky to version <!--version-->1.2.3<!--/version--> . see [latest versions](../README.md#dist)
+
+Since most browsers do not allow you to access local filesystem, you can start a small express server to run these examples.
+
+Run the following commands to start a basic web server:
+```sh
+npm install express # or yarn add express
+node -e "require('express')().use(require('express').static(__dirname, {index:'index.html'})).listen(8181)"
+```
 
 
-### more complete API usage example
+## more complete API usage example
 
 ```html
 <!DOCTYPE html>
@@ -19,7 +27,7 @@
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
   <script>
 
     // window.localStorage.clear();
@@ -125,7 +133,7 @@
 ```
 
 
-### using another template language (pug)
+## using another template language (pug)
 
 ```html
 <!DOCTYPE html>
@@ -134,7 +142,7 @@
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
   <script>
 
     /* <!-- */
@@ -175,7 +183,7 @@ ul
 ```
 
 
-### SFC style CSS variable injection (new edition)
+## SFC style CSS variable injection (new edition)
 
 _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
@@ -185,7 +193,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@1.2.3 "></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>
@@ -252,7 +260,7 @@ function regexpQuote(str) {
 const replaceBlock = (currentContent, tag, content) => {
 
 	const block = [ `<\!--${ tag }--\>`, `<\!--/${ tag }--\>` ];
-	const regexp = new RegExp(regexpQuote(block[0]) + '(\\s*)[^]*?(\\s*)' + regexpQuote(block[1]), 'g');
+	const regexp = new RegExp(regexpQuote(block[0]) + '([ \\t]*\\r?\\n?)[^]*?(\\s*)' + regexpQuote(block[1]), 'g');
 	return currentContent.replace(regexp, block[0] + '$1' + content + '$2' + block[1]);
 }
 
@@ -263,9 +271,9 @@ function ghAnchor(header) {
 
 const contentWithoutToc = replaceBlock(this, 'toc', ''); // avoid to TOC the TOC
 
-const toc = [...contentWithoutToc.matchAll(/^(#{1,3})([^#].*)$/mg)]
-.map(e => `${ ' '.repeat(e[1].length) }* [${ e[2] }](#${ ghAnchor(e[2]) })`)
-.join('\n\n')
+const toc = [...contentWithoutToc.matchAll(/^(#{1,3}) ?([^#].*)$/mg)]
+.map(e => `${ ' '.repeat((e[1].length-1) * 2) }* [${ e[2] }](#${ ghAnchor(e[2]) })`)
+.join('\n')
 
 const version = process.argv[3];
 
