@@ -132,6 +132,45 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 ```
 
 
+## Load a Vue component from a string
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
+  <script>
+
+    /* <!-- */
+    const sfcSontent = `
+      <template>
+        Hello World !
+      </template>
+    `;
+    /* --> */
+
+    const options = {
+      moduleCache: {
+        vue: Vue,
+      },
+      getFile(url) {
+
+        if ( url === './myComponent.vue' )
+          return Promise.resolve(sfcSontent);
+      },
+      addStyle() {},
+    }
+
+    const { loadModule } = window['vue3-sfc-loader'];
+    Vue.createApp(Vue.defineAsyncComponent(() => loadModule('./myComponent.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+```
+
+
 ## using another template language (pug)
 
 ```html
