@@ -1,21 +1,33 @@
 const fs = require('fs');
-let content = fs.readFileSync(0, 'utf-8');
 
-const delimiters = ['<!---', '-->'];
+const pathname = process.argv[2];
 
-const entries = content.split(new RegExp(delimiters[0] + '([^]*?)' + delimiters[1], 'g'));
+let content = fs.readFileSync(pathname, 'utf-8');
 
-const fctList = entries
-.filter((v, i) => i % 2)
-.map(code => ctx => (function() { return eval(code) }).call(ctx) );
+const delimiters = ['<!---', '--->'];
 
-for ( let i = 0; i < entries.length; i += 2 )
-	for ( const apply of fctList )
-		entries[i] = apply(entries[i])
+const regexp = new RegExp(delimiters[0] + '([^]*?)' + delimiters[1], 'g');
 
-const result = entries.map((e, i) => i % 2 ? delimiters[0] + e + delimiters[1] : e).join('');
+const scriptList = [];
 
-fs.writeFileSync(1, result);
+let result = content.replace(regexp, function(all, p1) {
+
+	scriptList.push(p1);
+	return delimiters[0] + (scriptList.length - 1) + delimiters[1];
+});
+
+const fctList = scriptList
+.map(code => (ctx, global) => (function(global) { return eval(code) }).call(ctx, global) );
+
+for ( const fct of fctList )
+	result = fct(result, global);
+
+result = result.replace(regexp, function(all, p1) {
+
+	return delimiters[0] + (scriptList[Number(p1)]) + delimiters[1];
+});
+
+fs.writeFileSync(pathname, result);
 
 
 /*
@@ -39,7 +51,7 @@ file.md:
 | 
 | -->
 
-> node ./build/evalHtmlComments.js < README.md > README.md
+> node ./build/evalHtmlComments.js README.md
 
 result:
 |   ...

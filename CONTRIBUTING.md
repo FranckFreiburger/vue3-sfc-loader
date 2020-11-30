@@ -15,7 +15,7 @@ see https://www.conventionalcommits.org/
 
 `<type>(<scope>): <subject>`
 
-type: `feat|fix|build|perf|docs|refactor|test|chore|wip|...`
+type: `feat|fix|build|perf|size|docs|refactor|test|chore|wip|...`
 scope: `core|build|docs|deps|workflow|...`
 subject: Use the imperative, present tense: "change" not "changed" nor "changes". Don't capitalize the first letter. Do dot (.) at the end
 
