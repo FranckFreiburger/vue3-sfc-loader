@@ -1,4 +1,16 @@
 
+### [0.2.13](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.12...v0.2.13) (2020-11-30)
+
+
+### Features
+
+* **build:** add more --env options for bundle build ([1971ac1](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/1971ac123b1c98b22882ba4541375cd0ba7c03fa))
+
+
+### Bug Fixes
+
+* **core:** in a Vue component, allow missing <template>, <script> and <style> ([3882746](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/3882746cac190199a0809d6d3d4c97af687a7f67))
+
 ### [0.2.12](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.11...v0.2.12) (2020-11-29)
 
 

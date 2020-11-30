@@ -8,7 +8,7 @@
     "url": "https://franck-freiburger.com/"
   },
   "license": "MIT",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "main": "dist/vue3-sfc-loader.js",
   "scripts": {
     "test": "cd test && yarn run start",
@@ -61,5 +61,5 @@
     "webpack": "^5.9.0",
     "webpack-bundle-analyzer": "^4.1.0",
     "webpack-cli": "^4.2.0"
-}
+  }
 }
