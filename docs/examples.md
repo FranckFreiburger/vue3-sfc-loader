@@ -8,7 +8,7 @@
 
 # Examples
 
-:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.13<!--/version-->*, for your use, prefer the [latest versions](../README.md#dist)
+:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.14<!--/version-->*, for your use, prefer the [latest versions](../README.md#dist)
 
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.
 
@@ -27,7 +27,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.14 "></script>
   <script>
 
     const componentSource = /* <!-- */`
@@ -134,7 +134,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <html>
 <body>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.14 "></script>
   <script>
 
     /* <!-- */
@@ -175,7 +175,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.14 "></script>
   <script>
 
     /* <!-- */
@@ -226,7 +226,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.13 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.14 "></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>
