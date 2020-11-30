@@ -1,8 +1,17 @@
-[//]:(toc)
+<!--toc-->
+
 ###[ more complete API usage example](#more-complete-api-usage-example)
+
 ###[ using another template language (pug)](#using-another-template-language-pug)
+
 ###[ SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
-[//]:(/toc)
+
+<!--/toc-->
+
+:warning: beware, the following examples are sticky to version <!--version-->0.2.12<!--/version-->
+
+see [latest versions](../README.md#dist)
+
 
 ### more complete API usage example
 
@@ -12,8 +21,7 @@
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
 
     // window.localStorage.clear();
@@ -128,7 +136,7 @@
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@latest/dist/vue3-sfc-loader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
 
     /* <!-- */
@@ -179,7 +187,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.12 "></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>
@@ -245,9 +253,9 @@ function regexpQuote(str) {
 
 const replaceBlock = (currentContent, tag, content) => {
 
-	const block = [ `[//]:(${ tag })`, `[//]:(/${ tag })` ];
-	const regexp = new RegExp(regexpQuote(block[0]) + '[^]*?' + regexpQuote(block[1]))
-	return currentContent.replace(regexp, block[0] + '\n' + content + '\n' + block[1])
+	const block = [ `<\!--${ tag }--\>`, `<\!--/${ tag }--\>` ];
+	const regexp = new RegExp(regexpQuote(block[0]) + '(\\s*)[^]*?(\\s*)' + regexpQuote(block[1]), 'g');
+	return currentContent.replace(regexp, block[0] + '$1' + content + '$2' + block[1]);
 }
 
 function ghAnchor(header) {
@@ -259,8 +267,14 @@ const contentWithoutToc = replaceBlock(this, 'toc', ''); // avoid to TOC the TOC
 
 const toc = [...contentWithoutToc.matchAll(/^(#{1,3})([^#].*)$/mg)]
 .map(e => `${ e[1] }[${ e[2] }](#${ ghAnchor(e[2]) })`)
-.join('\n')
+.join('\n\n')
 
-replaceBlock(this, 'toc', toc)
+const version = process.argv[3];
+
+let result = replaceBlock(this, 'toc', `${ toc }`);
+result = replaceBlock(result, 'version', `${ version }`);
+result = result.replace(/(npm\/vue3-sfc-loader@)(.+?)( )/g, `$1${ version }$3`);
+
+result;
 
 --->
