@@ -9,11 +9,12 @@
   },
   "license": "MIT",
   "version": "0.2.14",
+  "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead, not ie 11",
   "main": "dist/vue3-sfc-loader.js",
   "scripts": {
     "test": "cd test && yarn run start",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
-    "build": "webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\"> 1%, last 2 versions, Firefox ESR, not dead, not ie 11\"",
+    "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "docs": "cross-env-shell node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true",
     "pushDocs": "cross-env-shell yarn run docs && git add docs/ && git commit -m \"chore(docs) build docs v$npm_package_version\" docs",
     "release": "standard-version --header \"\""
