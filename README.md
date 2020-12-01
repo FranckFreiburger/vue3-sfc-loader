@@ -61,13 +61,16 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ## dist
 
-  latest minified version:
+  [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
+  [![bundle minified size](https://img.shields.io/bundlephobia/min/vue3-sfc-loader?label=min)](#dist)
+  [![bundle minified+zip size](https://img.shields.io/bundlephobia/minzip/vue3-sfc-loader?label=min%2Bzip)](#dist)
+  [![bundle minified+bz2 size](https://img.shields.io/badge/min%2Bbz2-even%20smaller-blue)](#dist)
+  [![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/FranckFreiburger/vue3-sfc-loader)](#dist)
+  [![GitHub package.json dynamic](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](#dist)
+
+  latest minified version :
   - at jsDelivr CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader
   - at UNPKG CDN: https://unpkg.com/vue3-sfc-loader
-
-### Bundle size
-- \~380 kB minified + bz2
-- \~1600 kB minified
 
 
 ## Public API
@@ -111,7 +114,10 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
   ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader
 
+  [see previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader)
 
-## Other examples
+
+## More examples
 
   see [examples](docs/examples.md)
+
