@@ -2,6 +2,10 @@
   <span class="example">{{ msg }}</span>
 </template>
 <script>
+
+
+  import './myModule.mjs'
+
   export default {
     data () {
       return {
