@@ -1,4 +1,5 @@
 # vue3-sfc-loader
+
 Vue3 Single File Component loader.  
 Load .vue files directly from your html/js. No node.js environment, no (webpack) build step.  
 

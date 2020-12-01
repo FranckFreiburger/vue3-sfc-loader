@@ -126,6 +126,8 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 </html>
 ```
 
+[:top:](#examples)
+
 
 ## Load a Vue component from a string
 
@@ -164,6 +166,8 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 </body>
 </html>
 ```
+
+[:top:](#examples)
 
 
 ## Using another template language (pug)
@@ -214,6 +218,8 @@ ul
 </html>
 
 ```
+
+[:top:](#examples)
 
 
 ## SFC style CSS variable injection (new edition)
@@ -275,6 +281,8 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </html>
 ```
 
+[:top:](#examples)
+
 
 ## Minimalist example (just for the fun)
 
@@ -302,6 +310,9 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </body>
 </html>
 ```
+
+[:top:](#examples)
+
 
 <!---
 
