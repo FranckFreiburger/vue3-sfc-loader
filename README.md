@@ -6,6 +6,15 @@ Vue3 Single File Component loader
 Load .vue files directly from your html/js. No node.js environment, no (webpack) build step.
 
 
+## Features
+
+ * Only requires [Vue3 runtime-only](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
+ * Only focuses on component compilation, network, styles, cache is [your responsibility through the options object](docs/api/interfaces/options.md)
+ * You can [build your own version, see below](#build-your-own-version) and customize browser support
+ * Properly reports template, styles or script errors through the [log callback](docs/api/interfaces/options.md#log)
+ * Support custom CSS, HTML and Script language, see [pug example](docs/examples.md#using-another-template-language-pug)
+
+
 ## Example
 
 ```html
