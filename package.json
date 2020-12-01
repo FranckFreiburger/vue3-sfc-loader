@@ -1,6 +1,7 @@
 {
   "name": "vue3-sfc-loader",
   "description": "Vue3 Single File Component loader",
+  "keywords": ["vue", "vuejs", "vue3", "component-loader", "nobuild"],
   "homepage": "https://github.com/FranckFreiburger/vue3-sfc-loader",
   "author": {
     "name": "Franck FREIBURGER",
