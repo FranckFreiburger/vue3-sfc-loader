@@ -11,7 +11,7 @@
 
   async function runComponent(source) {
 
-    Vue.createApp(await loadModule('./myComponent.vue', { moduleCache: { vue: Vue }, getFile: () => Promise.resolve(source), addStyle: () => {} })).mount(document.body);
+    Vue.createApp(await loadModule('./myComponent.vue', { moduleCache: { vue: Vue }, getFile: (url) => Promise.resolve(url.includes('empty') ? '' : source), addStyle: () => {}, log(type, ...args) { console.log(...args) } })).mount(document.body);
   }
 
   /* <!-- */
@@ -24,6 +24,15 @@
         </template>
       `);
     },
+
+    async function emptyBlocks() {
+      await runComponent(`
+        <template></template>
+        <style></style>
+        <script></script>
+      `);
+    },
+
     async function errorInTemplate() {
       await runComponent(`
         <template>
@@ -63,24 +72,40 @@
         </style>
         <script>
           export default {
-            data() {
-              return {
-                msg: 'world'
-              }
-            }
+            data: () => ({ msg: 'world' })
           }
         </script>
       `);
     },
+
+    async function invalidRequire() {
+      await runComponent(`
+        <script>
+          require('empty.mjs');
+        </script>
+      `);
+    },
+
+    async function invalidImport() {
+      await runComponent(`
+        <script>
+          import 'empty.mjs';
+        </script>
+      `);
+    },
+
 
   ]
 
   for ( const test of tests ) {
 
     try {
+
+      console.log('test:', test.name)
       await test();
     } catch(ex) {
-      console.log(ex)
+
+      //console.log(ex)
     }
   }
 
