@@ -19,7 +19,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 ```
 
 
-## more complete API usage example
+## A more complete API usage example
 
 ```html
 <!DOCTYPE html>
@@ -166,7 +166,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 ```
 
 
-## using another template language (pug)
+## Using another template language (pug)
 
 ```html
 <!DOCTYPE html>
@@ -275,6 +275,33 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </html>
 ```
 
+
+## Minimalist example (just for the fun)
+
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.14 "></script>
+  <script>
+
+    const vueContent = `
+      <template> Hello World !</template>
+    `;
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: () => vueContent,
+      addStyle: () => {},
+    }
+
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+```
 
 <!---
 
