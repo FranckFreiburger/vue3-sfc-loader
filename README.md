@@ -6,8 +6,8 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 ## Features
 
  * Only requires [Vue3 runtime-only](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
- * Only focuses on component compilation. The network, the styles, the cache are your responsibility through [options](docs/api/interfaces/options.md#index)
- * You can [build your own version](#build-your-own-version) and customize browser support
+ * Focuses on component compilation. Network, styles and cache are your responsibility through [options](docs/api/interfaces/options.md#index)
+ * You can [build your own version](#build-your-own-version) and easily customize browser support
  * Properly reports template, styles or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * Support custom CSS, HTML and Script language, see [pug example](docs/examples.md#using-another-template-language-pug)
 
