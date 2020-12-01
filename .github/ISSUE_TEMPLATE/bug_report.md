@@ -2,12 +2,16 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
+labels: 'bug,unconfirmed'
 assignees: ''
 
 ---
 
-:warning: **If you have a question or need assistance, use https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader instead.**
+<!--
+  - Use English language !
+  - If you have a question or need assistance, use https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader instead.
+  - https://jsfiddle.net/b1uvxaoj/2/ can help to create your test case.
+-->
 
 
 **Describe the bug**
@@ -15,8 +19,6 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
-
-(use https://jsfiddle.net/b1uvxaoj/2/ as a starting point)
 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
