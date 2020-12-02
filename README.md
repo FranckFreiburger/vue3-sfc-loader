@@ -7,7 +7,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 ## Features
 
  * Only requires [Vue3 runtime-only](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
- * Focuses on component compilation. Network, styles and cache are your responsibility through [options](docs/api/interfaces/options.md#index)
+ * Focuses on component compilation. Network, styles injection and cache are up to you (see [options](docs/api/interfaces/options.md#index))
  * You can [build your own version](#build-your-own-version) and easily customize browser support
  * Properly reports template, styles or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * Support custom CSS, HTML and Script language, see [pug example](docs/examples.md#using-another-template-language-pug)
@@ -76,8 +76,8 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
 
   latest minified version at :
-  - jsDelivr CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader
-  - UNPKG CDN: https://unpkg.com/vue3-sfc-loader
+  - [jsDelivr CDN](https://www.jsdelivr.com/package/npm/vue3-sfc-loader): https://cdn.jsdelivr.net/npm/vue3-sfc-loader
+  - [UNPKG CDN](https://unpkg.com/browse/vue3-sfc-loader/): https://unpkg.com/vue3-sfc-loader
 
 
 ## Public API
