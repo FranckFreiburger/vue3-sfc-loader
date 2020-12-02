@@ -151,6 +151,12 @@ ${ pkg.name } v${ pkg.version }
 				'json5': false,
 				'convert-source-map': false,
 
+				'loader-utils': false,
+				'@babel/helpers': false,
+				'postcss-modules-values': false,
+				'postcss-modules-scope': false,
+
+
 				...!genSourcemap ? {
 					'source-map': false,
 				} : {},
