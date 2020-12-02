@@ -149,6 +149,7 @@ ${ pkg.name } v${ pkg.version }
 //				'chalk': false,
 				'emojis-list': false,
 				'json5': false,
+				'convert-source-map': false,
 
 				...!genSourcemap ? {
 					'source-map': false,
