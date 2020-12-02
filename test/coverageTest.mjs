@@ -3,9 +3,6 @@ import { fileURLToPath } from 'url';
 
 import path from 'path'
 import fs from 'fs'
-import express from 'express'
-import serveStatic from 'serve-static'
-import open from 'open'
 
 import fetch from 'node-fetch'
 import puppeteer from 'puppeteer'
@@ -78,36 +75,110 @@ function convertRangesToLinesRanges(coverage) {
 }
 
 
+const files = {
+  '/coverageTest.html': path.join(__dirname, 'coverageTest.html'),
+  '/vue3-sfc-loader.js': path.join(__dirname, '..\\dist\\vue3-sfc-loader.js'),
+  '/vue3-sfc-loader.js.map': path.join(__dirname, '..\\dist\\vue3-sfc-loader.js.map'),
+}
+
+const mimeTypes = {
+  '.html': 'text/html',
+  '.js': 'application/javascript',
+  '.map': 'application/octet-stream',
+}
+
+
+async function getFile(url, encoding) {
+
+  const { protocol, pathname } = new URL(url);
+
+  if ( protocol !== 'file:' )
+    return null
+
+  try {
+
+    const body = fs.readFileSync(files[pathname], { encoding });
+    const res = {
+      contentType: mimeTypes[path.extname(pathname)] ?? '',
+      body,
+    };
+
+    return res;
+  } catch (ex) {
+
+    console.error(ex)
+    return null;
+  }
+}
+
+
 ;(async () => {
 
-	const app = express();
-	app.use(serveStatic(path.resolve(__dirname, '../dist')));
-	app.use(serveStatic(__dirname, { 'index': ['index.html'] } ));
-
-	const server = app.listen(8182);
-
-	const browser = await puppeteer.launch();
+	const browser = await puppeteer.launch({ headless: !false });
 	const page = await browser.newPage();
-	await page.coverage.startJSCoverage();
-	await page.goto('http://127.0.0.1:8182/coverageTest.html');
 
-	// doc: https://github.com/puppeteer/puppeteer/blob/v5.5.0/docs/api.md#coveragestopjscoverage
-	const coverageData = await page.coverage.stopJSCoverage();
+  await page.setRequestInterception(true);
+  page.on('request', async interceptedRequest => {
+
+    const file = await getFile(interceptedRequest.url(), 'utf-8');
+
+    if ( file !== null ) {
+
+      return void interceptedRequest.respond({
+        ...file,
+        contentType: file.contentType + '; charset=utf-8',
+      });
+    }
+
+    interceptedRequest.continue();
+  });
+
+//  page.on('console', async msg => console.log('CONSOLE', await Promise.all( msg.args().map(e => e.jsonValue()) ) ));
+  page.on('pageerror', async msg => console.log('ERROR', msg));
+
+  //const donePromise = new Promise(resolve => page.exposeFunction('_done', resolve));
+
+  await page.coverage.startJSCoverage();
+	await page.goto('file:///coverageTest.html');
+	const coverageData = await page.coverage.stopJSCoverage(); // doc: https://github.com/puppeteer/puppeteer/blob/v5.5.0/docs/api.md#coveragestopjscoverage
+  await browser.close();
 
 	const bundle = {
-		code: await fetch('http://127.0.0.1:8182/vue3-sfc-loader.js').then(res => res.buffer()),
-		map: await fetch('http://127.0.0.1:8182/vue3-sfc-loader.js.map').then(res => res.buffer()),
-		coverageRanges: convertRangesToLinesRanges(coverageData.find(e => e.url === 'http://127.0.0.1:8182/vue3-sfc-loader.js')),
+		code: await getFile('file:///vue3-sfc-loader.js').then(res => res.body),
+    map: await getFile('file:///vue3-sfc-loader.js.map').then(res => res.body),
+		coverageRanges: convertRangesToLinesRanges(coverageData.find(e => e.url === 'file:///vue3-sfc-loader.js')),
 	}
 
-	await browser.close();
-	server.close();
-
 	const result = await explore(bundle, {
-		output: { format: 'html' },
+    onlyMapped: true,
+    // output: { format: 'html' },
 	});
 
-	fs.writeFileSync('exploreOutput.html', result.output);
+  console.error('errors:', result.errors);
+
+  //console.log( result.bundles.map(e => e.bundleName) );
+
+/*
+      "files": {
+        "webpack://vue3-sfc-loader/webpack/universalModuleDefinition": {
+          "size": 240,
+          "coveredSize": 140
+        },
+        "[no source]": {
+          "size": 171445,
+          "coveredSize": 66319
+        },
+*/
+
+  const files = result.bundles[0].files;
+  const fileList = Object.entries(files).map( ([url, data]) => ({ url, data }) );
+  fileList.sort( (a, b) => {
+
+    return b.data.size / b.data.coveredSize - a.data.size / a.data.coveredSize;
+  });
+
+  console.log(fileList.slice(0, 10))
+	//fs.writeFileSync('exploreOutput.html', result.output);
 
 
 })()
