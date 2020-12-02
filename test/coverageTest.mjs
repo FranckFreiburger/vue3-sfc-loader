@@ -4,6 +4,8 @@ import { fileURLToPath } from 'url';
 import path from 'path'
 import fs from 'fs'
 
+import mime from 'mime-types'
+
 import fetch from 'node-fetch'
 import puppeteer from 'puppeteer'
 import SourceMapExplorer from 'source-map-explorer'
@@ -81,12 +83,6 @@ const files = {
   '/vue3-sfc-loader.js.map': path.join(__dirname, '..\\dist\\vue3-sfc-loader.js.map'),
 }
 
-const mimeTypes = {
-  '.html': 'text/html',
-  '.js': 'application/javascript',
-  '.map': 'application/octet-stream',
-}
-
 
 async function getFile(url, encoding) {
 
@@ -95,46 +91,46 @@ async function getFile(url, encoding) {
   if ( protocol !== 'file:' )
     return null
 
-  try {
+  const res = {
+    contentType: mime.lookup(path.extname(pathname)) || '',
+    body: fs.readFileSync(files[pathname], { encoding }),
+  };
 
-    const body = fs.readFileSync(files[pathname], { encoding });
-    const res = {
-      contentType: mimeTypes[path.extname(pathname)] ?? '',
-      body,
-    };
-
-    return res;
-  } catch (ex) {
-
-    console.error(ex)
-    return null;
-  }
+  return res;
 }
 
 
 ;(async () => {
 
-	const browser = await puppeteer.launch({ headless: !false });
+	const browser = await puppeteer.launch();
 	const page = await browser.newPage();
 
   await page.setRequestInterception(true);
   page.on('request', async interceptedRequest => {
 
-    const file = await getFile(interceptedRequest.url(), 'utf-8');
+    try {
 
-    if ( file !== null ) {
+      const file = await getFile(interceptedRequest.url(), 'utf-8');
 
-      return void interceptedRequest.respond({
-        ...file,
-        contentType: file.contentType + '; charset=utf-8',
-      });
+      if ( file !== null ) {
+
+        return void interceptedRequest.respond({
+          ...file,
+          contentType: file.contentType + '; charset=utf-8',
+        });
+      }
+
+      interceptedRequest.continue();
+
+    } catch (ex) {
+
+      page.emit('error', ex)
     }
-
-    interceptedRequest.continue();
   });
 
 //  page.on('console', async msg => console.log('CONSOLE', await Promise.all( msg.args().map(e => e.jsonValue()) ) ));
-  page.on('pageerror', async msg => console.log('ERROR', msg));
+  page.on('pageerror', async msg => console.log('PAGE ERROR', msg));
+  page.on('error', async msg => console.log('ERROR', msg));
 
   //const donePromise = new Promise(resolve => page.exposeFunction('_done', resolve));
 
@@ -158,26 +154,32 @@ async function getFile(url, encoding) {
 
   //console.log( result.bundles.map(e => e.bundleName) );
 
-/*
-      "files": {
-        "webpack://vue3-sfc-loader/webpack/universalModuleDefinition": {
-          "size": 240,
-          "coveredSize": 140
-        },
-        "[no source]": {
-          "size": 171445,
-          "coveredSize": 66319
-        },
-*/
+  //  "bundleName": "Buffer",
+  //  "totalBytes": 1674800,
+  //  "mappedBytes": 1674071,
+  //  "eolBytes": 23,
+  //  "sourceMapCommentBytes": 43,
+  //  "files": {
+  //    "webpack://vue3-sfc-loader/webpack/universalModuleDefinition": {
+  //      "size": 240,
+  //      "coveredSize": 140
+  //    },
+  //    ...
 
   const files = result.bundles[0].files;
-  const fileList = Object.entries(files).map( ([url, data]) => ({ url, data }) );
+  let fileList = Object.entries(files).map( ([url, data]) => ({ url, ...data }) );
+  fileList.forEach(e => { e.ratio = e.coveredSize / e.size });
+  fileList = fileList.filter(e => e.coveredSize < 50);
+  fileList = fileList.filter(e => e.size > 100);
+  fileList = fileList.filter(e => e.ratio < 0.1);
+
   fileList.sort( (a, b) => {
 
-    return b.data.size / b.data.coveredSize - a.data.size / a.data.coveredSize;
+    return a.coveredSize - b.coveredSize;
   });
 
-  console.log(fileList.slice(0, 10))
+
+  console.log(fileList)
 	//fs.writeFileSync('exploreOutput.html', result.output);
 
 

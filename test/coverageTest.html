@@ -95,6 +95,23 @@
     },
 
 
+    async function CSS_variable_injection() {
+      await runComponent(`
+        <template>
+          <b>Hello</b>
+        </template>
+        <style scoped>
+          b { color: v-bind('color'); }
+        </style>
+        <script>
+          export default {
+            data: () => ({ color: 'blue' })
+          }
+        </script>
+      `);
+    },
+
+
   ]
 
   console.log('start');
