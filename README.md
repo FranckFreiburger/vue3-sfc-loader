@@ -4,10 +4,10 @@ Vue3 Single File Component loader.
 Load .vue files directly from your html/js. No node.js environment, no (webpack) build step.  
 
 
-## Features
+## Key Features
 
  * Only requires [Vue3 runtime-only](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
- * Focuses on component compilation. Network, styles injection and cache are up to you (see [options](docs/api/interfaces/options.md#index))
+ * Focuses on component compilation. Network, styles injection and cache are up to you (see [example](#example))
  * You can [build your own version](#build-your-own-version) and easily customize browser support
  * Properly reports template, styles or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * Support custom CSS, HTML and Script language, see [pug example](docs/examples.md#using-another-template-language-pug)
@@ -31,19 +31,17 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
         vue: Vue
       },
 
-      getFile(url) {
+      getFile(path) {
 
-        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+        return fetch(path).then(res => res.ok ? res.text() : Promise.reject(res));
       },
 
-      addStyle(styleStr) {
+      addStyle(textContent) {
 
-        const style = document.createElement('style');
-        style.textContent = styleStr;
+        const style = Object.assign(document.createElement('style'), { textContent });
         const ref = document.head.getElementsByTagName('style')[0] || null;
         document.head.insertBefore(style, ref);
-      }
-
+      },
     }
 
     const app = Vue.createApp({
@@ -60,17 +58,17 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 </html>
 ```
 
-### More examples
+### More Examples
 
   see [examples](docs/examples.md)
 
 
-## Try it online
+## Try it Online
 
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
-## dist
+## dist/
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
   [![bundle minified size](https://img.shields.io/bundlephobia/min/vue3-sfc-loader?label=min)](#dist)
@@ -98,12 +96,12 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   see [browserslist queries](https://github.com/browserslist/browserslist#queries)  
 
 
-## How it works
+## How It Works
 
   `vue3-sfc-loader.js` = `Webpack`( `@vue/compiler-sfc` + `@babel` )
 
 
-### More details
+### more details
 
   1. load the `.vue` file
   1. parse and compile template, script and style sections (`@vue/compiler-sfc`)
@@ -113,7 +111,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   1. merge all and return the component
 
 
-## Any questions ?
+## Any Questions ?
 
   ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader))
 

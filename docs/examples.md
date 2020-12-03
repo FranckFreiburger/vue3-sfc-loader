@@ -65,10 +65,9 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
         return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
       },
 
-      addStyle(styleStr) {
+      addStyle(textContent) {
 
-        const style = document.createElement('style');
-        style.textContent = styleStr;
+        const style = Object.assign(document.createElement('style'), { textContent });
         const ref = document.head.getElementsByTagName('style')[0] || null;
         document.head.insertBefore(style, ref);
       },
@@ -265,10 +264,9 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
           return Promise.resolve(sfcSontent);
         return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
       },
-      addStyle(styleStr) {
+      addStyle(textContent) {
 
-        const style = document.createElement('style');
-        style.textContent = styleStr;
+        const style = Object.assign(document.createElement('style'), { textContent });
         const ref = document.head.getElementsByTagName('style')[0] || null;
         document.head.insertBefore(style, ref);
       },
