@@ -69,6 +69,12 @@ interface Cache {
 }
 
 
+/**
+ * Represents the content of the file or the content and the extension name.
+ */
+type File = string | { content : string, extname : string };
+
+
 interface Options {
 // ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
 
@@ -104,7 +110,7 @@ interface Options {
  *	...
  * ```
 */
-	getFile(path : string) : Promise<string>,
+	getFile(path : string) : Promise<File>,
 
 
 /**
@@ -737,13 +743,15 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 
 	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
-	const ext = Path.extname(path);
-	if ( !(ext in moduleHandlers) )
-		throw new TypeError(`Unable to handle ${ ext } files (${ path }), see additionalModuleHandlers`);
+	const res = await getFile(path);
 
-	const source = await getFile(path);
-	if ( typeof source !== 'string' )
-		throw new TypeError(`Invalid module content (${ path }): ${ source }`);
+	const file = typeof res === 'object' ? res : { content: res, extname: Path.extname(path) };
 
-	return moduleHandlers[ext](source, path, options);
+	if ( !(file.extname in moduleHandlers) )
+		throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
+
+	if ( typeof file.content !== 'string' )
+		throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
+
+	return moduleHandlers[file.extname](file.content, path, options);
 }
