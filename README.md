@@ -65,7 +65,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   see [examples](docs/examples.md)
 
 
-## Try it
+## Try it online
 
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
@@ -82,7 +82,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   latest minified version at :
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader
   - [UNPKG](https://unpkg.com/browse/vue3-sfc-loader/) CDN: https://unpkg.com/vue3-sfc-loader
-  - `npm install vue3-sfc-loader` (here: `node_modules/vue3-sfc-loader/dist/vue3-sfc-loader.js`)
+  - `npm install vue3-sfc-loader` (here: `./node_modules/vue3-sfc-loader/dist/vue3-sfc-loader.js`)
 
 
 ## Public API
@@ -115,9 +115,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
 ## Any questions ?
 
-  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader
-
-  [see previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader)
+  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader))
 
 
 ## Previous version (for vue2)
