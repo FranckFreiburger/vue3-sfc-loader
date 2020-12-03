@@ -13,6 +13,7 @@
   "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead, not ie 11",
   "main": "dist/vue3-sfc-loader.js",
   "scripts": {
+    "coverage": "node test/coverageTest.mjs",
     "test": "cd test && yarn run start",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
