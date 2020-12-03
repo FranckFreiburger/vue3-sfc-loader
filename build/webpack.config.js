@@ -188,6 +188,7 @@ ${ pkg.name } v${ pkg.version }
 						loader: 'babel-loader',
 						options: {
 							compact: true,
+							sourceMaps: true,
 
 							presets: [
 
