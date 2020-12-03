@@ -13,6 +13,10 @@
 * [ModuleHandler](interfaces/modulehandler.md)
 * [Options](interfaces/options.md)
 
+### Type aliases
+
+* [File](README.md#file)
+
 ### Variables
 
 * [version](README.md#version)
@@ -21,13 +25,23 @@
 
 * [loadModule](README.md#loadmodule)
 
+## Type aliases
+
+### File
+
+Ƭ  **File**: string \| { content: string ; extname: string  }
+
+*Defined in [index.ts:75](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/73d6120/src/index.ts#L75)*
+
+Represents the content of the file or the content and the extension name.
+
 ## Variables
 
 ### version
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:250](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cdd9cdb/src/index.ts#L250)*
+*Defined in [index.ts:256](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/73d6120/src/index.ts#L256)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -37,7 +51,7 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 ▸ **loadModule**(`path`: string, `options?`: [Options](interfaces/options.md)): Promise\<[Module](interfaces/module.md)>
 
-*Defined in [index.ts:729](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/cdd9cdb/src/index.ts#L729)*
+*Defined in [index.ts:735](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/73d6120/src/index.ts#L735)*
 
 This is the main function.
 
