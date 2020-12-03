@@ -63,7 +63,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   see [examples](docs/examples.md)
 
 
-## Try it Online
+## Try It Online
 
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
@@ -76,6 +76,7 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
   [![bundle minified+bz2 size](https://img.shields.io/badge/min%2Bbz2-even%20smaller-blue)](#dist)
   [![Snyk Vulnerabilities for GitHub vue3-sfc-loader](https://img.shields.io/snyk/vulnerabilities/github/FranckFreiburger/vue3-sfc-loader)](#dist)
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
+  [![GitHub package.json dependency version (dev dep on branch)](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/@vue/compiler-sfc?label=built%20with%20compiler-sfc)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
 
   latest minified version at :
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader
@@ -92,8 +93,8 @@ Load .vue files directly from your html/js. No node.js environment, no (webpack)
 
   `webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 2 versions, Firefox ESR, not dead, not ie 11"`
 
-  see [`package.json`](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/package.json) "build" script  
-  see [browserslist queries](https://github.com/browserslist/browserslist#queries)  
+  _see [`package.json`](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/package.json) "build" script_  
+  _see [browserslist queries](https://github.com/browserslist/browserslist#queries)_  
 
 
 ## How It Works
