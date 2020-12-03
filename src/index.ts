@@ -701,7 +701,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 
 /**
  * This is the main function.
- * @param path  The path of the .vue file
+ * @param path  The path of the `.vue` file. If path is not a path (eg. an string ID), your [[getFile]] function must return a [[File]] object.
  * @param options  The options
  * @returns A Promise of the component
  *
