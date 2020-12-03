@@ -1,4 +1,11 @@
 
+### [0.2.15](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.14...v0.2.15) (2020-12-03)
+
+
+### Features
+
+* **core:** now, getFile() may return the file content or an object `{ content, extname }` ([292db5f](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/292db5f9cc98d0b9c86588af42278d191add8508))
+
 ### [0.2.14](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.13...v0.2.14) (2020-11-30)
 
 
