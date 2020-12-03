@@ -77,6 +77,9 @@ function convertRangesToLinesRanges(coverage) {
 }
 
 
+
+
+
 const files = {
   '/coverageTest.html': path.join(__dirname, 'coverageTest.html'),
   '/vue3-sfc-loader.js': path.join(__dirname, '..\\dist\\vue3-sfc-loader.js'),
@@ -97,6 +100,24 @@ async function getFile(url, encoding) {
   };
 
   return res;
+}
+
+
+function sorted(list, key) {
+
+  let dir = 1;
+  if ( key[0] === '-' ) {
+
+    key = key.slice(1);
+    dir = -1;
+  }
+
+  return list.slice().sort( (a, b) => dir * (a[key] - b[key]) );
+}
+
+function allignRight(str, width) {
+
+  return ' '.repeat(Math.max(width - str.length, 0)) + str;
 }
 
 
@@ -172,16 +193,7 @@ async function getFile(url, encoding) {
   fileList = fileList.filter(e => e.coveredSize < 100);
   fileList = fileList.filter(e => e.size > 100);
 //  fileList = fileList.filter(e => e.ratio < 0.1);
-
-  fileList.sort( (a, b) => {
-
-    return a.coveredSize - b.coveredSize;
-  });
-
-  function allignRight(str, width) {
-
-    return ' '.repeat(Math.max(width - str.length, 0)) + str;
-  }
+  fileList = sorted(fileList, 'ratio');
 
   for ( const e of fileList.slice(0, 50) ) {
 
