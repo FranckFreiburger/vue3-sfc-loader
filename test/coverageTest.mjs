@@ -117,13 +117,17 @@ function sorted(list, key) {
 
 function allignRight(str, width) {
 
+  str = String(str);
   return ' '.repeat(Math.max(width - str.length, 0)) + str;
 }
 
 
 ;(async () => {
 
-	const browser = await puppeteer.launch();
+
+  const ui = process.argv[2] === 'ui';
+
+	const browser = await puppeteer.launch({ headless: !ui });
 	const page = await browser.newPage();
 
   await page.setRequestInterception(true);
@@ -158,7 +162,6 @@ function allignRight(str, width) {
   await page.coverage.startJSCoverage();
 	await page.goto('file:///coverageTest.html');
 	const coverageData = await page.coverage.stopJSCoverage(); // doc: https://github.com/puppeteer/puppeteer/blob/v5.5.0/docs/api.md#coveragestopjscoverage
-  await browser.close();
 
 	const bundle = {
 		code: await getFile('file:///vue3-sfc-loader.js').then(res => res.body),
@@ -166,41 +169,100 @@ function allignRight(str, width) {
 		coverageRanges: convertRangesToLinesRanges(coverageData.find(e => e.url === 'file:///vue3-sfc-loader.js')),
 	}
 
-	const result = await explore(bundle, {
-    onlyMapped: true,
-    // output: { format: 'html' },
-	});
 
-  console.error('errors:', result.errors);
+  if ( ui ) {
 
-  //console.log( result.bundles.map(e => e.bundleName) );
+    const result = await explore(bundle, {
+      onlyMapped: true,
+      noBorderChecks: true,
+      output: { format: 'html' },
+    });
 
-  //  "bundleName": "Buffer",
-  //  "totalBytes": 1674800,
-  //  "mappedBytes": 1674071,
-  //  "eolBytes": 23,
-  //  "sourceMapCommentBytes": 43,
-  //  "files": {
-  //    "webpack://vue3-sfc-loader/webpack/universalModuleDefinition": {
-  //      "size": 240,
-  //      "coveredSize": 140
-  //    },
-  //    ...
+    console.error('errors:', result.errors);
 
-  const files = result.bundles[0].files;
-  let fileList = Object.entries(files).map( ([url, data]) => ({ url, ...data }) );
-  fileList.forEach(e => { e.ratio = e.coveredSize / e.size });
-  fileList = fileList.filter(e => e.coveredSize < 100);
-  fileList = fileList.filter(e => e.size > 100);
-//  fileList = fileList.filter(e => e.ratio < 0.1);
-  fileList = sorted(fileList, 'ratio');
+    page.setContent(result.output);
 
-  for ( const e of fileList.slice(0, 50) ) {
+  } else {
 
-    console.log(allignRight(`${ e.coveredSize } / ${ e.size }`, 12), allignRight(`(${ (e.ratio*100).toFixed(1) }%)`, 7),  e.url);
+  	const result = await explore(bundle, {
+      onlyMapped: true,
+      noBorderChecks: true,
+  	});
+
+    console.error('errors:', result.errors);
+
+    //console.log( result.bundles.map(e => e.bundleName) );
+
+    //  "bundleName": "Buffer",
+    //  "totalBytes": 1674800,
+    //  "mappedBytes": 1674071,
+    //  "eolBytes": 23,
+    //  "sourceMapCommentBytes": 43,
+    //  "files": {
+    //    "webpack://vue3-sfc-loader/webpack/universalModuleDefinition": {
+    //      "size": 240,
+    //      "coveredSize": 140
+    //    },
+    //    ...
+
+    const files = result.bundles[0].files;
+    let fileList = Object.entries(files).map( ([url, data]) => ({ url, ...data }) );
+
+
+    function getModuleName(url) {
+
+      // webpack://vue3-sfc-loader/node_modules/lodash/_getMatchData.js
+      const match = url.match(/\/node_modules\/(@.*?\/.*?|.*?)\//);
+      if ( match === null )
+        return ''
+      return match[1];
+    }
+
+
+    let factorized = Object.values(fileList.reduce((acc, entry) => {
+
+      const moduleName = getModuleName(entry.url);
+
+      const resEntry = (acc[moduleName] || (acc[moduleName] = { moduleName, size:0, coveredSize:0 }));
+
+      resEntry.size += entry.size;
+      resEntry.coveredSize += entry.coveredSize;
+
+      return acc;
+    }, {}));
+
+
+    console.log('by module');
+    factorized = sorted(factorized, 'coveredSize');
+
+    for ( const e of factorized ) {
+
+      console.log(allignRight(e.coveredSize, 4) + ' / ' + allignRight(e.size, 4), allignRight(`(${ (e.coveredSize / e.size * 100).toFixed(1) }%)`, 7),  e.moduleName);
+    }
+
+
+
+
+
+    fileList.forEach(e => { e.ratio = e.coveredSize / e.size });
+    fileList = fileList.filter(e => e.coveredSize < 100);
+    fileList = fileList.filter(e => e.size > 100);
+  //  fileList = fileList.filter(e => e.ratio < 0.1);
+    fileList = sorted(fileList, 'coveredSize');
+
+
+    console.log('by file (filtered)');
+
+    for ( const e of fileList.slice(0, 50) ) {
+
+      console.log(allignRight(e.coveredSize, 4) + ' / ' + allignRight(e.size, 4), allignRight(`(${ (e.ratio*100).toFixed(1) }%)`, 7),  e.url);
+    }
+
+  	//fs.writeFileSync('exploreOutput.html', result.output);
+
+    await browser.close();
   }
 
-	//fs.writeFileSync('exploreOutput.html', result.output);
 
 
 })()
