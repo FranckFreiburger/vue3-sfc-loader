@@ -169,17 +169,25 @@ async function getFile(url, encoding) {
   const files = result.bundles[0].files;
   let fileList = Object.entries(files).map( ([url, data]) => ({ url, ...data }) );
   fileList.forEach(e => { e.ratio = e.coveredSize / e.size });
-  fileList = fileList.filter(e => e.coveredSize < 50);
+  fileList = fileList.filter(e => e.coveredSize < 100);
   fileList = fileList.filter(e => e.size > 100);
-  fileList = fileList.filter(e => e.ratio < 0.1);
+//  fileList = fileList.filter(e => e.ratio < 0.1);
 
   fileList.sort( (a, b) => {
 
     return a.coveredSize - b.coveredSize;
   });
 
+  function allignRight(str, width) {
 
-  console.log(fileList)
+    return ' '.repeat(Math.max(width - str.length, 0)) + str;
+  }
+
+  for ( const e of fileList.slice(0, 50) ) {
+
+    console.log(allignRight(`${ e.coveredSize } / ${ e.size }`, 12), allignRight(`(${ (e.ratio*100).toFixed(1) }%)`, 7),  e.url);
+  }
+
 	//fs.writeFileSync('exploreOutput.html', result.output);
 
 
