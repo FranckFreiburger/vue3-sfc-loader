@@ -226,6 +226,7 @@ interface Module {
  * @param path The path of the file
  * @param options The options
  *
+ *
  * **example:**
  *
  * ```javascript
@@ -699,7 +700,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * @param options  The options
  * @returns A Promise of the component
  *
- * **example using `Vue.defineAsyncComponent`:**
+ * **example using `Vue.defineAsyncComponent`:**  
  * ```javascript
  *
  *	const app = Vue.createApp({
@@ -711,7 +712,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  * ```
  *
- * **example using await:**
+ * **example using await:**  
  * _the following code requires to be placed in an async function_
  *
  * ```javascript

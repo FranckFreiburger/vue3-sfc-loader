@@ -1,7 +1,7 @@
 # vue3-sfc-loader
 
 Vue3 Single File Component loader.  
-Load .vue files dynamically at runtime from your html/js. No node.js environment, no (webpack) build step.  
+Load .vue files dynamically at runtime from your html/js. No node.js environment, no (webpack) build step needed.  
 
 
 ## Key Features
@@ -23,8 +23,6 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader"></script>
   <script>
 
-    const { loadModule } = window['vue3-sfc-loader'];
-
     const options = {
 
       moduleCache: {
@@ -43,6 +41,8 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
         document.head.insertBefore(style, ref);
       },
     }
+
+    const { loadModule } = window['vue3-sfc-loader'];
 
     const app = Vue.createApp({
       components: {
@@ -68,6 +68,11 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
+## Public API
+
+  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): Promise\<Module>
+
+
 ## dist/
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
@@ -82,11 +87,6 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader
   - [UNPKG](https://unpkg.com/browse/vue3-sfc-loader/) CDN: https://unpkg.com/vue3-sfc-loader
   - `npm install vue3-sfc-loader` (here: `./node_modules/vue3-sfc-loader/dist/vue3-sfc-loader.js`)
-
-
-## Public API
-
-  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): Promise\<Module>
 
 
 ## Build your own version
@@ -123,4 +123,4 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 #
 
-[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Load%20.vue%20files%20dynamically%20from%20your%20html%2Fjs%20without%20any%20build%20step%20!&url=https://github.com/FranckFreiburger/vue3-sfc-loader&hashtags=vue,vue3,developers)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Load%20.vue%20files%20dynamically%20from%20your%20html%2Fjs%20without%20any%20build%20step%20!&url=https://github.com/FranckFreiburger/vue3-sfc-loader&via=F_Freiburger&hashtags=vue,vue3,developers)
