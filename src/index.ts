@@ -432,6 +432,7 @@ function createModule(filePath : string, source : string, options : Options) {
 
 /**
  * Simple cache helper
+ * preventCache usage: non-fatal error
  * @internal
  */
 async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) {
