@@ -384,8 +384,7 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
 		if ( path in moduleCache )
 			continue;
 
-		const compiled = await loadModule(path, options);
-		moduleCache[path] = compiled;
+		moduleCache[path] = await loadModule(path, options);
 	}
 }
 
@@ -413,10 +412,7 @@ function createModule(filePath : string, source : string, options : Options) {
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
-		const compiled = await loadModule(path, options);
-		moduleCache[path] = compiled;
-
-		return compiled;
+		return moduleCache[path] = await loadModule(path, options);
 	}
 
 	const module = {
