@@ -393,13 +393,13 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
  * Create a cjs module
  * @internal
  */
-function createModule(filePath : string, source : string, options : Options) {
+function createModule(filename : string, source : string, options : Options) {
 
 	const { moduleCache } = options;
 
 	const require = function(path : string) {
 
-		const absPath = resolvePath(filePath, path);
+		const absPath = resolvePath(filename, path);
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
@@ -408,7 +408,7 @@ function createModule(filePath : string, source : string, options : Options) {
 
 	const import_ = async function(path : string) {
 
-		const absPath = resolvePath(filePath, path);
+		const absPath = resolvePath(filename, path);
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
@@ -419,12 +419,9 @@ function createModule(filePath : string, source : string, options : Options) {
 		exports: {}
 	}
 
-	const filename = filePath;
-	const dirname = Path.dirname(filePath);
-
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, dirname, import_);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, Path.dirname(filename), import_);
 
 	return module;
 }
