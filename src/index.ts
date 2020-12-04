@@ -320,7 +320,7 @@ function renameDynamicImport(fileAst : t.File) : void {
 	traverse(fileAst, {
 		CallExpression(path : NodePath<t.CallExpression>) {
 
-			if ( path.node.callee.type === 'Import' )
+			if ( t.isImport(path.node.callee) )
 				path.replaceWith(t.callExpression(t.identifier('import_'), path.node.arguments))
 		}
 	});
