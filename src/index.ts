@@ -300,6 +300,36 @@ function hash(...valueList : any[]) : string {
 
 
 /**
+ * Simple cache helper
+ * preventCache usage: non-fatal error
+ * @internal
+ */
+async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) {
+
+	let cachePrevented = false;
+
+	const api = {
+		preventCache: () => cachePrevented = true,
+	}
+
+	if ( !cacheInstance )
+		return await valueFactory(api);
+
+	const hashedKey = hash(...key);
+	const valueStr = await cacheInstance.get(hashedKey);
+	if ( valueStr )
+		return JSON.parse(valueStr);
+
+	const value = await valueFactory(api);
+
+	if ( !cachePrevented )
+		await cacheInstance.set(hashedKey, JSON.stringify(value));
+
+	return value;
+}
+
+
+/**
  * @internal
  */
 function interopRequireDefault(obj : any) : any {
@@ -307,9 +337,9 @@ function interopRequireDefault(obj : any) : any {
   return obj && obj.__esModule ? obj : { default: obj };
 }
 
+
 // node types: https://babeljs.io/docs/en/babel-types
 // handbook: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md
-
 
 /**
  * import is a reserved keyword, then rename
@@ -424,36 +454,6 @@ function createModule(filename : string, source : string, options : Options) {
 	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, Path.dirname(filename), import_);
 
 	return module;
-}
-
-
-/**
- * Simple cache helper
- * preventCache usage: non-fatal error
- * @internal
- */
-async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) {
-
-	let cachePrevented = false;
-
-	const api = {
-		preventCache: () => cachePrevented = true,
-	}
-
-	if ( !cacheInstance )
-		return await valueFactory(api);
-
-	const hashedKey = hash(...key);
-	const valueStr = await cacheInstance.get(hashedKey);
-	if ( valueStr )
-		return JSON.parse(valueStr);
-
-	const value = await valueFactory(api);
-
-	if ( !cachePrevented )
-		await cacheInstance.set(hashedKey, JSON.stringify(value));
-
-	return value;
 }
 
 
