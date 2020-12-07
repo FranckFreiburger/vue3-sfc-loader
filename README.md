@@ -11,7 +11,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Embedded ES6 modules support
  * Support custom CSS, HTML and Script language, see [pug example](docs/examples.md#using-another-template-language-pug)
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
- * You can [build your own version](#build-your-own-version) and easily customize browser you need to support
+ * You can [build your own version](#build-your-own-version) and easily customize browsers you need to support
 
 
 ## Example
