@@ -17,10 +17,10 @@ let result = content.replace(regexp, function(all, p1) {
 });
 
 const fctList = scriptList
-.map(code => (ctx, global) => (function(global) { return eval(code) }).call(ctx, global) );
+.map(code => ctx => (function(ctx) { return eval(code) }).call(null, ctx) );
 
 for ( const fct of fctList )
-	result = fct(result, global);
+	result = fct({ wholeContent: result, global });
 
 result = result.replace(regexp, function(all, p1) {
 
@@ -47,7 +47,7 @@ file.md:
 | <!---
 | 
 |   const versionObj = require('semver').parse(require(process.cwd() + '/package.json').version);
-|   this.replace(/(\/vue3-sfc-loader@)(.*?)(\/)/g, `$1^${ versionObj.major }.${ versionObj.minor }$3`);
+|   ctx.wholeContent.replace(/(\/vue3-sfc-loader@)(.*?)(\/)/g, `$1^${ versionObj.major }.${ versionObj.minor }$3`);
 | 
 | -->
 
