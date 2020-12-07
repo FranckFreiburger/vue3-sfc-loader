@@ -9,7 +9,7 @@
 
 # Examples
 
-:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.15<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
+:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.16<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
 
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.  
 Run the following commands to start a basic web server:
@@ -27,7 +27,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.15 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.16 "></script>
   <script>
 
     const componentSource = /* <!-- */`
@@ -135,7 +135,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <html>
 <body>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.15 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.16 "></script>
   <script>
 
     /* <!-- */
@@ -178,7 +178,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.15 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.16 "></script>
   <script>
 
     /* <!-- */
@@ -231,7 +231,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.15 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.16 "></script>
   <script>
     const sfcSontent = /* <!-- */`
       <template>
@@ -289,7 +289,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <html>
 <body>
   <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.15 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.16 "></script>
   <script>
 
     const vueContent = `
