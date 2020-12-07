@@ -1,4 +1,12 @@
 
+### [0.2.16](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.15...v0.2.16) (2020-12-07)
+
+
+### Bug Fixes
+
+* **build:** enable babel-loader sourceMap ([9fe51af](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/9fe51afb9a7614b6272248384e9438973ced2045))
+* **build:** enable ts sourceMap (through ts-loader) ([a09ec5e](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/a09ec5e762f681f917bff8c4206352dbe754c28e))
+
 ### [0.2.15](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.14...v0.2.15) (2020-12-03)
 
 
