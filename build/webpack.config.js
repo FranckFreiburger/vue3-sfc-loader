@@ -22,13 +22,13 @@ module.exports = (env = {}, { mode = 'production' }) => {
 	// eg. '> 0.5%, last 2 versions, Firefox ESR, not dead, not ie 11'
 	const {
 		targetsBrowsers = 'defaults',
-		noPresetEnv = false,
-		noCompress = false,
+		noPresetEnv = !isProd,
+		noCompress = !isProd,
 	} = env;
 
-	console.log('env', env);
-
 	const genSourcemap = false;
+
+	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, genSourcemap });
 
 	return {
 		entry: [
@@ -45,7 +45,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 			},
 			environment: {
 				// doc: https://webpack.js.org/configuration/output/#outputenvironment
-				...isProd ? {
+				...!noPresetEnv ? {
 					arrowFunction: caniuse.isSupported('arrow-functions', targetsBrowsers),
 					const: caniuse.isSupported('const', targetsBrowsers),
 					destructuring: caniuse.isSupported('es6', targetsBrowsers), // see https://github.com/Fyrd/caniuse/issues/5676
@@ -94,7 +94,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 			}),
 
 			// minimize
-			...(isProd && !noCompress) ? [
+			...!noCompress ? [
 				new TerserPlugin({
 					extractComments: false,
 					terserOptions: {
@@ -103,8 +103,10 @@ module.exports = (env = {}, { mode = 'production' }) => {
 						compress: {
 							passes: 2,
 							drop_console: true,
-							arrows: caniuse.isSupported('arrow-functions', targetsBrowsers),
-							ecma: caniuse.isSupported('es6', targetsBrowsers) ? '2015' : '5', // note ECMAScript 2015 is the sixth edition of the ECMAScript Language Specification standard
+							...!noPresetEnv ? {
+								arrows: caniuse.isSupported('arrow-functions', targetsBrowsers),
+								ecma: caniuse.isSupported('es6', targetsBrowsers) ? '2015' : '5', // note ECMAScript 2015 is the sixth edition of the ECMAScript Language Specification standard
+							} : {},
 						},
 					},
 				}),
