@@ -121,6 +121,10 @@ function allignRight(str, width) {
   return ' '.repeat(Math.max(width - str.length, 0)) + str;
 }
 
+function toPercent(ratio) {
+
+  return `${ (ratio * 100).toFixed(1) }%`;
+}
 
 ;(async () => {
 
@@ -219,6 +223,25 @@ function allignRight(str, width) {
     }
 
 
+    let total = fileList.reduce((acc, entry) => {
+
+      if ( entry.coveredSize !== undefined ) {
+
+        acc.size += entry.size;
+        acc.coveredSize += entry.coveredSize;
+      } else {
+
+        acc.unk += entry.size;
+      }
+
+      return acc;
+    }, { unk: 0, size: 0, coveredSize: 0 });
+
+    console.log('total');
+    console.log(total, toPercent(total.coveredSize / total.size));
+
+
+
     let factorized = Object.values(fileList.reduce((acc, entry) => {
 
       const moduleName = getModuleName(entry.url);
@@ -237,11 +260,8 @@ function allignRight(str, width) {
 
     for ( const e of factorized ) {
 
-      console.log(allignRight(e.coveredSize, 4) + ' / ' + allignRight(e.size, 4), allignRight(`(${ (e.coveredSize / e.size * 100).toFixed(1) }%)`, 7),  e.moduleName);
+      console.log(allignRight(e.coveredSize, 4) + ' / ' + allignRight(e.size, 4), allignRight(`(${ toPercent(e.coveredSize / e.size) })`, 7),  e.moduleName);
     }
-
-
-
 
 
     fileList.forEach(e => { e.ratio = e.coveredSize / e.size });
