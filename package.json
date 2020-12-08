@@ -24,7 +24,7 @@
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "docs": "cross-env-shell node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true",
-    "pushDocs": "cross-env-shell yarn run docs && git add docs/ && git commit -m \"chore(docs) build docs v$npm_package_version\" docs",
+    "pushDocs": "cross-env-shell \"yarn run docs && git add docs/ && git commit -m 'chore(docs) build docs v$npm_package_version' docs\"",
     "release": "standard-version --header \"\""
   },
   "standard-version": {
