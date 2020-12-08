@@ -79,7 +79,7 @@ interface Options {
 // ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
 
 /**
- * Initial cache that will contain resolved dependencies.
+ * Initial cache that will contain resolved dependencies. All new modules go here.
  * `vue` must initially be contained in this object.
  *
  * **example:**
