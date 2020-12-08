@@ -92,7 +92,7 @@ interface Options {
  * ```
  *
 */
-	moduleCache: Record<string, Module>,
+	moduleCache?: Record<string, Module>,
 
 
 /**
@@ -209,6 +209,15 @@ interface Options {
  * ```
  */
 	log?(type : string, ...data : any[]) : void,
+
+/**
+ * Called when the lib requires a module. Return `undefined` to let the library handle this.
+ * @param path  The path of the module.
+ * @param options  The options object.
+ * @returns A Promise of the module
+ */
+	loadModule?(path : string, options : Options) : Promise<Module> | undefined,
+
 }
 
 
@@ -724,14 +733,22 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 export async function loadModule(path : string, options : Options = throwNotDefined('options')) {
 
 	const {
-		moduleCache = throwNotDefined('options.moduleCache'),
+		moduleCache = (options.moduleCache = {}),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
 		additionalModuleHandlers = {},
+		loadModule,
 	} = options;
 
 	if ( path in moduleCache )
 		return moduleCache[path];
+
+	if ( loadModule ) {
+
+		const module = await loadModule(path, options);
+		if ( module !== undefined )
+			return moduleCache[path] = module;
+	}
 
 
 	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
