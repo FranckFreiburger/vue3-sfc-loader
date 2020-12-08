@@ -161,7 +161,7 @@ interface Options {
  *
  * In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place (usually 5MB).
  * Here we handle space limitation in a very basic way.
- * Maybe (not tested), the following lib may help you to gain more space [pako](https://github.com/nodeca/pako)
+ * Maybe (not tested), the following libraries may help you to gain more space [pako](https://github.com/nodeca/pako), [lz-string](https://github.com/pieroxy/lz-string/)
  * ```javascript
  *	...
  *	compiledCache: {
@@ -175,7 +175,8 @@ interface Options {
  *					// doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
  *					window.localStorage.setItem(key, str);
  *					break;
- *				} catch(ex) { // handle: Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
+ *				} catch(ex) {
+ *					// here we handle DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
  *	
  *					window.localStorage.removeItem(window.localStorage.key(0));
  *				}
@@ -700,7 +701,8 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * @param options  The options
  * @returns A Promise of the component
  *
- * **example using `Vue.defineAsyncComponent`:**  
+ * **example using `Vue.defineAsyncComponent`:**
+ *
  * ```javascript
  *
  *	const app = Vue.createApp({
@@ -712,7 +714,8 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  * ```
  *
- * **example using await:**  
+ * **example using `await`:**
+ *
  * _the following code requires to be placed in an async function_
  *
  * ```javascript
