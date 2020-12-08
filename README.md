@@ -100,7 +100,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## How It Works
 
-  `vue3-sfc-loader.js` = `Webpack`( `@vue/compiler-sfc` + `@babel` )
+  [`vue3-sfc-loader.js`](https://unpkg.com/vue3-sfc-loader@0.2.16/dist/report.html) = `Webpack`( `@vue/compiler-sfc` + `@babel` )
 
 
 ### more details
