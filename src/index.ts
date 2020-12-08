@@ -408,16 +408,8 @@ function resolvePath(path : string, depPath : string) {
  */
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
-	const { moduleCache } = options;
-
-	for ( const dep of deps ) {
-
-		const path = resolvePath(filename, dep);
-		if ( path in moduleCache )
-			continue;
-
-		moduleCache[path] = await loadModule(path, options);
-	}
+	for ( const dep of deps )
+		await loadModule(resolvePath(filename, dep), options);
 }
 
 
@@ -435,16 +427,12 @@ function createModule(filename : string, source : string, options : Options) {
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
-		throw new Error(`${ absPath } not found`);
+		throw new Error(`${ absPath } not found in moduleCache`);
 	}
 
 	const import_ = async function(path : string) {
 
-		const absPath = resolvePath(filename, path);
-		if ( absPath in moduleCache )
-			return moduleCache[absPath];
-
-		return moduleCache[absPath] = await loadModule(absPath, options);
+		return await loadModule(resolvePath(filename, path), options);
 	}
 
 	const module = {
@@ -739,6 +727,10 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 		additionalModuleHandlers = {}
 	} = options;
 
+	if ( path in moduleCache )
+		return moduleCache[path];
+
+
 	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
 	const res = await getFile(path);
@@ -751,5 +743,5 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 	if ( typeof file.content !== 'string' )
 		throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
 
-	return moduleHandlers[file.extname](file.content, path, options);
+	return moduleCache[path] = moduleHandlers[file.extname](file.content, path, options);
 }
