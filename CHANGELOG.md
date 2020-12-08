@@ -1,4 +1,18 @@
 
+### [0.2.17](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.16...v0.2.17) (2020-12-08)
+
+
+### Features
+
+* **core:** enhance moduleCache management ([4ab1dbd](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/4ab1dbda918276a0d7f7d2784537d5cc5f6e360f))
+
+
+### Bug Fixes
+
+* **core:** call addStyle() with scopeId only if style is scoped ([cd10f83](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/cd10f8344a0dcd3ba6a44733c5feb3e45bc3671b))
+* **core:** fix import() path resolution ([33af5e9](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/33af5e96a68ce077a1de80222a042b48247323c4))
+* **core:** fix module cache handling ([80907a4](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/80907a40d68759db35d9af3696828c47444e4dc6))
+
 ### [0.2.16](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.15...v0.2.16) (2020-12-07)
 
 
