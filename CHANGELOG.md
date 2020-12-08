@@ -1,4 +1,13 @@
 
+### [0.2.18](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.17...v0.2.18) (2020-12-08)
+
+
+### Bug Fixes
+
+* **build:** issue with cross-env-shell and `$npm_package_version` ([72c1539](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/72c1539d08fa506ea1dd704a71fc96862a4ba614))
+* **build:** issue with cross-env-shell and `$npm_package_version` ([b2f09c7](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/b2f09c78a1b1a1425ffdf7d6a86105fd2dce3113))
+* **core:** allow `descriptor.template.lang` and `descriptor.styles.*.lang` to be dynamically loaded. ([25af387](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/25af3875cfbd35ad94613f04aef538951452b4f3))
+
 ### [0.2.17](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.16...v0.2.17) (2020-12-08)
 
 
