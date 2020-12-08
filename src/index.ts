@@ -543,6 +543,8 @@ async function createSFCModule(source : string, filename : string, options : Opt
 	const scopeId = `data-v-${componentHash}`;
 
 
+	if ( descriptor.template && descriptor.template.lang )
+		await loadModule(descriptor.template.lang, options);
 
 	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
@@ -658,6 +660,9 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 
 	for ( const descStyle of descriptor.styles ) {
+
+		if ( descStyle.lang )
+			await loadModule(descStyle.lang, options);
 
 		const style = await withCache(compiledCache, [ componentHash, descStyle.content ], async ({ preventCache }) => {
 
