@@ -678,7 +678,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 			return compiledStyle.code;
 		});
 
-		addStyle(style, scopeId);
+		addStyle(style, descStyle.scoped ? scopeId : undefined);
 	}
 
 	return component;
