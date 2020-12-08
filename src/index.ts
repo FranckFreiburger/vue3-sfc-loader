@@ -727,7 +727,7 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 		moduleCache = throwNotDefined('options.moduleCache'),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
-		additionalModuleHandlers = {}
+		additionalModuleHandlers = {},
 	} = options;
 
 	if ( path in moduleCache )
