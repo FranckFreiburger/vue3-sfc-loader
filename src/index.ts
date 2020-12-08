@@ -413,7 +413,7 @@ function parseDeps(fileAst : t.File) : string[] {
  * relative to absolute module path resolution.
  * @internal
  */
-function resolvePath(path : string, depPath : string) {
+function resolvePath(path : string, depPath : string) : string {
 
 	if ( depPath[0] !== '.' )
 		return depPath;
