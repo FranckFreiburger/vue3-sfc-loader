@@ -444,7 +444,7 @@ function createModule(filename : string, source : string, options : Options) {
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
-		return moduleCache[path] = await loadModule(path, options);
+		return moduleCache[absPath] = await loadModule(absPath, options);
 	}
 
 	const module = {
