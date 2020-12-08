@@ -704,16 +704,19 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  *
  * **example using `await`:**
  *
- * _the following code requires to be placed in an async function_
- *
  * ```javascript
+
+ * ;(async () => {
  *
- *	const app = Vue.createApp({
- *		components: {
- *			'my-component': await loadModule('./myComponent.vue', options)
- *		},
- *		template: '<my-component></my-component>'
- *	});
+ *		const app = Vue.createApp({
+ *			components: {
+ *				'my-component': await loadModule('./myComponent.vue', options)
+ *			},
+ *			template: '<my-component></my-component>'
+ *		});
+ *
+ * })()
+ * .catch(ex => console.error(ex));
  *
  * ```
  *
