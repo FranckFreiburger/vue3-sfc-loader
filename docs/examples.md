@@ -134,6 +134,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 
 
 
+
 <!--/example:target:complete_api-->
 
 [:top:](#readme)
@@ -180,6 +181,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <!--example:target:cpn_string-->
 
 [open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+World+!%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+
 
 
 
@@ -242,6 +244,7 @@ ul
 <!--example:target:tpl_pug-->
 
 [open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fpugjs.org%2Fjs%2Fpug.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A%3Ctemplate+lang%3D%22pug%22%3E%0Aul%0A++each+val+in+%5B'p'%2C+'u'%2C+'g'%5D%0A++++li%3D+val%0A%3C%2Ftemplate%3E%0A%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++++pug%3A+require('pug')%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyPugComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyPugComponent.vue'%2C+options))).mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A%0A)
+
 
 
 
@@ -322,6 +325,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
 
 
+
 <!--/example:target:rfc_231-->
 
 [:top:](#readme)
@@ -359,6 +363,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!--example:target:min_for_fun-->
 
 [open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+vueContent+%3D+%60%0A++++++%3Ctemplate%3E+Hello+World+!%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+()+%3D%3E+vueContent%2C%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('file.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+
 
 
 
