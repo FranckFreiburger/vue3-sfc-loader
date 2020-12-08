@@ -9,7 +9,7 @@
 
 # Examples
 
-:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.17<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
+:warning: **beware**, the following examples are sticky to version *<!--version-->0.2.19<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
 
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.  
 Run the following commands to start a basic web server:
@@ -28,7 +28,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.17 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.19 "></script>
   <script>
 
     const componentSource = /* <!-- */`
@@ -127,7 +127,12 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 ```
 <!--example:target:complete_api-->
 
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.17+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++const+componentSource+%3D+%2F*+%3C!--+*%2F%60%0A++++++%3Ctemplate%3E%0A++++++++%3Cspan+class%3D%22example%22%3E%7B%7B+msg+%7D%7D%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++++%3Cscript%3E%0A++++++++export+default+%7B%0A++++++++++data+()+%7B%0A++++++++++++return+%7B%0A++++++++++++++msg%3A+'world!'%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++++%3C%2Fscript%3E%0A%0A++++++%3Cstyle+scoped%3E%0A++++++++.example+%7B%0A++++++++++color%3A+red%3B%0A++++++++%7D%0A++++++%3C%2Fstyle%3E%0A++++%60%2F*+--%3E+*%2F%3B%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(componentSource)%3B%0A%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A%0A++++++log(type%2C+...args)+%7B%0A%0A++++++++console%5Btype%5D(...args)%3B%0A++++++%7D%2C%0A%0A++++++compiledCache%3A+%7B%0A++++++++set(key%2C+str)+%7B%0A%0A++++++++++%2F%2F+naive+storage+space+management%0A++++++++++for+(%3B%3B)+%7B%0A%0A++++++++++++try+%7B%0A%0A++++++++++++++%2F%2F+doc%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FStorage%0A++++++++++++++window.localStorage.setItem(key%2C+str)%3B%0A++++++++++++++break%3B%0A++++++++++++%7D+catch(ex)+%7B%0A%0A++++++++++++++%2F%2F+handle%3A+Uncaught+DOMException%3A+Failed+to+execute+'setItem'+on+'Storage'%3A+Setting+the+value+of+'XXX'+exceeded+the+quota%0A%0A++++++++++++++window.localStorage.removeItem(window.localStorage.key(0))%3B%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%2C%0A++++++++get(key)+%7B%0A%0A++++++++++return+window.localStorage.getItem(key)%3B%0A++++++++%7D%2C%0A++++++%7D%2C%0A%0A++++++additionalModuleHandlers%3A+%7B%0A++++++++'.json'%3A+(source%2C+path%2C+options)+%3D%3E+JSON.parse(source)%2C%0A++++++%7D%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++const+myComponent+%3D+loadModule('.%2FmyComponent.vue'%2C+options)%3B%0A%0A++++const+app+%3D+Vue.createApp(%7B%0A++++++components%3A+%7B%0A++++++++'my-component'%3A+Vue.defineAsyncComponent(+()+%3D%3E+myComponent+)%2C%0A++++++%7D%2C%0A++++++template%3A+'Hello+%3Cmy-component%3E%3C%2Fmy-component%3E'%0A++++%7D)%3B%0A%0A++++app.mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++const+componentSource+%3D+%2F*+%3C!--+*%2F%60%0A++++++%3Ctemplate%3E%0A++++++++%3Cspan+class%3D%22example%22%3E%7B%7B+msg+%7D%7D%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++++%3Cscript%3E%0A++++++++export+default+%7B%0A++++++++++data+()+%7B%0A++++++++++++return+%7B%0A++++++++++++++msg%3A+'world!'%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++++%3C%2Fscript%3E%0A%0A++++++%3Cstyle+scoped%3E%0A++++++++.example+%7B%0A++++++++++color%3A+red%3B%0A++++++++%7D%0A++++++%3C%2Fstyle%3E%0A++++%60%2F*+--%3E+*%2F%3B%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(componentSource)%3B%0A%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A%0A++++++log(type%2C+...args)+%7B%0A%0A++++++++console%5Btype%5D(...args)%3B%0A++++++%7D%2C%0A%0A++++++compiledCache%3A+%7B%0A++++++++set(key%2C+str)+%7B%0A%0A++++++++++%2F%2F+naive+storage+space+management%0A++++++++++for+(%3B%3B)+%7B%0A%0A++++++++++++try+%7B%0A%0A++++++++++++++%2F%2F+doc%3A+https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FStorage%0A++++++++++++++window.localStorage.setItem(key%2C+str)%3B%0A++++++++++++++break%3B%0A++++++++++++%7D+catch(ex)+%7B%0A%0A++++++++++++++%2F%2F+handle%3A+Uncaught+DOMException%3A+Failed+to+execute+'setItem'+on+'Storage'%3A+Setting+the+value+of+'XXX'+exceeded+the+quota%0A%0A++++++++++++++window.localStorage.removeItem(window.localStorage.key(0))%3B%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%2C%0A++++++++get(key)+%7B%0A%0A++++++++++return+window.localStorage.getItem(key)%3B%0A++++++++%7D%2C%0A++++++%7D%2C%0A%0A++++++additionalModuleHandlers%3A+%7B%0A++++++++'.json'%3A+(source%2C+path%2C+options)+%3D%3E+JSON.parse(source)%2C%0A++++++%7D%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++const+myComponent+%3D+loadModule('.%2FmyComponent.vue'%2C+options)%3B%0A%0A++++const+app+%3D+Vue.createApp(%7B%0A++++++components%3A+%7B%0A++++++++'my-component'%3A+Vue.defineAsyncComponent(+()+%3D%3E+myComponent+)%2C%0A++++++%7D%2C%0A++++++template%3A+'Hello+%3Cmy-component%3E%3C%2Fmy-component%3E'%0A++++%7D)%3B%0A%0A++++app.mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+
+
+
+
+
 
 <!--/example:target:complete_api-->
 
@@ -142,7 +147,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 <html>
 <body>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.17 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.19 "></script>
   <script>
 
     /* <!-- */
@@ -174,7 +179,12 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 ```
 <!--example:target:cpn_string-->
 
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.17+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+World+!%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+World+!%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+
+
+
+
+
 
 <!--/example:target:cpn_string-->
 [:top:](#readme)
@@ -190,7 +200,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.17 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.19 "></script>
   <script>
 
     /* <!-- */
@@ -231,7 +241,12 @@ ul
 ```
 <!--example:target:tpl_pug-->
 
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fpugjs.org%2Fjs%2Fpug.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.17+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A%3Ctemplate+lang%3D%22pug%22%3E%0Aul%0A++each+val+in+%5B'p'%2C+'u'%2C+'g'%5D%0A++++li%3D+val%0A%3C%2Ftemplate%3E%0A%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++++pug%3A+require('pug')%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyPugComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyPugComponent.vue'%2C+options))).mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A%0A)
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fpugjs.org%2Fjs%2Fpug.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A%3Ctemplate+lang%3D%22pug%22%3E%0Aul%0A++each+val+in+%5B'p'%2C+'u'%2C+'g'%5D%0A++++li%3D+val%0A%3C%2Ftemplate%3E%0A%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++++pug%3A+require('pug')%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyPugComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyPugComponent.vue'%2C+options))).mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A%0A)
+
+
+
+
+
 
 <!--/example:target:tpl_pug-->
 
@@ -249,7 +264,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <div id="app"></div>
   <script src="https://unpkg.com/vue@next"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.17 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.19 "></script>
   <script>
     /* <!-- */
     const sfcContent = `
@@ -300,7 +315,12 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 ```
 <!--example:target:rfc_231-->
 
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.17+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+%3Cspan+class%3D%22example%22%3E%7B%7B+msg+%7D%7D%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++++%3Cscript%3E%0A++++++++export+default+%7B%0A++++++++++data+()+%7B%0A++++++++++++return+%7B%0A++++++++++++++msg%3A+'world!'%2C%0A++++++++++++++color%3A+'blue'%2C%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++++%3C%2Fscript%3E%0A++++++%3Cstyle+scoped%3E%0A++++++++.example+%7B%0A++++++++++color%3A+v-bind('color')%0A++++++++%7D%0A++++++%3C%2Fstyle%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount('%23app')%3B%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+%3Cspan+class%3D%22example%22%3E%7B%7B+msg+%7D%7D%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++++%3Cscript%3E%0A++++++++export+default+%7B%0A++++++++++data+()+%7B%0A++++++++++++return+%7B%0A++++++++++++++msg%3A+'world!'%2C%0A++++++++++++++color%3A+'blue'%2C%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++++%3C%2Fscript%3E%0A++++++%3Cstyle+scoped%3E%0A++++++++.example+%7B%0A++++++++++color%3A+v-bind('color')%0A++++++++%7D%0A++++++%3C%2Fstyle%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++++return+fetch(url).then(response+%3D%3E+response.ok+%3F+response.text()+%3A+Promise.reject(response))%3B%0A++++++%7D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount('%23app')%3B%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+
+
+
+
+
 
 <!--/example:target:rfc_231-->
 
@@ -315,7 +335,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <html>
 <body>
   <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.17 "></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.2.19 "></script>
   <script>
 
     /* <!-- */
@@ -338,7 +358,12 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 ```
 <!--example:target:min_for_fun-->
 
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.17+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+vueContent+%3D+%60%0A++++++%3Ctemplate%3E+Hello+World+!%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+()+%3D%3E+vueContent%2C%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('file.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+vueContent+%3D+%60%0A++++++%3Ctemplate%3E+Hello+World+!%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+()+%3D%3E+vueContent%2C%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('file.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+
+
+
+
+
 
 <!--/example:target:min_for_fun-->
 
