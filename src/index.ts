@@ -505,7 +505,7 @@ async function transformJSCode(source : string, moduleSourceType : boolean, file
  */
 async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
-	const { moduleCache, compiledCache } = options;
+	const { compiledCache } = options;
 
 	const [ depsList, transformedSource ] = await withCache(compiledCache, [ version, source, filename ], async () => {
 
