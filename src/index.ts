@@ -227,7 +227,7 @@ interface Options {
  *	...
  * ```
  */
-	loadModule?(path : string, options : Options) : Promise<Module> | undefined,
+	loadModule?(path : string, options : Options) : Promise<Module | undefined>,
 
 }
 
