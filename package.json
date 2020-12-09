@@ -21,6 +21,7 @@
   "scripts": {
     "coverage": "node test/coverageTest.mjs",
     "test": "cd test && yarn run start",
+    "tests": "jest \"tests/.*\\.test.js\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "docs": "cross-env-shell node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true",
@@ -29,6 +30,7 @@
   },
   "standard-version": {
     "scripts": {
+      "prerelease": "yarn run tests",
       "postbump": "yarn run pushDocs",
       "postcommit": "yarn run build"
     }
@@ -53,8 +55,10 @@
     "cross-env": "^7.0.3",
     "crypto-browserify": "^3.12.0",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
+    "jest": "^26.6.3",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
+    "puppeteer": "^5.5.0",
     "safe-buffer": "^5.2.1",
     "source-map-explorer": "^2.5.1",
     "standard-version": "^9.0.0",
