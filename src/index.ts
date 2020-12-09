@@ -542,7 +542,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 	const hasScoped = descriptor.styles.some(e => e.scoped);
 	const scopeId = `data-v-${componentHash}`;
 
-
+	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 	if ( descriptor.template && descriptor.template.lang )
 		await loadModule(descriptor.template.lang, options);
 
@@ -661,6 +661,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 	for ( const descStyle of descriptor.styles ) {
 
+		// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 		if ( descStyle.lang )
 			await loadModule(descStyle.lang, options);
 
