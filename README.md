@@ -115,7 +115,8 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Any Questions ?
 
-  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader))
+  <!--  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader)) -->
+  ask here: https://github.com/FranckFreiburger/vue3-sfc-loader/discussions
 
 
 ## Previous version (for vue2)
