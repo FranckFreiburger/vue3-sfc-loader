@@ -756,7 +756,7 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 export async function loadModule(path : string, options : Options = throwNotDefined('options')) {
 
 	const {
-		moduleCache = (options.moduleCache = {}),
+		moduleCache = (options.moduleCache = Object.create(null)),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
 		additionalModuleHandlers = {},
