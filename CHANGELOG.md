@@ -1,4 +1,11 @@
 
+### [0.2.19](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.18...v0.2.19) (2020-12-10)
+
+
+### Bug Fixes
+
+* **core:** Options.loadModule() return type ([afea8bf](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/afea8bf7ea799fb3ab60d830e89255b191fda726))
+
 ### [0.2.18](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.17...v0.2.18) (2020-12-08)
 
 
