@@ -31,7 +31,7 @@
 
 Ƭ  **File**: string \| { content: string ; extname: string  }
 
-*Defined in [index.ts:75](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/72c1539/src/index.ts#L75)*
+*Defined in [index.ts:75](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L75)*
 
 Represents the content of the file or the content and the extension name.
 
@@ -41,7 +41,7 @@ Represents the content of the file or the content and the extension name.
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:278](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/72c1539/src/index.ts#L278)*
+*Defined in [index.ts:278](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L278)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -49,9 +49,9 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 ### loadModule
 
-▸ **loadModule**(`path`: string, `options?`: [Options](interfaces/options.md)): Promise\<[Module](interfaces/module.md)>
+▸ **loadModule**(`path`: string, `options?`: [Options](interfaces/options.md)): Promise<[Module](interfaces/module.md)\>
 
-*Defined in [index.ts:749](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/72c1539/src/index.ts#L749)*
+*Defined in [index.ts:750](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L750)*
 
 This is the main function.
 
@@ -62,7 +62,7 @@ Name | Type | Default value | Description |
 `path` | string | - | The path of the `.vue` file. If path is not a path (eg. an string ID), your [getFile](interfaces/options.md#getfile) function must return a [File](README.md#file) object. |
 `options` | [Options](interfaces/options.md) | throwNotDefined('options') | The options |
 
-**Returns:** Promise\<[Module](interfaces/module.md)>
+**Returns:** Promise<[Module](interfaces/module.md)\>
 
 A Promise of the component
 

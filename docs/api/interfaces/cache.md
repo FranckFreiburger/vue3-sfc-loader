@@ -19,9 +19,9 @@
 
 ### get
 
-▸ **get**(`key`: string): Promise\<string>
+▸ **get**(`key`: string): Promise<string\>
 
-*Defined in [index.ts:67](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/72c1539/src/index.ts#L67)*
+*Defined in [index.ts:67](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L67)*
 
 #### Parameters:
 
@@ -29,15 +29,15 @@ Name | Type |
 ------ | ------ |
 `key` | string |
 
-**Returns:** Promise\<string>
+**Returns:** Promise<string\>
 
 ___
 
 ### set
 
-▸ **set**(`key`: string, `value`: string): Promise\<void>
+▸ **set**(`key`: string, `value`: string): Promise<void\>
 
-*Defined in [index.ts:68](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/72c1539/src/index.ts#L68)*
+*Defined in [index.ts:68](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L68)*
 
 #### Parameters:
 
@@ -46,4 +46,4 @@ Name | Type |
 `key` | string |
 `value` | string |
 
-**Returns:** Promise\<void>
+**Returns:** Promise<void\>
