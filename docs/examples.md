@@ -64,7 +64,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
         if ( url === './myComponent.vue' )
           return Promise.resolve(componentSource);
 
-        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+        return fetch(url).then(res => res.ok ? res.text() : Promise.reject( Object.assign(new Error(url+' '+res.statusText), { res }) ));
       },
 
       addStyle(textContent) {
@@ -211,7 +211,7 @@ ul
         if ( url === './myPugComponent.vue' )
           return Promise.resolve(sfcContent);
 
-        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+        return fetch(url).then(res => res.ok ? res.text() : Promise.reject( Object.assign(new Error(url+' '+res.statusText), { res }) ));
       },
 
       addStyle: () => {},
@@ -275,7 +275,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
         if ( url === './myComponent.vue' )
           return Promise.resolve(sfcContent);
-        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+        return fetch(url).then(res => res.ok ? res.text() : Promise.reject( Object.assign(new Error(url+' '+res.statusText), { res }) ));
       },
       addStyle(textContent) {
 
@@ -375,7 +375,8 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </html>
 ```
 <!--example:target:options_loadModule-->
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+World+!%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++async+loadModule(path)+%7B%0A%0A++++++++%2F%2F+(TBD)%0A%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:options_loadModule-->
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19+%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+World+!%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++async+loadModule(path)+%7B%0A%0A++++++++%2F%2F+(TBD)%0A%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'.%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('.%2FmyComponent.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+<!--/example:target:options_loadModule-->
 [:top:](#readme)
 
 

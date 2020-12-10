@@ -30,9 +30,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
         vue: Vue
       },
 
-      getFile(path) {
+      getFile(url) {
 
-        return fetch(path).then(res => res.ok ? res.text() : Promise.reject(res));
+        return fetch(url).then(res => res.ok ? res.text() : Promise.reject( Object.assign(new Error(url+' '+res.statusText), { res }) ));
       },
 
       addStyle(textContent) {
