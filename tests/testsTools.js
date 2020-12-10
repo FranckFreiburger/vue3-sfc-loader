@@ -6,7 +6,7 @@ const mime = require('mime-types');
 
 const local = new URL('http://local/');
 
-async function getPage({ files }) {
+async function createPage({ files }) {
 
 	async function getFile(url, encoding) {
 
@@ -53,11 +53,10 @@ async function getPage({ files }) {
 		}
 	});
 
-	page.console = [];
+	const output = [];
 
-	//page.on('console', msg => page.console.push({ type: msg.type(), content: msg.text() }) );
-	page.on('console', async msg => page.console.push({ type: msg.type(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) }) );
-	page.on('pageerror', error => page.console.push({ type: 'pageerror', content: error }) );
+	page.on('console', async msg => output.push({ type: msg.type(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) }) );
+	page.on('pageerror', error => output.push({ type: 'pageerror', content: error }) );
 
 	page.on('error', msg => console.log('ERROR', msg));
 
@@ -65,15 +64,21 @@ async function getPage({ files }) {
 
 	await page.goto(new URL('/index.html', local));
 
-	return page;
+	await new Promise(resolve => setTimeout(resolve, 250));
+
+	return { page, output };
 }
 
 let browser;
 
 beforeAll(async () => {
 
+	if ( browser )
+		return browser;
+
 	browser = await puppeteer.launch({
-		headless: !false,
+		headless: true,
+		pipe: true,
 		args: [
 			'--incognito',
 			'--disable-gpu',
@@ -94,11 +99,12 @@ afterAll(async () => {
 
 const defaultFiles = {
 	'/vue3-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue3-sfc-loader.js'), { encoding: 'utf-8' }),
+	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue/dist/vue.global.js'), { encoding: 'utf-8' }),
 	'/index.html': `
 		<!DOCTYPE html>
 		<html><body>
 			<div id="app"></div>
-			<script src="https://unpkg.com/vue@next"></script>
+			<script src="vue"></script>
 			<script src="vue3-sfc-loader.js"></script>
 			<script>
 
@@ -113,9 +119,6 @@ const defaultFiles = {
 						Object.defineProperties(this, {
 							name: {
 								value: this.constructor.name,
-							},
-							statusCode: {
-								value: res.statusCode,
 							},
 							url: {
 								value: url,
@@ -165,5 +168,5 @@ const defaultFiles = {
 
 module.exports = {
 	defaultFiles,
-	getPage,
+	createPage,
 }

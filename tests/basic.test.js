@@ -1,51 +1,54 @@
-const {	defaultFiles,	getPage } = require('./testsTools.js');
+const { defaultFiles, createPage } = require('./testsTools.js');
 
-test('text-only tamplate', async () => {
 
-	const page = await getPage({
+test('text-only template', async () => {
+
+	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
 			'/component.vue': `
 				<template>
-					Hello World ! <b id="done"/>
+					Hello World !
 				</template>
 			`
 		}
 	});
 
-	await page.waitForSelector('#done');
 	await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
+
 	await page.close();
 });
 
 
 test('properly detect and reports errors in template', async () => {
 
-	const page = await getPage({
+	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
 			'/component.vue': `
 				<template>
-					Hello World ! {{ msg } <b id="done"/>
+					Hello World ! {{ msg }
 				</template>
 			`
 		}
 	});
 
-	await page.waitForSelector('#done');
-	await expect(page.console.some(e => e.type === 'error' && e.content[0] === 'SFC template')).toBe(true);
+	//await page.waitForSelector('#done');
+	await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC template')).toBe(true);
+	//await new Promise(resolve => page.on('consoleValues', ({ type, args }) => type === 'error' && args[0] === 'SFC template' && resolve() ));
+
 	await page.close();
 });
 
 
 test('properly detect and reports errors in style', async () => {
 
-	const page = await getPage({
+	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
 			'/component.vue': `
 				<template>
-					Hello World ! <b id="done"/>
+					Hello World !
 				</template>
 				<style>
 					body
@@ -56,15 +59,15 @@ test('properly detect and reports errors in style', async () => {
 		}
 	});
 
-	await page.waitForSelector('#done');
-	await expect(page.console.some(e => e.type === 'error' && e.content[0] === 'SFC style')).toBe(true);
+	await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC style')).toBe(true);
+
 	await page.close();
 });
 
 
 test('properly detect and reports errors in script', async () => {
 
-	const page = await getPage({
+	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
 			'/component.vue': `
@@ -75,8 +78,8 @@ test('properly detect and reports errors in script', async () => {
 		}
 	});
 
-	await new Promise(resolve => setTimeout(resolve, 500));
-	await expect(page.console.some(e => e.type === 'error' && e.content[0] === 'SFC script')).toBe(true);
+	await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC script')).toBe(true);
+
 	await page.close();
 });
 
@@ -84,12 +87,12 @@ test('properly detect and reports errors in script', async () => {
 
 test('all blocks', async () => {
 
-	const page = await getPage({
+	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
 			'/component.vue': `
 				<template>
-					<b>Hello {{ msg }} !</b><b id="done"/>
+					<b>Hello {{ msg }} !</b>
 				</template>
 				<style scoped>
 					b { color: red; }
@@ -103,15 +106,15 @@ test('all blocks', async () => {
 		}
 	});
 
-	await new Promise(resolve => setTimeout(resolve, 500));
-	await expect(!page.console.some(e => e.type === 'error')).toBe(true);
+	await expect(!output.some(e => e.type === 'error')).toBe(true);
+
 	await page.close();
 });
 
 
 test('invalid require', async () => {
 
-	const page = await getPage({
+	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
 			'/component.vue': `
@@ -122,8 +125,8 @@ test('invalid require', async () => {
 		}
 	});
 
-	await new Promise(resolve => setTimeout(resolve, 1500));
-	await expect(page.console.some(e => e.type === 'pageerror' && String(e.content).includes('HttpError') )).toBe(true);
+	await expect(output.some(e => e.type === 'pageerror' && String(e.content).includes('HttpError') )).toBe(true);
+
 	await page.close();
 });
 
