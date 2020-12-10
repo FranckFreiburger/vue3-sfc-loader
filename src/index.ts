@@ -484,7 +484,7 @@ async function transformJSCode(source : string, moduleSourceType : boolean, file
 		});
 	} catch(ex) {
 
-		log?.('error', 'dep script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+		log?.('error', 'parse script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
 		throw ex;
 	}
 
