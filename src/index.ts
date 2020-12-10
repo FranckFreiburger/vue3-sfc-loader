@@ -81,13 +81,17 @@ interface Options {
 /**
  * Initial cache that will contain resolved dependencies. All new modules go here.
  * `vue` must initially be contained in this object.
+ * [[moduleCache]] is mandatory for the lib but optional for you. If you do not provide it, the lib will automatically add it to the [[options]] object.
+ * It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
+​ *
+ * See also [[options.loadModule]].
  *
  * **example:**
  * ```javascript
  *	...
- *	moduleCache: {
+ *	moduleCache: Object.assign(Object.create(null), {
  *		vue: Vue,
- *	},
+ *	}),
  *	...
  * ```
  *
@@ -217,6 +221,8 @@ interface Options {
  * @param options  The options object.
  * @returns A Promise of the module or undefined
  *
+ * [[moduleCache]] and [[Options.loadModule]] are strongly related, in the sense that the result of [[options.loadModule]] is stored in [[moduleCache]].
+ * However, [[options.loadModule]] is asynchronous and may help you to handle modules or components that are conditionally required (optional features, current languages, plugins, ...).
  * ```javascript
  *	...
  *	loadModule(path, options) {
