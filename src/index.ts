@@ -107,9 +107,12 @@ interface Options {
  * **example:**
  * ```javascript
  *	...
- *	getFile(url) {
+ *	async getFile(url) {
  *	
- *		return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+ *		const res = await fetch(url);
+ *		if ( !res.ok )
+ *			throw Object.assign(new Error(url+' '+res.statusText), { res });
+ *		return await res.text();
  *	},
  *	...
  * ```
