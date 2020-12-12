@@ -3,6 +3,7 @@
   * [A more complete API usage example](#a-more-complete-api-usage-example)
   * [Load a Vue component from a string](#load-a-vue-component-from-a-string)
   * [Using another template language (pug)](#using-another-template-language-pug)
+  * [Using another style language (stylus)](#using-another-style-language-stylus)
   * [SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
   * [Minimalist example (just for the fun)](#minimalist-example-just-for-the-fun)
   * [Use `options.loadModule` hook](#use-optionsloadmodule-hook)
@@ -233,6 +234,57 @@ ul
 [:top:](#readme)
 
 
+## Using another style language (stylus)
+
+<!--example:source:style_stylus-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="app"></div>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="vue3-sfc-loader.js"></script>
+  <script src="//stylus-lang.com/try/stylus.min.js"></script>
+  <script>
+
+    /* <!-- */
+    const vueContent = `
+      <template>
+        Hello <b>World</b> !
+      </template>
+      <style lang="stylus">
+ b
+  color red
+      </style>
+    `;
+    /* --> */
+
+    const options = {
+      moduleCache: {
+        vue: Vue,
+        stylus: source => Object.assign(stylus(source), { deps: () => [] }), // note: deps() does not work in this bundle of stylus (see https://stylus-lang.com/docs/js.html#deps)
+      },
+      getFile: () => vueContent,
+      addStyle(styleStr) {
+        const style = document.createElement('style');
+        style.textContent = styleStr;
+        const ref = document.head.getElementsByTagName('style')[0] || null;
+        document.head.insertBefore(style, ref);
+      },
+    }
+
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+
+```
+<!--example:target:style_stylus-->
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22vue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22%2F%2Fstylus-lang.com%2Ftry%2Fstylus.min.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+vueContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+%3Cb%3EWorld%3C%2Fb%3E+!%0A++++++%3C%2Ftemplate%3E%0A++++++%3Cstyle+lang%3D%22stylus%22%3E%0A+b%0A++color+red%0A++++++%3C%2Fstyle%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++++stylus%3A+source+%3D%3E+Object.assign(stylus(source)%2C+%7B+deps%3A+()+%3D%3E+%5B%5D+%7D)%2C+%2F%2F+note%3A+deps()+does+not+work+in+this+bundle+of+stylus+(see+https%3A%2F%2Fstylus-lang.com%2Fdocs%2Fjs.html%23deps)%0A++++++%7D%2C%0A++++++getFile%3A+()+%3D%3E+vueContent%2C%0A++++++addStyle(styleStr)+%7B%0A++++++++const+style+%3D+document.createElement('style')%3B%0A++++++++style.textContent+%3D+styleStr%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('file.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A%0A)<!--/example:target:style_stylus-->
+[:top:](#readme)
+
+
 ## SFC style CSS variable injection (new edition)
 
 _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
@@ -384,6 +436,8 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
 ## Dynamic component (`:is` Special Attribute)
 
+In the following example we use a trick to preserve reactivity through the `Vue.defineAsyncComponent()` call (see the following [discussion](https://github.com/FranckFreiburger/vue3-sfc-loader/discussions/6))
+
 <!--example:source:dynamic_component-->
 ```html
 <!DOCTYPE html>
@@ -439,6 +493,9 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
           const currentComponent = this.currentComponent; // the trick is here
           return Vue.defineAsyncComponent( () => loadModule(currentComponent + '.vue', options) )
+
+          // or, equivalently, use Function.prototype.bind function like this:
+          // return Vue.defineAsyncComponent( (url => loadModule(url, options)).bind(null, this.currentComponent + '.vue') )
         }
       },
       data() {
@@ -455,7 +512,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </html>
 ```
 <!--example:target:dynamic_component-->
-[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++switch+(+url+)+%7B%0A++++++++++case+'a.vue'%3A%0A++++++++++++return+%60%0A++++++++++++++%3Ctemplate%3E%0A++++++++++++++++%3Ci%3E+a+%3C%2Fi%3E%0A++++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%60%3B%0A++++++++++case+'b.vue'%3A%0A++++++++++++return+%60%0A++++++++++++++%3Ctemplate%3E%0A++++++++++++++++%3Cb%3E+b+%3C%2Fb%3E%0A++++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%60%3B%0A++++++++%7D%0A%0A++++++++return+fetch(url).then(res+%3D%3E+res.ok+%3F+res.text()+%3A+Promise.reject(+new+Error(res.statusText)+))%3B%0A++++++%7D%2C%0A%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A%0A%0A++++const+app+%3D+Vue.createApp(%7B%0A++++++template%3A+%60%0A++++++++%3Cbutton%0A++++++++++%40click%3D%22currentComponent+%3D+currentComponent+%3D%3D%3D+'a'+%3F+'b'+%3A+'a'%22%0A++++++++%3Etoggle%3C%2Fbutton%3E%0A++++++++dynamic+component%3A%0A++++++++%3Ccomponent+%3Ais%3D%22comp%22%3E%3C%2Fcomponent%3E%0A++++++%60%2C%0A++++++computed%3A+%7B%0A++++++++comp()+%7B%0A%0A++++++++++const+currentComponent+%3D+this.currentComponent%3B+%2F%2F+the+trick+is+here%0A++++++++++return+Vue.defineAsyncComponent(+()+%3D%3E+loadModule(currentComponent+%2B+'.vue'%2C+options)+)%0A++++++++%7D%0A++++++%7D%2C%0A++++++data()+%7B%0A++++++++return+%7B%0A++++++++++currentComponent%3A+'a'%2C%0A++++++++%7D%0A++++++%7D%0A++++%7D)%3B%0A%0A++++app.mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:dynamic_component-->
+[open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.19%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++const+options+%3D+%7B%0A%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A%0A++++++getFile(url)+%7B%0A%0A++++++++switch+(+url+)+%7B%0A++++++++++case+'a.vue'%3A%0A++++++++++++return+%60%0A++++++++++++++%3Ctemplate%3E%0A++++++++++++++++%3Ci%3E+a+%3C%2Fi%3E%0A++++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%60%3B%0A++++++++++case+'b.vue'%3A%0A++++++++++++return+%60%0A++++++++++++++%3Ctemplate%3E%0A++++++++++++++++%3Cb%3E+b+%3C%2Fb%3E%0A++++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%60%3B%0A++++++++%7D%0A%0A++++++++return+fetch(url).then(res+%3D%3E+res.ok+%3F+res.text()+%3A+Promise.reject(+new+Error(res.statusText)+))%3B%0A++++++%7D%2C%0A%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A%0A%0A++++const+app+%3D+Vue.createApp(%7B%0A++++++template%3A+%60%0A++++++++%3Cbutton%0A++++++++++%40click%3D%22currentComponent+%3D+currentComponent+%3D%3D%3D+'a'+%3F+'b'+%3A+'a'%22%0A++++++++%3Etoggle%3C%2Fbutton%3E%0A++++++++dynamic+component%3A%0A++++++++%3Ccomponent+%3Ais%3D%22comp%22%3E%3C%2Fcomponent%3E%0A++++++%60%2C%0A++++++computed%3A+%7B%0A++++++++comp()+%7B%0A%0A++++++++++const+currentComponent+%3D+this.currentComponent%3B+%2F%2F+the+trick+is+here%0A++++++++++return+Vue.defineAsyncComponent(+()+%3D%3E+loadModule(currentComponent+%2B+'.vue'%2C+options)+)%0A%0A++++++++++%2F%2F+or%2C+equivalently%2C+use+Function.prototype.bind+function+like+this%3A%0A++++++++++%2F%2F+return+Vue.defineAsyncComponent(+(url+%3D%3E+loadModule(url%2C+options)).bind(null%2C+this.currentComponent+%2B+'.vue')+)%0A++++++++%7D%0A++++++%7D%2C%0A++++++data()+%7B%0A++++++++return+%7B%0A++++++++++currentComponent%3A+'a'%2C%0A++++++++%7D%0A++++++%7D%0A++++%7D)%3B%0A%0A++++app.mount('%23app')%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:dynamic_component-->
 [:top:](#readme)
 
 
