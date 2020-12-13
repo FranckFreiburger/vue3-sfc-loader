@@ -564,7 +564,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 		scoped: hasScoped,
 		id: scopeId,
 		compilerOptions: {
-			scopeId,
+			scopeId: hasScoped ? scopeId : undefined,
 			mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
 		},
 		//	transformAssetUrls
