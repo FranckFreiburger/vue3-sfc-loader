@@ -30,7 +30,7 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:146](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L146)*
+*Defined in [index.ts:153](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L153)*
 
 Additional babel plugins. [TBD]
 
@@ -45,7 +45,7 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record<string, [ModuleHandler](modulehandler.md)\>
 
-*Defined in [index.ts:153](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L153)*
+*Defined in [index.ts:160](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L160)*
 
 Additional module type handlers. see [ModuleHandler](modulehandler.md)
 
@@ -55,7 +55,7 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:193](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L193)*
+*Defined in [index.ts:200](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L200)*
 
 [get](cache.md#get)() and [set](cache.md#set)() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
@@ -99,17 +99,21 @@ ___
 
 • `Optional` **moduleCache**: Record<string, [Module](module.md)\>
 
-*Defined in [index.ts:95](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L95)*
+*Defined in [index.ts:99](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L99)*
 
 Initial cache that will contain resolved dependencies. All new modules go here.
 `vue` must initially be contained in this object.
+[moduleCache](options.md#modulecache) is mandatory for the lib but optional for you. If you do not provide it, the lib will automatically add it to the [[options]] object.
+It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
+​ *
+See also [[options.loadModule]].
 
 **example:**
 ```javascript
 	...
-	moduleCache: {
+	moduleCache: Object.assign(Object.create(null), {
 		vue: Vue,
-	},
+	}),
 	...
 ```
 
@@ -119,7 +123,7 @@ Initial cache that will contain resolved dependencies. All new modules go here.
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:135](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L135)*
+*Defined in [index.ts:142](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L142)*
 
 Called by the library when CSS style must be added in the HTML document.
 
@@ -151,7 +155,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise<[File](../README.md#file)\>
 
-*Defined in [index.ts:113](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L113)*
+*Defined in [index.ts:120](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L120)*
 
 Called by the library when it needs a file.
 
@@ -168,9 +172,12 @@ a Promise of the file content (UTF-8)
 **example:**
 ```javascript
 	...
-	getFile(url) {
+	async getFile(url) {
 
-		return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
+		const res = await fetch(url);
+		if ( !res.ok )
+			throw Object.assign(new Error(url+' '+res.statusText), { res });
+		return await res.text();
 	},
 	...
 ```
@@ -181,7 +188,7 @@ ___
 
 ▸ `Optional`**loadModule**(`path`: string, `options`: [Options](options.md)): Promise<[Module](module.md) \| undefined\>
 
-*Defined in [index.ts:230](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L230)*
+*Defined in [index.ts:239](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L239)*
 
 Called when the lib requires a module. Do return `undefined` to let the library handle this.
 
@@ -196,6 +203,8 @@ Name | Type | Description |
 
 A Promise of the module or undefined
 
+[moduleCache](options.md#modulecache) and [Options.loadModule](options.md#loadmodule) are strongly related, in the sense that the result of [[options.loadModule]] is stored in [moduleCache](options.md#modulecache).
+However, [[options.loadModule]] is asynchronous and may help you to handle modules or components that are conditionally required (optional features, current languages, plugins, ...).
 ```javascript
 	...
 	loadModule(path, options) {
@@ -212,7 +221,7 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:211](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/547328e/src/index.ts#L211)*
+*Defined in [index.ts:218](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L218)*
 
 Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
 
