@@ -1,4 +1,17 @@
 
+### [0.2.20](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.19...v0.2.20) (2020-12-13)
+
+
+### Features
+
+* **docs:** add stylus example ([1fe4d4f](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/1fe4d4f2f672fc86b27a794fc252a550314a376d))
+
+
+### Bug Fixes
+
+* **core:** avoid useless template scoped (data-v-...) when (style) scope is not required ([f9c9fe7](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/f9c9fe7f715ef115b697c3388bde30e61b621391))
+* **docs:** fix vue3-sfc-loader.js link ([0333913](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/0333913d3bb1c1d77226320c8da71f161f1af1a1))
+
 ### [0.2.19](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.18...v0.2.19) (2020-12-10)
 
 
