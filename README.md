@@ -9,7 +9,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Only requires [Vue3 runtime](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
  * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Embedded ES6 modules support ( including `import()` )
- * Support custom CSS, HTML and Script language, see [pug example](docs/examples.md#using-another-template-language-pug)
+ * Support custom CSS, HTML and Script language, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * You can [build your own version](#build-your-own-version) and easily customize browsers you need to support
 
@@ -119,7 +119,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 ## Any Questions <sub>:question:</sub>
 
   <!--  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader)) -->
-  [:speech_balloon: ask in Discussions tab](https://github.com/FranckFreiburger/vue3-sfc-loader/discussions)
+  [:speech_balloon: ask in Discussions tab](https://github.com/FranckFreiburger/vue3-sfc-loader/discussions?discussions_q=category%3AQ%26A)
 
 
 ## Previous version (for vue2)
