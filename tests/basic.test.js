@@ -130,3 +130,59 @@ test('invalid require', async () => {
 	await page.close();
 });
 
+
+test('DOM has scope', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<template>
+					<span>Hello World !</span>
+				</template>
+				<style scoped>
+					body
+						color: red;
+					}
+				</style>
+			`
+		}
+	});
+
+	await expect(page.evaluate(() =>
+
+		[...document.querySelector('#app > span').attributes].some(e => e.name.startsWith('data-v-'))
+
+	)).resolves.toBe(true);
+
+	await page.close();
+});
+
+
+test('DOM has no scope', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<template>
+					<span>Hello World !</span>
+				</template>
+				<style>
+					body
+						color: red;
+					}
+				</style>
+			`
+		}
+	});
+
+	await expect(page.evaluate(() =>
+
+		[...document.querySelector('#app > span').attributes].some(e => e.name.startsWith('data-v-'))
+
+	)).resolves.toBe(false);
+
+	await page.close();
+});
+
