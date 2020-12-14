@@ -187,7 +187,7 @@ test('DOM has no scope', async () => {
 });
 
 
-test.only('nested mjs import', async () => {
+test('nested mjs import', async () => {
 
 	const { page, output } = await createPage({
 		files: {
