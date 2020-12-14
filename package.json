@@ -21,7 +21,7 @@
   "scripts": {
     "coverage": "node test/coverageTest.mjs",
     "test": "cd test && yarn run start",
-    "tests": "jest \"tests/.*\\.test.js\"",
+    "tests": "jest --runInBand \"tests/.*\\.test.js\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "docs": "cross-env-shell node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true",
