@@ -789,5 +789,5 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 	if ( typeof file.content !== 'string' )
 		throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
 
-	return moduleCache[path] = moduleHandlers[file.extname](file.content, path, options);
+	return moduleCache[path] = await moduleHandlers[file.extname](file.content, path, options);
 }
