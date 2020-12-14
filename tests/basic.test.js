@@ -220,3 +220,109 @@ test.only('nested mjs import', async () => {
 	await page.close();
 });
 
+
+test('nested js require', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<script>
+					const { test } = require('./foo/test.js')
+					console.log( test() );
+				</script>
+			`,
+
+			'/foo/test.js': `
+				exports.test = function() {
+
+					return require('../bar/test.js').test();
+				}
+			`,
+
+			'/bar/test.js': `
+				exports.test = function() {
+
+					return 'test_ok';
+				}
+			`
+		}
+	});
+
+	await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
+
+	await page.close();
+});
+
+
+
+test('access es6 module default from cjs', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<script>
+					const { test } = require('./foo/test.js')
+					console.log( test() );
+				</script>
+			`,
+
+			'/foo/test.js': `
+				exports.test = function() {
+
+					return require('../bar/test.mjs').default();
+				}
+			`,
+
+			'/bar/test.mjs': `
+				export default function() {
+
+					return 'test_ok';
+				}
+			`
+		}
+	});
+
+	await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
+
+	await page.close();
+});
+
+
+
+test('access cjs module default from es6', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<script>
+					const { test } = require('./foo/test.mjs')
+					console.log( test() );
+				</script>
+			`,
+
+			'/foo/test.mjs': `
+
+				import test1 from '../bar/test.js'
+				export function test() {
+
+					return test1();
+				}
+			`,
+
+			'/bar/test.js': `
+				module.exports = function() {
+
+					return 'test_ok';
+				}
+			`
+		}
+	});
+
+	await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
+
+	await page.close();
+});
+
