@@ -154,7 +154,7 @@ ${ pkg.name } v${ pkg.version }
 				'convert-source-map': false,
 
 				'loader-utils': false,
-				'@babel/helpers': false,
+				// '@babel/helpers': false, // required !
 				'postcss-modules-values': false,
 				'postcss-modules-scope': false,
 
