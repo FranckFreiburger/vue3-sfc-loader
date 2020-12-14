@@ -30,7 +30,7 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:153](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L153)*
+*Defined in [index.ts:153](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L153)*
 
 Additional babel plugins. [TBD]
 
@@ -45,7 +45,7 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record<string, [ModuleHandler](modulehandler.md)\>
 
-*Defined in [index.ts:160](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L160)*
+*Defined in [index.ts:160](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L160)*
 
 Additional module type handlers. see [ModuleHandler](modulehandler.md)
 
@@ -55,7 +55,7 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:200](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L200)*
+*Defined in [index.ts:200](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L200)*
 
 [get](cache.md#get)() and [set](cache.md#set)() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
@@ -99,7 +99,7 @@ ___
 
 • `Optional` **moduleCache**: Record<string, [Module](module.md)\>
 
-*Defined in [index.ts:99](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L99)*
+*Defined in [index.ts:99](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L99)*
 
 Initial cache that will contain resolved dependencies. All new modules go here.
 `vue` must initially be contained in this object.
@@ -123,7 +123,7 @@ See also [[options.loadModule]].
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:142](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L142)*
+*Defined in [index.ts:142](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L142)*
 
 Called by the library when CSS style must be added in the HTML document.
 
@@ -155,7 +155,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise<[File](../README.md#file)\>
 
-*Defined in [index.ts:120](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L120)*
+*Defined in [index.ts:120](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L120)*
 
 Called by the library when it needs a file.
 
@@ -188,7 +188,7 @@ ___
 
 ▸ `Optional`**loadModule**(`path`: string, `options`: [Options](options.md)): Promise<[Module](module.md) \| undefined\>
 
-*Defined in [index.ts:239](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L239)*
+*Defined in [index.ts:239](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L239)*
 
 Called when the lib requires a module. Do return `undefined` to let the library handle this.
 
@@ -221,7 +221,7 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:218](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/c0792ec/src/index.ts#L218)*
+*Defined in [index.ts:218](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L218)*
 
 Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
 
