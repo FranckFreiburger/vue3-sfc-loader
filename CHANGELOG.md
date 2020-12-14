@@ -1,4 +1,12 @@
 
+### [0.2.21](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.20...v0.2.21) (2020-12-14)
+
+
+### Bug Fixes
+
+* **code:** add missing await ([7290217](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/7290217f35e00e70df7339c38c70123cfee00eab))
+* **config:** revert disabling @babel/helpers since it is required ([f767bc4](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/f767bc4f1daa60726dd518dcbc12e7dde067f3e7))
+
 ### [0.2.20](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.19...v0.2.20) (2020-12-13)
 
 
