@@ -509,8 +509,6 @@ async function transformJSCode(source : string, moduleSourceType : boolean, file
 		babelrc: false,
 		configFile: false,
 		highlightCode: false,
-		// @ts-ignore // not defined in https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/babel__core/index.d.ts
-		cloneInputAst: false, // doc: can improve parsing performance if the input AST is not used elsewhere.
 	});
 
 	return [ depsList, transformedScript.code ];
@@ -628,8 +626,6 @@ async function createSFCModule(source : string, filename : string, options : Opt
 				babelrc: false,
 				configFile: false,
 				highlightCode: false,
-				// @ts-ignore // not defined in https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/babel__core/index.d.ts
-				cloneInputAst: false, // doc: can improve parsing performance if the input AST is not used elsewhere.
 			});
 
 			return [ depsList, transformedScript.code ];
