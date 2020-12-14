@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html>
 <body>
-  <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
   <script src="vue3-sfc-loader.js"></script>
   <script>
 
-      const options = {
+    /* <!-- */
+    const config = {
+      files: {
+        '/component.vue': `
+          <script>
+            const { test } = require('./foo/test.js')
+            console.log( test() );
+          </script>
+        `,
 
-        moduleCache: {
-        vue: Vue,
-      },
+        '/foo/test.js': `
+          exports.test = function() {
 
-      getFile(url) {
+            return require('../bar/test.js').test();
+          }
+        `,
 
-        return fetch(url).then(response => response.ok ? response.text() : Promise.reject(response));
-      },
+        '/bar/test.js': `
+          exports.test = function() {
 
-      addStyle(styleStr) {
-        const style = document.createElement('style');
-        style.textContent = styleStr;
-        const ref = document.head.getElementsByTagName('style')[0] || null;
-        document.head.insertBefore(style, ref);
-      },
-
-      log(type, ...args) {
-        console.log(type, ...args);
+            return 'test_ok';
+          }
+        `
       }
+    };
+    /* --> */
+
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: url => config.files[url],
+      addStyle: () => {},
     }
 
-    const { loadModule } = window["vue3-sfc-loader"];
-
-    const app = Vue.createApp({
-      components: {
-        'my-component': Vue.defineAsyncComponent(() => loadModule('./myComponent.vue', options)),
-      },
-      template: 'Hello <my-component></my-component>'
-    });
-
-    app.mount('#app');
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/component.vue', options))).mount(document.body);
 
   </script>
 </body>
 </html>
+
