@@ -186,3 +186,37 @@ test('DOM has no scope', async () => {
 	await page.close();
 });
 
+
+test.only('nested mjs import', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<script>
+					import { test } from './foo/test.mjs'
+					console.log( test() );
+				</script>
+			`,
+
+			'/foo/test.mjs': `
+				export function test() {
+
+					return require('../bar/test.mjs').test();
+				}
+			`,
+
+			'/bar/test.mjs': `
+				export function test() {
+
+					return 'test_ok';
+				}
+			`
+		}
+	});
+
+	await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
+
+	await page.close();
+});
+
