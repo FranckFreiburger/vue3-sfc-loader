@@ -4,6 +4,9 @@
 		"allowJs": true,
 		"module": "ESNext",
 		"target": "ESNext",
+		"lib": [
+			"ESNext"
+		],
 		"moduleResolution": "node"
 	}
 }
