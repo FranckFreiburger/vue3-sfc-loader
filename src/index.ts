@@ -290,7 +290,7 @@ export const version : string = process.env.VERSION;
 /**
  * @internal
  */
-const isProd = process.env.NODE_ENV === 'production';
+const isProd : boolean = process.env.NODE_ENV === 'production';
 
 
 // tools
