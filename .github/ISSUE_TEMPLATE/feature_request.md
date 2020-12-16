@@ -9,7 +9,7 @@ assignees: ''
 
 <!--
   - Use English language !
-  - If you have a question or need assistance, use https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader instead.
+  - If you have a question or need assistance, use  https://github.com/FranckFreiburger/vue3-sfc-loader/discussions?discussions_q=category%3AQ%26A  instead.
 -->
 
 
