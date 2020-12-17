@@ -14,8 +14,9 @@
 
 :warning: **beware**, the following examples are sticky to version *<!--version-->0.2.21<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
 
+** Try the examples locally **  
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.  
-Run the following commands to start a basic web server:
+Run the following commands to start a basic web server on port `8181`:
 ```sh
 npm install express  # or yarn add express
 node -e "require('express')().use(require('express').static(__dirname, {index:'index.html'})).listen(8181)"
@@ -353,7 +354,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
 ## Minimalist example (just for the fun)
 
-<!--example:source:min_for_fun-->
+<!--example:source:minimalist_example-->
 ```html
 <!DOCTYPE html>
 <html>
@@ -380,9 +381,9 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </body>
 </html>
 ```
-<!--example:target:min_for_fun-->
+<!--example:target:minimalist_example-->
 [open in JSBin](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.2.21%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+vueContent+%3D+%60%0A++++++%3Ctemplate%3E+Hello+World+!%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+()+%3D%3E+vueContent%2C%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('file.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
-<!--/example:target:min_for_fun-->
+<!--/example:target:minimalist_example-->
 [:top:](#readme)
 
 
