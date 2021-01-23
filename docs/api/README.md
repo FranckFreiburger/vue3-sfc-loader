@@ -31,7 +31,7 @@
 
 Ƭ  **File**: string \| { content: string ; extname: string  }
 
-*Defined in [index.ts:75](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L75)*
+*Defined in [index.ts:75](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L75)*
 
 Represents the content of the file or the content and the extension name.
 
@@ -41,7 +41,7 @@ Represents the content of the file or the content and the extension name.
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:287](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L287)*
+*Defined in [index.ts:327](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L327)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -51,7 +51,7 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 ▸ **loadModule**(`path`: string, `options?`: [Options](interfaces/options.md)): Promise<any\>
 
-*Defined in [index.ts:755](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bd3838c/src/index.ts#L755)*
+*Defined in [index.ts:796](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L796)*
 
 This is the main function.
 
