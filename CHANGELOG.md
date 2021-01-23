@@ -1,4 +1,11 @@
 
+### [0.2.22](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.21...v0.2.22) (2021-01-23)
+
+
+### Bug Fixes
+
+* **core:** enable template text interpolation delimiters configuration ([9eb3d33](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/9eb3d337da6e97dae4e0bc0f2e685b409ab6cf05))
+
 ### [0.2.21](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.20...v0.2.21) (2020-12-14)
 
 
