@@ -141,6 +141,46 @@ interface Options {
 */
 	addStyle(style : string, scopeId : string) : void,
 
+/**
+ * Sets the delimiters used for text interpolation within the template.
+ * Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax.
+ *
+ *	```javascript
+ *	...
+ *	<script>
+ *
+ *		// <!--
+ *		const vueContent = `
+ *			<template> Hello [[[[ who ]]]] !</template>
+ *			<script>
+ *			export default {
+ *				data() {
+ *					return {
+ *						who: 'world'
+ *					}
+ *				}
+ *			}
+ *			</script>
+ *		`;
+ *		// -->
+ *
+ *		const options = {
+ *			moduleCache: { vue: Vue },
+ *			getFile: () => vueContent,
+ *			addStyle: () => {},
+ *			delimiters: ['[[[[', ']]]]'],
+ *		}
+ *
+ *		const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
+ *		app.mount(document.body);
+ *
+ *	</script>
+ *	...
+ *	```
+*/
+
+	delimiters?: SFCTemplateCompileOptions['compilerOptions']['delimiters'],
+
 
 /**
  * Additional babel plugins. [TBD]
@@ -537,7 +577,7 @@ async function createJSModule(source : string, moduleSourceType : boolean, filen
  */
 async function createSFCModule(source : string, filename : string, options : Options) {
 
-	const { moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [] } = options;
+	const { delimiters, moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [] } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
@@ -562,6 +602,7 @@ async function createSFCModule(source : string, filename : string, options : Opt
 		scoped: hasScoped,
 		id: scopeId,
 		compilerOptions: {
+			delimiters,
 			scopeId: hasScoped ? scopeId : undefined,
 			mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
 		},
