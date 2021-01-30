@@ -142,40 +142,40 @@ interface Options {
 	addStyle(style : string, scopeId : string) : void,
 
 /**
- * Sets the delimiters used for text interpolation within the template.
+ * Sets the delimiters used for text interpolation within the template.  
  * Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax.
  *
  *	```javascript
- *	...
- *	<script>
- *
- *		// <!--
- *		const vueContent = `
- *			<template> Hello [[[[ who ]]]] !</template>
- *			<script>
- *			export default {
- *				data() {
- *					return {
- *						who: 'world'
+ *		...
+ *		<script>
+ *	
+ *			// <!--
+ *			const vueContent = `
+ *				<template> Hello [[[[ who ]]]] !</template>
+ *				<script>
+ *				export default {
+ *					data() {
+ *						return {
+ *							who: 'world'
+ *						}
  *					}
  *				}
+ *				</script>
+ *			`;
+ *			// -->
+ *	
+ *			const options = {
+ *				moduleCache: { vue: Vue },
+ *				getFile: () => vueContent,
+ *				addStyle: () => {},
+ *				delimiters: ['[[[[', ']]]]'],
  *			}
- *			</script>
- *		`;
- *		// -->
- *
- *		const options = {
- *			moduleCache: { vue: Vue },
- *			getFile: () => vueContent,
- *			addStyle: () => {},
- *			delimiters: ['[[[[', ']]]]'],
- *		}
- *
- *		const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
- *		app.mount(document.body);
- *
- *	</script>
- *	...
+ *	
+ *			const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
+ *			app.mount(document.body);
+ *	
+ *		</script>
+ *		...
  *	```
 */
 
