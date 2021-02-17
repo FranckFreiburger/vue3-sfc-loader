@@ -69,6 +69,13 @@ interface Cache {
 }
 
 
+interface PathUtil {
+	concat(current : string, path : string) : string,
+	dirname(path : string) : string,
+	extname(path : string) : string,
+}
+
+
 /**
  * Represents the content of the file or the content and the extension name.
  */
@@ -278,6 +285,13 @@ interface Options {
  */
 	loadModule?(path : string, options : Options) : Promise<Module | undefined>,
 
+
+/**
+ * Abstact path handling
+ *
+ */
+ 	pathUtil : PathUtil,
+
 }
 
 
@@ -462,12 +476,12 @@ function parseDeps(fileAst : t.File) : string[] {
  * relative to absolute module path resolution.
  * @internal
  */
-function resolvePath(path : string, depPath : string) : string {
+function resolvePath(path : string, depPath : string, { pathUtil } : Options ) : string {
 
 	if ( depPath[0] !== '.' )
 		return depPath;
 
-	return Path.normalize(Path.join(Path.dirname(path), depPath));
+	return pathUtil.concat(pathUtil.dirname(path), depPath);
 }
 
 
@@ -478,7 +492,7 @@ function resolvePath(path : string, depPath : string) : string {
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
 	for ( const dep of deps )
-		await loadModule(resolvePath(filename, dep), options);
+		await loadModule(resolvePath(filename, dep, options), options);
 }
 
 
@@ -488,11 +502,11 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
  */
 function createModule(filename : string, source : string, options : Options) {
 
-	const { moduleCache } = options;
+	const { moduleCache, pathUtil } = options;
 
 	const require = function(path : string) {
 
-		const absPath = resolvePath(filename, path);
+		const absPath = resolvePath(filename, path, options);
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
@@ -501,7 +515,7 @@ function createModule(filename : string, source : string, options : Options) {
 
 	const import_ = async function(path : string) {
 
-		return await loadModule(resolvePath(filename, path), options);
+		return await loadModule(resolvePath(filename, path, options), options);
 	}
 
 	const module = {
@@ -510,7 +524,7 @@ function createModule(filename : string, source : string, options : Options) {
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, Path.dirname(filename), import_);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, pathUtil.dirname(filename), import_);
 
 	return module;
 }
@@ -756,6 +770,25 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 
 
 /**
+ * Default implementation of PathUtil
+ */
+const defaultPathUtil : PathUtil = {
+	concat(current, path) {
+
+		return Path.normalize(Path.join(current, path));
+	},
+	dirname(path) {
+
+		return Path.dirname(path);
+	},
+	extname(path) {
+
+		return Path.extname(path);
+	},
+}
+
+
+/**
  * This is the main function.
  * This function is intended to be used only to load the entry point of your application.
  * If for some reason you need to use it in your components, be sure to share at least the options.`compiledCache` object between all calls.
@@ -796,15 +829,18 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * ```
  *
  */
-export async function loadModule(path : string, options : Options = throwNotDefined('options')) {
+export async function loadModule(path : string, options_ : Options = throwNotDefined('options')) : Promise<Module> {
 
 	const {
-		moduleCache = (options.moduleCache = Object.create(null)),
+		moduleCache = Object.create(null),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
 		additionalModuleHandlers = {},
 		loadModule,
-	} = options;
+		pathUtil = defaultPathUtil,
+	} = options_;
+
+	const options = { moduleCache, getFile, addStyle, additionalModuleHandlers, loadModule, pathUtil };
 
 	if ( path in moduleCache )
 		return moduleCache[path];
@@ -821,7 +857,7 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 
 	const res = await getFile(path);
 
-	const file = typeof res === 'object' ? res : { content: res, extname: Path.extname(path) };
+	const file = typeof res === 'object' ? res : { content: res, extname: pathUtil.extname(path) };
 
 	if ( !(file.extname in moduleHandlers) )
 		throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
