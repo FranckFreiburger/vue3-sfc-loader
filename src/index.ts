@@ -70,9 +70,12 @@ interface Cache {
 
 
 interface PathUtil {
-	concat(current : string, path : string) : string,
 	dirname(path : string) : string,
 	extname(path : string) : string,
+	/*
+	 * relative to absolute module path resolution.
+	 */
+	resolve(current : string, dep : string) : string,
 }
 
 
@@ -473,26 +476,15 @@ function parseDeps(fileAst : t.File) : string[] {
 
 
 /**
- * relative to absolute module path resolution.
- * @internal
- */
-function resolvePath(path : string, depPath : string, { pathUtil } : Options ) : string {
-
-	if ( depPath[0] !== '.' )
-		return depPath;
-
-	return pathUtil.concat(pathUtil.dirname(path), depPath);
-}
-
-
-/**
  * Just load and cache given dependencies.
  * @internal
  */
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
+	const { pathUtil: { resolve } } = options;
+
 	for ( const dep of deps )
-		await loadModule(resolvePath(filename, dep, options), options);
+		await loadModule(resolve(filename, dep), options);
 }
 
 
@@ -502,11 +494,11 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
  */
 function createModule(filename : string, source : string, options : Options) {
 
-	const { moduleCache, pathUtil } = options;
+	const { moduleCache, pathUtil: { resolve, dirname } } = options;
 
 	const require = function(path : string) {
 
-		const absPath = resolvePath(filename, path, options);
+		const absPath = resolve(filename, path);
 		if ( absPath in moduleCache )
 			return moduleCache[absPath];
 
@@ -515,7 +507,7 @@ function createModule(filename : string, source : string, options : Options) {
 
 	const import_ = async function(path : string) {
 
-		return await loadModule(resolvePath(filename, path, options), options);
+		return await loadModule(resolve(filename, path), options);
 	}
 
 	const module = {
@@ -524,7 +516,7 @@ function createModule(filename : string, source : string, options : Options) {
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, pathUtil.dirname(filename), import_);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, dirname(filename), import_);
 
 	return module;
 }
@@ -773,10 +765,6 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * Default implementation of PathUtil
  */
 const defaultPathUtil : PathUtil = {
-	concat(current, path) {
-
-		return Path.normalize(Path.join(current, path));
-	},
 	dirname(path) {
 
 		return Path.dirname(path);
@@ -785,6 +773,13 @@ const defaultPathUtil : PathUtil = {
 
 		return Path.extname(path);
 	},
+	resolve(current, dep) {
+
+		if ( dep[0] !== '.' )
+			return dep;
+
+		return Path.normalize(Path.join(Path.dirname(current), dep));
+	}
 }
 
 
