@@ -69,7 +69,7 @@ interface Cache {
 }
 
 
-interface PathUtil {
+interface PathHandlers {
 	dirname(path : string) : string,
 	extname(path : string) : string,
 	/*
@@ -293,7 +293,7 @@ interface Options {
  * Abstact path handling
  *
  */
- 	pathUtil : PathUtil,
+ 	pathHandlers : PathHandlers,
 
 }
 
@@ -481,7 +481,7 @@ function parseDeps(fileAst : t.File) : string[] {
  */
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
-	const { pathUtil: { resolve } } = options;
+	const { pathHandlers: { resolve } } = options;
 
 	for ( const dep of deps )
 		await loadModule(resolve(filename, dep), options);
@@ -494,7 +494,7 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
  */
 function createModule(filename : string, source : string, options : Options) {
 
-	const { moduleCache, pathUtil: { resolve, dirname } } = options;
+	const { moduleCache, pathHandlers: { resolve, dirname } } = options;
 
 	const require = function(path : string) {
 
@@ -762,9 +762,9 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
 
 
 /**
- * Default implementation of PathUtil
+ * Default implementation of PathHandlers
  */
-const defaultPathUtil : PathUtil = {
+const defaultPathHandlers : PathHandlers = {
 	dirname(path) {
 
 		return Path.dirname(path);
@@ -832,10 +832,10 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		addStyle = throwNotDefined('options.addStyle()'),
 		additionalModuleHandlers = {},
 		loadModule,
-		pathUtil = defaultPathUtil,
+		pathHandlers = defaultPathHandlers,
 	} = options_;
 
-	const options = { moduleCache, getFile, addStyle, additionalModuleHandlers, loadModule, pathUtil };
+	const options = { moduleCache, getFile, addStyle, additionalModuleHandlers, loadModule, pathHandlers };
 
 	if ( path in moduleCache )
 		return moduleCache[path];
@@ -852,7 +852,7 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 
 	const res = await getFile(path);
 
-	const file = typeof res === 'object' ? res : { content: res, extname: pathUtil.extname(path) };
+	const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
 
 	if ( !(file.extname in moduleHandlers) )
 		throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
