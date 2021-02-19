@@ -830,12 +830,16 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleCache = Object.create(null),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
+		delimiters,
+		additionalBabelPlugins,
 		additionalModuleHandlers = {},
+		compiledCache,
+		log,
 		loadModule,
 		pathHandlers = defaultPathHandlers,
 	} = options_;
 
-	const options = { moduleCache, getFile, addStyle, additionalModuleHandlers, loadModule, pathHandlers };
+	const options = { moduleCache, getFile, addStyle, delimiters, additionalBabelPlugins, additionalModuleHandlers, compiledCache, log, loadModule, pathHandlers };
 
 	if ( path in moduleCache )
 		return moduleCache[path];
