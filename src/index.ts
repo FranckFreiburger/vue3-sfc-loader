@@ -91,7 +91,7 @@ interface Options {
 /**
  * Initial cache that will contain resolved dependencies. All new modules go here.
  * `vue` must initially be contained in this object.
- * [[moduleCache]] is mandatory for the lib but optional for you. If you do not provide it, the lib will automatically add it to the [[options]] object.
+ * [[moduleCache]] is mandatory for the lib. If you do not provide it, the library will create one.
  * It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
 ​ *
  * See also [[options.loadModule]].
@@ -830,16 +830,17 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleCache = Object.create(null),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
-		delimiters,
-		additionalBabelPlugins,
-		additionalModuleHandlers = {},
-		compiledCache,
-		log,
-		loadModule,
+		additionalModuleHandlers = null,
 		pathHandlers = defaultPathHandlers,
+		loadModule,
 	} = options_;
 
-	const options = { moduleCache, getFile, addStyle, delimiters, additionalBabelPlugins, additionalModuleHandlers, compiledCache, log, loadModule, pathHandlers };
+	const options = {
+		moduleCache,
+		additionalModuleHandlers,
+		pathHandlers,
+		...options_
+	};
 
 	if ( path in moduleCache )
 		return moduleCache[path];
