@@ -70,12 +70,11 @@ interface Cache {
 
 
 interface PathHandlers {
-	dirname(path : string) : string,
-	extname(path : string) : string,
+	extname(filepath : string) : string,
 	/*
 	 * relative to absolute module path resolution.
 	 */
-	resolve(current : string, dep : string) : string,
+	resolve(absoluteFilepath : string, dependencyPath : string) : string,
 }
 
 
@@ -494,7 +493,7 @@ async function loadDeps(filename : string, deps : string[], options : Options) {
  */
 function createModule(filename : string, source : string, options : Options) {
 
-	const { moduleCache, pathHandlers: { resolve, dirname } } = options;
+	const { moduleCache, pathHandlers: { resolve } } = options;
 
 	const require = function(path : string) {
 
@@ -516,7 +515,7 @@ function createModule(filename : string, source : string, options : Options) {
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, dirname(filename), import_);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, resolve(filename, '.'), import_);
 
 	return module;
 }
@@ -765,20 +764,13 @@ const defaultModuleHandlers : Record<string, ModuleHandler> = {
  * Default implementation of PathHandlers
  */
 const defaultPathHandlers : PathHandlers = {
-	dirname(path) {
+	extname(filepath) {
 
-		return Path.dirname(path);
+		return Path.extname(filepath);
 	},
-	extname(path) {
+	resolve(absoluteFilepath, dependencyPath) {
 
-		return Path.extname(path);
-	},
-	resolve(current, dep) {
-
-		if ( dep[0] !== '.' )
-			return dep;
-
-		return Path.normalize(Path.join(Path.dirname(current), dep));
+		return dependencyPath[0] !== '.' ? dependencyPath : Path.normalize(Path.join(Path.dirname(absoluteFilepath), dependencyPath));
 	}
 }
 
