@@ -26,7 +26,7 @@ async function createPage({ files }) {
 
 	const page = await browser.newPage();
 
-	page.setDefaultTimeout(2000);
+	page.setDefaultTimeout(3000);
 
 
 	await page.setRequestInterception(true);
