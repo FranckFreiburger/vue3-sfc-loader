@@ -56,7 +56,7 @@
     "jest": "^26.6.3",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
-    "puppeteer": "^5.5.0",
+    "puppeteer": "^7.1.0",
     "safe-buffer": "^5.2.1",
     "source-map-explorer": "2.5.2",
     "standard-version": "^9.1.1",
