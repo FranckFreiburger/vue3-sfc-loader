@@ -1,4 +1,20 @@
 
+## [0.3.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.22...v0.3.0) (2021-02-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** loadModule() `options` argument is not mutated any more.
+
+### Features
+
+* **core:** abstraction of path management ([b647cb3](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/b647cb39a7b8ee9f591e3d9a3a77e9d26f56eeb9))
+
+
+### wip
+
+* **core:** enhance loadModule() options management. ([913a616](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/913a6169e248ce6531ba523cb30c36ab814029bf))
+
 ### [0.2.22](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.21...v0.2.22) (2021-01-23)
 
 
