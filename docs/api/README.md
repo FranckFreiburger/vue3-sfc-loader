@@ -12,6 +12,7 @@
 * [Module](interfaces/module.md)
 * [ModuleHandler](interfaces/modulehandler.md)
 * [Options](interfaces/options.md)
+* [PathHandlers](interfaces/pathhandlers.md)
 
 ### Type aliases
 
@@ -25,13 +26,17 @@
 
 * [loadModule](README.md#loadmodule)
 
+### Object literals
+
+* [defaultPathHandlers](README.md#defaultpathhandlers)
+
 ## Type aliases
 
 ### File
 
 Ƭ  **File**: string \| { content: string ; extname: string  }
 
-*Defined in [index.ts:75](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L75)*
+*Defined in [index.ts:84](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L84)*
 
 Represents the content of the file or the content and the extension name.
 
@@ -41,7 +46,7 @@ Represents the content of the file or the content and the extension name.
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:327](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L327)*
+*Defined in [index.ts:343](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L343)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -49,20 +54,22 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 ### loadModule
 
-▸ **loadModule**(`path`: string, `options?`: [Options](interfaces/options.md)): Promise<any\>
+▸ **loadModule**(`path`: string, `options_?`: [Options](interfaces/options.md)): Promise<[Module](interfaces/module.md)\>
 
-*Defined in [index.ts:796](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L796)*
+*Defined in [index.ts:819](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L819)*
 
 This is the main function.
+This function is intended to be used only to load the entry point of your application.
+If for some reason you need to use it in your components, be sure to share at least the options.`compiledCache` object between all calls.
 
 #### Parameters:
 
 Name | Type | Default value | Description |
 ------ | ------ | ------ | ------ |
 `path` | string | - | The path of the `.vue` file. If path is not a path (eg. an string ID), your [getFile](interfaces/options.md#getfile) function must return a [File](README.md#file) object. |
-`options` | [Options](interfaces/options.md) | throwNotDefined('options') | The options |
+`options_` | [Options](interfaces/options.md) | throwNotDefined('options') | - |
 
-**Returns:** Promise<any\>
+**Returns:** Promise<[Module](interfaces/module.md)\>
 
 A Promise of the component
 
@@ -96,3 +103,20 @@ A Promise of the component
 .catch(ex => console.error(ex));
 
 ```
+
+## Object literals
+
+### defaultPathHandlers
+
+▪ `Const` **defaultPathHandlers**: object
+
+*Defined in [index.ts:766](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L766)*
+
+Default implementation of PathHandlers
+
+#### Properties:
+
+Name | Type | Value |
+------ | ------ | ------ |
+`extname` | function | (filepath: string) => string |
+`resolve` | function | (absoluteFilepath: string, dependencyPath: string) => string |

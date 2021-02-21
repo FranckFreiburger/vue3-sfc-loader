@@ -17,6 +17,7 @@
 * [compiledCache](options.md#compiledcache)
 * [delimiters](options.md#delimiters)
 * [moduleCache](options.md#modulecache)
+* [pathHandlers](options.md#pathhandlers)
 
 ### Methods
 
@@ -31,7 +32,7 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:193](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L193)*
+*Defined in [index.ts:202](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L202)*
 
 Additional babel plugins. [TBD]
 
@@ -46,7 +47,7 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record<string, [ModuleHandler](modulehandler.md)\>
 
-*Defined in [index.ts:200](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L200)*
+*Defined in [index.ts:209](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L209)*
 
 Additional module type handlers. see [ModuleHandler](modulehandler.md)
 
@@ -56,7 +57,7 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:240](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L240)*
+*Defined in [index.ts:249](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L249)*
 
 [get](cache.md#get)() and [set](cache.md#set)() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
@@ -100,42 +101,42 @@ ___
 
 • `Optional` **delimiters**: SFCTemplateCompileOptions[\"compilerOptions\"][\"delimiters\"]
 
-*Defined in [index.ts:182](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L182)*
+*Defined in [index.ts:191](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L191)*
 
 Sets the delimiters used for text interpolation within the template.
 Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax.
 
 	```javascript
-	...
-	<script>
+		...
+		<script>
 
-		// <!--
-		const vueContent = `
-			<template> Hello [[[[ who ]]]] !</template>
-			<script>
-			export default {
-				data() {
-					return {
-						who: 'world'
+			// <!--
+			const vueContent = `
+				<template> Hello [[[[ who ]]]] !</template>
+				<script>
+				export default {
+					data() {
+						return {
+							who: 'world'
+						}
 					}
 				}
+				</script>
+			`;
+			// -->
+
+			const options = {
+				moduleCache: { vue: Vue },
+				getFile: () => vueContent,
+				addStyle: () => {},
+				delimiters: ['[[[[', ']]]]'],
 			}
-			</script>
-		`;
-		// -->
 
-		const options = {
-			moduleCache: { vue: Vue },
-			getFile: () => vueContent,
-			addStyle: () => {},
-			delimiters: ['[[[[', ']]]]'],
-		}
+			const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
+			app.mount(document.body);
 
-		const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
-		app.mount(document.body);
-
-	</script>
-	...
+		</script>
+		...
 	```
 
 ___
@@ -144,11 +145,11 @@ ___
 
 • `Optional` **moduleCache**: Record<string, [Module](module.md)\>
 
-*Defined in [index.ts:99](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L99)*
+*Defined in [index.ts:108](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L108)*
 
 Initial cache that will contain resolved dependencies. All new modules go here.
 `vue` must initially be contained in this object.
-[moduleCache](options.md#modulecache) is mandatory for the lib but optional for you. If you do not provide it, the lib will automatically add it to the [[options]] object.
+[moduleCache](options.md#modulecache) is mandatory for the lib. If you do not provide it, the library will create one.
 It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
 ​ *
 See also [[options.loadModule]].
@@ -162,13 +163,23 @@ See also [[options.loadModule]].
 	...
 ```
 
+___
+
+### pathHandlers
+
+•  **pathHandlers**: [PathHandlers](pathhandlers.md)
+
+*Defined in [index.ts:295](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L295)*
+
+Abstact path handling
+
 ## Methods
 
 ### addStyle
 
 ▸ **addStyle**(`style`: string, `scopeId`: string): void
 
-*Defined in [index.ts:142](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L142)*
+*Defined in [index.ts:151](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L151)*
 
 Called by the library when CSS style must be added in the HTML document.
 
@@ -200,7 +211,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise<[File](../README.md#file)\>
 
-*Defined in [index.ts:120](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L120)*
+*Defined in [index.ts:129](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L129)*
 
 Called by the library when it needs a file.
 
@@ -233,7 +244,7 @@ ___
 
 ▸ `Optional`**loadModule**(`path`: string, `options`: [Options](options.md)): Promise<[Module](module.md) \| undefined\>
 
-*Defined in [index.ts:279](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L279)*
+*Defined in [index.ts:288](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L288)*
 
 Called when the lib requires a module. Do return `undefined` to let the library handle this.
 
@@ -266,7 +277,7 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:258](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f07a644/src/index.ts#L258)*
+*Defined in [index.ts:267](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L267)*
 
 Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
 
