@@ -520,6 +520,105 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
 
 
+
+## Nested components
+
+<!--example:source:nested_components-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.3.0/dist/vue3-sfc-loader.js"></script>
+  <script>
+
+    /* <!-- */
+    const config = {
+      files: {
+        '/main.vue': `
+            <template>
+                <foo/>
+            </template>
+            <script>
+                import foo from './foo.vue'
+
+                export default {
+                    components: {
+                        foo,
+                    },
+                    created() {
+                        console.log('main created')
+                    },
+                    mounted() {
+                        console.log('main mounted')
+                    }
+                }
+            </script>
+        `,
+
+        '/foo.vue': `
+            <template>
+                <bar/>
+            </template>
+            <script>
+                import bar from './bar.vue'
+
+                export default {
+                    components: {
+                        bar,
+                    },
+                    created() {
+                        console.log('foo created')
+                    },
+                    mounted() {
+                        console.log('foo mounted')
+                    }
+                }
+            </script>
+        `,
+
+        '/bar.vue': `
+            <template>
+                end
+            </template>
+            <script>
+
+                export default {
+                    components: {
+                    },
+                    created() {
+                        console.log('bar created')
+                    },
+                    mounted() {
+                        console.log('bar mounted')
+                    }
+                }
+            </script>
+        `
+      }
+    };
+    /* --> */
+
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: url => config.files[url],
+      addStyle: () => {},
+    }
+
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+```
+<!--example:target:nested_components-->
+<!--/example:target:nested_components-->
+[:top:](#readme)
+
+
+
+
 <!---
 
 const regexpReservedChars = '\\.+*?^$|[{()';
