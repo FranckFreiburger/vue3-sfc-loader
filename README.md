@@ -72,7 +72,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
-## Public API <sub>:book:</sub>
+## Public API documentation <sub>:book:</sub>
 
   **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): Promise\<Module>
 
