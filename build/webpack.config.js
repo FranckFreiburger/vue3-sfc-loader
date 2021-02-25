@@ -139,11 +139,16 @@ ${ pkg.name } v${ pkg.version }
 				'safe-buffer': require.resolve('safe-buffer'),
 				//'es-abstract': require.resolve('es-abstract'),
 
-				// '@babel/parser': require.resolve('@babel/parser'),
-				// '@babel/template': require.resolve('@babel/template'),
-				// '@babel/traverse': require.resolve('@babel/traverse'),
-				// '@babel/types': require.resolve('@babel/types'),
+				'@babel/parser': require.resolve('@babel/parser'),
+				'@babel/template': require.resolve('@babel/template'),
+				'@babel/traverse': require.resolve('@babel/traverse'),
+				'@babel/types': require.resolve('@babel/types'),
+				'@babel/code-frame': require.resolve('@babel/code-frame'),
+				'@babel/core': require.resolve('@babel/core'),
 
+				'@vue/shared': require.resolve('@vue/shared'),
+				'@vue/compiler-sfc': require.resolve('@vue/compiler-sfc'),
+				'@vue/compiler-dom': require.resolve('@vue/compiler-dom'),
 
 				// not needed
 				'consolidate': false,
