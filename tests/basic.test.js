@@ -326,3 +326,99 @@ test('access cjs module default from es6', async () => {
 	await page.close();
 });
 
+
+
+test('nested with slot', async () => {
+
+	const { page, output, textContent } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<template>
+					<foo><bar>test</bar></foo>
+				</template>
+				<script>
+					import foo from './foo.vue'
+					import bar from './bar.vue'
+
+					export default {
+						components: {
+							foo,
+							bar,
+						},
+						created: () => console.log('main created'),
+						mounted: () => console.log('main mounted'),
+					}
+				</script>
+			`,
+
+			'/foo.vue': `
+				<template>
+					foo (<slot></slot>)
+				</template>
+				<script>
+					export default {
+						created: () => console.log('foo created'),
+						mounted: () => console.log('foo mounted'),
+					}
+				</script>
+			`,
+
+			'/bar.vue': `
+				<template>
+					bar (<slot></slot>)
+				</template>
+				<script>
+					export default {
+						created: () => console.log('bar created'),
+						mounted: () => console.log('bar mounted'),
+					}
+				</script>
+			`
+		}
+	});
+
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('main created,foo created,bar created,bar mounted,foo mounted,main mounted');
+
+	expect(await page.content()).toEqual(expect.stringContaining('foo ( bar (test) )'));
+
+	await page.close();
+});
+
+
+
+test.only('should not hang', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+        '/component.vue': `
+            <script>
+                import bar from '/foo.vue';
+
+                console.log('component');
+
+                export default {
+                }
+            </script>
+        `,
+
+        '/foo.vue': `
+            <script>
+                import component from '/component.vue';
+
+                console.log('foo');
+
+                export default {
+                }
+            </script>
+        `,
+		}
+	});
+
+	await new Promise(resolve => setTimeout(resolve, 500));
+
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('component,foo');
+
+	await page.close();
+});
