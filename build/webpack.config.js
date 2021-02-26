@@ -139,6 +139,9 @@ ${ pkg.name } v${ pkg.version }
 				'safe-buffer': require.resolve('safe-buffer'),
 				//'es-abstract': require.resolve('es-abstract'),
 
+				'semver': require.resolve('semver'),
+				'lru-cache': require.resolve('lru-cache'),
+
 				'@babel/parser': require.resolve('@babel/parser'),
 				'@babel/template': require.resolve('@babel/template'),
 				'@babel/traverse': require.resolve('@babel/traverse'),

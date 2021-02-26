@@ -33,19 +33,21 @@
       "postbump": "yarn run pushDocs && yarn run build && yarn run tests"
     }
   },
-  "devDependencies": {
+  "dependencies": {
+    "@babel/code-frame": "^7.12.13",
     "@babel/core": "^7.13.1",
+    "@babel/parser": "^7.13.4",
     "@babel/plugin-proposal-dynamic-import": "^7.12.17",
     "@babel/plugin-transform-arrow-functions": "^7.13.0",
     "@babel/plugin-transform-modules-commonjs": "^7.13.0",
     "@babel/plugin-transform-runtime": "^7.13.7",
     "@babel/preset-env": "^7.13.5",
-    "@babel/code-frame": "^7.12.13",
-    "@babel/parser": "^7.13.4",
     "@types/babel__code-frame": "^7.0.2",
     "@types/babel__core": "^7.1.12",
     "@types/babel__traverse": "^7.11.0",
+    "@vue/compiler-dom": "^3.0.6",
     "@vue/compiler-sfc": "^3.0.6",
+    "@vue/shared": "^3.0.6",
     "assert": "^2.0.0",
     "babel-loader": "^8.2.2",
     "bn.js": "5",
@@ -56,6 +58,7 @@
     "crypto-browserify": "^3.12.0",
     "duplicate-package-checker-webpack-plugin": "^3.0.0",
     "jest": "^26.6.3",
+    "lru-cache": "^6.0.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "puppeteer": "^7.1.0",
@@ -71,10 +74,9 @@
     "util": "^0.12.3",
     "vm-browserify": "^1.1.2",
     "vue": "3.0.4",
-    "@vue/compiler-dom": "^3.0.6",
-    "@vue/shared": "^3.0.6",
     "webpack": "^5.24.2",
     "webpack-bundle-analyzer": "^4",
-    "webpack-cli": "^4.5.0"
+    "webpack-cli": "^4.5.0",
+    "semver": "^7.3.4"
   }
 }
