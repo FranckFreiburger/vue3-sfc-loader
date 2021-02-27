@@ -387,6 +387,20 @@ function hash(...valueList : any[]) : string {
 
 
 /**
+ * @internal
+ */
+class Loading {
+
+	promise : Promise<Module>;
+
+	constructor(promise : Promise<Module>) {
+
+		this.promise = promise;
+	}
+}
+
+
+/**
  * Simple cache helper
  * preventCache usage: non-fatal error
  * @internal
@@ -481,9 +495,7 @@ function parseDeps(fileAst : t.File) : string[] {
 async function loadDeps(filename : string, deps : string[], options : Options) {
 
 	const { pathHandlers: { resolve } } = options;
-
-	for ( const dep of deps )
-		await loadModule(resolve(filename, dep), options);
+	await Promise.all(deps.map(dep => loadModule(resolve(filename, dep), options)))
 }
 
 
@@ -834,28 +846,46 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		...options_
 	};
 
-	if ( path in moduleCache )
-		return moduleCache[path];
+	if ( path in moduleCache ) {
 
-	if ( loadModule ) {
-
-		const module = await loadModule(path, options);
-		if ( module !== undefined )
-			return moduleCache[path] = module;
+		if ( moduleCache[path] instanceof Loading )
+			return await moduleCache[path].promise;
+		else
+			return moduleCache[path];
 	}
 
 
-	const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
+	moduleCache[path] = new Loading(
 
-	const res = await getFile(path);
+		(async () => {
 
-	const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+			if ( loadModule ) {
 
-	if ( !(file.extname in moduleHandlers) )
-		throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
+				const module = await loadModule(path, options);
+				if ( module !== undefined )
+					return moduleCache[path] = module;
+			}
 
-	if ( typeof file.content !== 'string' )
-		throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
+			const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
-	return moduleCache[path] = await moduleHandlers[file.extname](file.content, path, options);
+			const res = await getFile(path);
+
+			const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+
+			if ( !(file.extname in moduleHandlers) )
+				throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
+
+			if ( typeof file.content !== 'string' )
+				throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
+
+
+			const module = await moduleHandlers[file.extname](file.content, path, options);
+
+			return moduleCache[path] = module;
+
+		})()
+
+	);
+
+	return await moduleCache[path].promise;
 }
