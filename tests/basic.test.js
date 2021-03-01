@@ -386,8 +386,29 @@ test('nested with slot', async () => {
 });
 
 
+test.only('should handle missing dynamic import', async () => {
 
-test.only('should not hang', async () => {
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+        '/component.vue': `
+            <script>
+	            import('./missing_file.js')
+	            .catch(ex => console.log('error'))
+	            .finally(() => console.log('done'))
+            </script>
+        `,
+		}
+	});
+
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('error,done');
+
+	await page.close();
+});
+
+
+/*
+xtest('should not hang on cycles', async () => {
 
 	const { page, output } = await createPage({
 		files: {
@@ -416,9 +437,48 @@ test.only('should not hang', async () => {
 		}
 	});
 
-	await new Promise(resolve => setTimeout(resolve, 500));
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('component,foo');
+
+	await page.close();
+});
+
+
+
+xtest('should handle cycles', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+        '/component.vue': `
+            <script>
+                import bar from '/foo.vue';
+
+                console.log('component', bar);
+
+                export default {
+                	name: 'component',
+                }
+            </script>
+        `,
+
+        '/foo.vue': `
+            <script>
+                import component from '/component.vue';
+
+                console.log('foo', component);
+
+                export default {
+                	name: 'foo',
+                }
+            </script>
+        `,
+		}
+	});
+
+	console.log( output )
 
 	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('component,foo');
 
 	await page.close();
 });
+*/
