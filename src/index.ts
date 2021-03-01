@@ -866,11 +866,11 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 					return moduleCache[path] = module;
 			}
 
-			const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
-
 			const res = await getFile(path);
 
 			const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+
+			const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
 			if ( !(file.extname in moduleHandlers) )
 				throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
