@@ -2,6 +2,7 @@
 <html>
 <body>
   <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-i18n@next"></script>
   <script src="vue3-sfc-loader.js"></script>
   <script>
 
@@ -9,39 +10,47 @@
     const config = {
       files: {
         '/component.vue': `
-          <script>
-            const { test } = require('./foo/test.js')
-            console.log( test() );
-          </script>
-        `,
-
-        '/foo/test.js': `
-          exports.test = function() {
-
-            return require('../bar/test.js').test();
+          <template>
+            {{ $t('hello') }}
+          </template>
+          <i18n>
+          {
+            "en": {
+              "hello": "hello world!"
+            },
+            "ja": {
+              "hello": "こんにちは、世界！"
+            }
           }
-        `,
-
-        '/bar/test.js': `
-          exports.test = function() {
-
-            return 'test_ok';
-          }
-        `
+          </i18n>
+       `
       }
     };
     /* --> */
 
+    const i18n = VueI18n.createI18n();
 
     const options = {
       moduleCache: { vue: Vue },
       getFile: url => config.files[url],
       addStyle: () => {},
+      customBlockHandler(block, filename, options) {
+
+        if ( block.type !== 'i18n' )
+          return
+
+        const messages = JSON.parse(block.content);
+        for ( let locale in messages )
+          i18n.global.mergeLocaleMessage(locale, messages[locale]);
+      }
     }
 
-    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/component.vue', options))).mount(document.body);
+    const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/component.vue', options)));
+
+    app.use(i18n);
+
+    app.mount(document.body);
 
   </script>
 </body>
 </html>
-
