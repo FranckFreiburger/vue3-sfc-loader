@@ -31,7 +31,8 @@ import {
 	compileScript as sfc_compileScript,
 	compileTemplate as sfc_compileTemplate,
 	SFCAsyncStyleCompileOptions,
-	SFCTemplateCompileOptions
+	SFCTemplateCompileOptions,
+	SFCBlock
 } from '@vue/compiler-sfc'
 
 import {
@@ -82,6 +83,12 @@ interface PathHandlers {
  * Represents the content of the file or the content and the extension name.
  */
 type File = string | { content : string, extname : string };
+
+
+/**
+ * CustomBlockCallback function type
+ */
+type CustomBlockCallback = ( component : Module ) => undefined;
 
 
 interface Options {
@@ -293,6 +300,28 @@ interface Options {
  *
  */
  	pathHandlers : PathHandlers,
+
+
+/**
+ * Called for each custom block.
+ * @returns A Promise of the module or undefined
+ *
+ * ```javascript
+ *	...
+ *	customBlockHandler(block, filename, options) {
+ *	
+ *		if ( block.type !== 'i18n' )
+ *			 return;
+ *	
+ *		return (component) => {
+ *	
+ *			component.i18n = JSON.parse(block.content);
+ *		}
+ *	}
+ *	...
+ * ```
+ */
+ 	customBlockHandler(block : SFCBlock, filename : string, options : Options) : Promise<CustomBlockCallback | undefined>,
 
 }
 
@@ -592,15 +621,18 @@ async function createJSModule(source : string, moduleSourceType : boolean, filen
 /**
  * @internal
  */
-async function createSFCModule(source : string, filename : string, options : Options) {
+async function createSFCModule(source : string, filename : string, options : Options) : Promise<Module> {
 
-	const { delimiters, moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [] } = options;
+	const { delimiters, moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
 		filename,
 		sourceMap: genSourcemap,
 	});
+
+
+	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map(block => customBlockHandler(block, filename, options)) ) : [];
 
 	const componentHash = hash(filename, version);
 	const hasScoped = descriptor.styles.some(e => e.scoped);
@@ -757,6 +789,8 @@ async function createSFCModule(source : string, filename : string, options : Opt
 
 		addStyle(style, descStyle.scoped ? scopeId : undefined);
 	}
+
+	await Promise.all(customBlockCallbacks.map(cb => cb?.(component)));
 
 	return component;
 }
