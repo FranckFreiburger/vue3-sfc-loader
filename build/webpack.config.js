@@ -177,14 +177,14 @@ ${ pkg.name } v${ pkg.version }
 			},
 
 			fallback: {
-				'path': require.resolve('path-browserify'),
-				'buffer': require.resolve('buffer/'),
-				'url': require.resolve('url/'),
-				'crypto': false,
-				'stream': require.resolve('stream-browserify'),
-				'assert': require.resolve('assert/'),
-				'util': require.resolve('util/'),
-				'process': require.resolve('process/'),
+				'path': require.resolve('path-browserify'), // only the posix part
+				'buffer': false,// require.resolve('buffer/'),
+				'url': false, //require.resolve('url/'),
+				'crypto': false, // or require.resolve('crypto-browserify'),
+				'stream': false, //require.resolve('stream-browserify'),
+				'assert': false, //require.resolve('assert/'),
+				'util': false, //require.resolve('util/'),
+				'process': false, //require.resolve('process/'),
 				'vm': false, // or require.resolve('vm-browserify'),
 				'fs': false,
 			}
