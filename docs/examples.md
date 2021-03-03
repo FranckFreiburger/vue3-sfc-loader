@@ -16,7 +16,7 @@
 
 :warning: **beware**, the following examples are sticky to version *<!--version-->0.3.1<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
 
-** Try the examples locally **  
+**Try the examples locally**  
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.  
 Run the following commands to start a basic web server on port `8181`:
 ```sh
