@@ -619,6 +619,73 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
 
 
+## Example using SFC Custom Blocks for i18n
+
+<!--example:source:custom_block_i18n-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-i18n@next"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.3.0/dist/vue3-sfc-loader.js"></script>
+  <script>
+
+    /* <!-- */
+    const config = {
+      files: {
+        '/component.vue': `
+          <template>
+            {{ $t('hello') }}
+          </template>
+          <i18n>
+          {
+            "en": {
+              "hello": "hello world!"
+            },
+            "ja": {
+              "hello": "こんにちは、世界！"
+            }
+          }
+          </i18n>
+       `
+      }
+    };
+    /* --> */
+
+    const i18n = VueI18n.createI18n();
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: url => config.files[url],
+      addStyle: () => {},
+      customBlockHandler(block, filename, options) {
+
+        if ( block.type !== 'i18n' )
+          return
+
+        const messages = JSON.parse(block.content);
+        for ( let locale in messages )
+          i18n.global.mergeLocaleMessage(locale, messages[locale]);
+      }
+    }
+
+    const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/component.vue', options)));
+
+    app.use(i18n);
+
+    app.mount(document.body);
+
+  </script>
+</body>
+</html>
+```
+<!--example:target:custom_block_i18n-->
+<!--/example:target:custom_block_i18n-->
+[:top:](#readme)
+
+
+
 <!---
 
 const regexpReservedChars = '\\.+*?^$|[{()';
