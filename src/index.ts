@@ -790,7 +790,8 @@ async function createSFCModule(source : string, filename : string, options : Opt
 		addStyle(style, descStyle.scoped ? scopeId : undefined);
 	}
 
-	await Promise.all(customBlockCallbacks.map(cb => cb?.(component)));
+	if ( customBlockHandler !== undefined )
+		await Promise.all(customBlockCallbacks.map(cb => cb?.(component)));
 
 	return component;
 }
