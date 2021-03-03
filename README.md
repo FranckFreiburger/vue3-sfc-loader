@@ -9,6 +9,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Only requires [Vue3 runtime](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
  * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Embedded ES6 modules support ( including `import()` )
+ * SFC Custom Blocks support
  * Support custom CSS, HTML and Script language, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * You can [build your own version](#build-your-own-version) and easily customize browsers you need to support
