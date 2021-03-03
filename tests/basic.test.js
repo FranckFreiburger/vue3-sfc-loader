@@ -386,7 +386,7 @@ test('nested with slot', async () => {
 });
 
 
-test.only('should handle missing dynamic import', async () => {
+test('should handle missing dynamic import', async () => {
 
 	const { page, output } = await createPage({
 		files: {
