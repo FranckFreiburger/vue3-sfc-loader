@@ -100,13 +100,22 @@ afterAll(async () => {
 const defaultFiles = {
 	'/vue3-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue3-sfc-loader.js'), { encoding: 'utf-8' }),
 	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue/dist/vue.global.js'), { encoding: 'utf-8' }),
+	'/optionsOverride.js': `
+		export default () => {};
+	`,
+	'/appOverride.js': `
+		export default () => {};
+	`,
 	'/index.html': `
 		<!DOCTYPE html>
 		<html><body>
 			<div id="app"></div>
 			<script src="vue"></script>
 			<script src="vue3-sfc-loader.js"></script>
-			<script>
+			<script type="module">
+
+				import optionsOverride from '/optionsOverride.js'
+				import appOverride from '/appOverride.js'
 
 				class HttpError extends Error {
 
@@ -155,8 +164,13 @@ const defaultFiles = {
 					}
 				}
 
+				optionsOverride(options);
+
 				const { loadModule } = window['vue3-sfc-loader'];
 				const app = Vue.createApp(Vue.defineAsyncComponent( () => loadModule('./component.vue', options) ));
+
+				appOverride(app);
+
 				app.mount('#app');
 
 				//window._done && window._done();

@@ -407,6 +407,48 @@ test('should handle missing dynamic import', async () => {
 });
 
 
+test.only('should handle custom blocks asynchronously', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<script>
+					export default {
+						mounted() {
+
+							console.log( this.$options.bazComponentProperty );
+						}
+					}
+				</script>
+
+				<foo>bar</foo>
+
+			`,
+			'/optionsOverride.js': `
+
+				export default options => {
+
+					options.customBlockHandler = async (block, filename, options) => {
+
+						console.log(block.type, block.content);
+
+						return async (component) => {
+
+							component.bazComponentProperty = 'baz';
+						}
+					}
+				}
+			`
+		}
+	});
+
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('foo,bar,baz');
+
+	await page.close();
+});
+
+
 /*
 xtest('should not hang on cycles', async () => {
 
