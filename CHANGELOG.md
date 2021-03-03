@@ -1,4 +1,12 @@
 
+### [0.3.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.3.0...v0.3.1) (2021-03-03)
+
+
+### Features
+
+* **core:** ass custom block support through customBlockHandler() ([1ce1e9b](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/1ce1e9b2a42d94429b3cfda57c75e9138dd0c0ae))
+* **core:** enable parallel dependencies downloading ([79846a8](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/79846a88bf1250688eeee88a85f9f0c79e880d7a))
+
 ## [0.3.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.2.22...v0.3.0) (2021-02-21)
 
 
