@@ -180,7 +180,7 @@ ${ pkg.name } v${ pkg.version }
 				'path': require.resolve('path-browserify'),
 				'buffer': require.resolve('buffer/'),
 				'url': require.resolve('url/'),
-				'crypto': require.resolve('crypto-browserify'),
+				'crypto': false,
 				'stream': require.resolve('stream-browserify'),
 				'assert': require.resolve('assert/'),
 				'util': require.resolve('util/'),

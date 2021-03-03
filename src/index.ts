@@ -1,5 +1,7 @@
 import { posix as Path } from 'path'
-import { createHash } from 'crypto'
+
+// @ts-ignore (TS7016: Could not find a declaration file for module 'spark-md5')
+import SparkMD5 from 'spark-md5'
 
 // astexplorer: https://astexplorer.net/
 // babel-core doc: https://babeljs.io/docs/en/babel-core
@@ -408,10 +410,10 @@ function formatError(message : string, path : string, source : string, line : nu
  */
 function hash(...valueList : any[]) : string {
 
-	const hashInstance = createHash('md5');
+	const hashInstance = new SparkMD5();
 	for ( const val of valueList )
-		hashInstance.update( typeof val === 'string' ? val : JSON.stringify(val) );
-	return hashInstance.digest('hex').slice(0, 8);
+		hashInstance.append( typeof val === 'string' ? val : JSON.stringify(val) );
+	return hashInstance.end().slice(0, 8);
 }
 
 
