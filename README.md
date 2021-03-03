@@ -68,17 +68,17 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   see [examples](docs/examples.md)
 
 
-## Try It Online <sub>:test_tube:</sub>
+## Try It Online
 
   https://codepen.io/franckfreiburger/project/editor/AqPyBr
 
 
-## Public API documentation <sub>:book:</sub>
+## Public API documentation
 
   **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): Promise\<Module>
 
 
-## dist/ <sub>:package:</sub>
+## dist/
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
   [![bundle minified size](https://img.shields.io/bundlephobia/min/vue3-sfc-loader?label=min)](#dist)
@@ -94,7 +94,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   - `npm install vue3-sfc-loader` (`./node_modules/vue3-sfc-loader/dist/vue3-sfc-loader.js`)
 
 
-## Build your own version <sub>:hammer_and_wrench:</sub>
+## Build your own version
 
   `webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 2 versions, Firefox ESR, not dead, not ie 11"`
 
@@ -102,12 +102,12 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   _see [browserslist queries](https://github.com/browserslist/browserslist#queries)_  
 
 
-## How It Works <sub>:gear:</sub>
+## How It Works
 
   [`vue3-sfc-loader.js`](https://unpkg.com/vue3-sfc-loader/dist/report.html) = `Webpack`( `@vue/compiler-sfc` + `@babel` )
 
 
-### more details <sub>:mag:</sub>
+### more details
 
   1. load the `.vue` file
   1. parse and compile template, script and style sections (`@vue/compiler-sfc`)
@@ -117,7 +117,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   1. merge all and return the component
 
 
-## Any Questions <sub>:question:</sub>
+## Any Questions
 
   <!--  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader)) -->
   [:speech_balloon: ask in Discussions tab](https://github.com/FranckFreiburger/vue3-sfc-loader/discussions?discussions_q=category%3AQ%26A)
