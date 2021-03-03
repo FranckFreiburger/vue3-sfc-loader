@@ -407,7 +407,7 @@ test('should handle missing dynamic import', async () => {
 });
 
 
-test.only('should handle custom blocks asynchronously', async () => {
+test('should handle custom blocks asynchronously', async () => {
 
 	const { page, output } = await createPage({
 		files: {
