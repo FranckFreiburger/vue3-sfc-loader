@@ -16,6 +16,7 @@
 
 ### Type aliases
 
+* [CustomBlockCallback](README.md#customblockcallback)
 * [File](README.md#file)
 
 ### Variables
@@ -32,11 +33,21 @@
 
 ## Type aliases
 
+### CustomBlockCallback
+
+Ƭ  **CustomBlockCallback**: (component: [Module](interfaces/module.md)) => undefined
+
+*Defined in [index.ts:91](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L91)*
+
+CustomBlockCallback function type
+
+___
+
 ### File
 
 Ƭ  **File**: string \| { content: string ; extname: string  }
 
-*Defined in [index.ts:84](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L84)*
+*Defined in [index.ts:85](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L85)*
 
 Represents the content of the file or the content and the extension name.
 
@@ -46,7 +57,7 @@ Represents the content of the file or the content and the extension name.
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [index.ts:343](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L343)*
+*Defined in [index.ts:372](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L372)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -56,7 +67,7 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 ▸ **loadModule**(`path`: string, `options_?`: [Options](interfaces/options.md)): Promise<[Module](interfaces/module.md)\>
 
-*Defined in [index.ts:819](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L819)*
+*Defined in [index.ts:865](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L865)*
 
 This is the main function.
 This function is intended to be used only to load the entry point of your application.
@@ -110,7 +121,7 @@ A Promise of the component
 
 ▪ `Const` **defaultPathHandlers**: object
 
-*Defined in [index.ts:766](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f3c303d/src/index.ts#L766)*
+*Defined in [index.ts:812](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L812)*
 
 Default implementation of PathHandlers
 
