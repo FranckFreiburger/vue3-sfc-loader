@@ -100,22 +100,23 @@ afterAll(async () => {
 const defaultFiles = {
 	'/vue3-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue3-sfc-loader.js'), { encoding: 'utf-8' }),
 	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue/dist/vue.global.js'), { encoding: 'utf-8' }),
-	'/optionsOverride.js': `
-		export default () => {};
+	'/boot.js': `
+
+		export default function boot({ options, createApp, mountApp }) {
+
+			mountApp( createApp(options) );
+		}
+
 	`,
-	'/appOverride.js': `
-		export default () => {};
-	`,
+
 	'/index.html': `
 		<!DOCTYPE html>
 		<html><body>
-			<div id="app"></div>
 			<script src="vue"></script>
 			<script src="vue3-sfc-loader.js"></script>
 			<script type="module">
 
-				import optionsOverride from '/optionsOverride.js'
-				import appOverride from '/appOverride.js'
+				import boot from '/boot.js'
 
 				class HttpError extends Error {
 
@@ -164,14 +165,28 @@ const defaultFiles = {
 					}
 				}
 
-				optionsOverride(options);
-
 				const { loadModule } = window['vue3-sfc-loader'];
-				const app = Vue.createApp(Vue.defineAsyncComponent( () => loadModule('./component.vue', options) ));
 
-				appOverride(app);
 
-				app.mount('#app');
+				function createApp(options) {
+
+					return Vue.createApp(Vue.defineAsyncComponent( () => loadModule('./component.vue', options) ));
+				}
+
+				function mountApp(app, eltId = 'app') {
+
+					if ( !document.getElementById(eltId) ) {
+
+						const parent = document.body;
+						const elt = document.createElement('div');
+						elt.id = eltId;
+						parent.insertBefore(elt, parent.firstChild);
+					}
+
+					return app.mount('#' + eltId);
+				}
+
+				boot({ options, createApp, mountApp, Vue });
 
 				//window._done && window._done();
 

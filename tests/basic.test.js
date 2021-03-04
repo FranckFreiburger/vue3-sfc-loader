@@ -423,11 +423,10 @@ test('should handle custom blocks asynchronously', async () => {
 				</script>
 
 				<foo>bar</foo>
-
 			`,
-			'/optionsOverride.js': `
 
-				export default options => {
+			'/boot.js': `
+				export default function boot({ options, createApp, mountApp }) {
 
 					options.customBlockHandler = async (block, filename, options) => {
 
@@ -438,6 +437,8 @@ test('should handle custom blocks asynchronously', async () => {
 							component.bazComponentProperty = 'baz';
 						}
 					}
+
+					mountApp( createApp(options) );
 				}
 			`
 		}
@@ -447,6 +448,62 @@ test('should handle custom blocks asynchronously', async () => {
 
 	await page.close();
 });
+
+
+test('should use cache', async () => {
+
+	const { page, output } = await createPage({
+		files: {
+			...defaultFiles,
+			'/component.vue': `
+				<script>
+					export default {
+						mounted() {
+							console.log('mounted')
+						}
+					}
+				</script>
+				<foo>bar</foo>
+			`,
+			'/boot.js': `
+				export default function boot({ options, createApp, mountApp, Vue }) {
+
+					const myCache = {};
+
+					Object.assign(options, {
+						compiledCache: {
+							set(key, str) {
+
+								console.log('cache.set')
+								myCache[key] = str;
+							},
+							get(key) {
+
+								console.log('cache.get')
+								return myCache[key];
+							},
+						}
+					});
+
+
+					mountApp(createApp(options), 'elt1');
+
+					options.moduleCache = {
+						vue: Vue
+					};
+
+					mountApp(createApp(options), 'elt2');
+				}
+			`
+		}
+	});
+
+
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('cache.get,cache.set,mounted,cache.get,mounted');
+
+	await page.close();
+});
+
 
 
 /*
