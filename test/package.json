@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "node ./serve.js"
+    "start": "node ./serve.js",
+    "startVue2": "cross-env VUE_VERSION=2 node ./serveVue2.js"
   },
   "dependencies": {
     "express": "^4.17.1",

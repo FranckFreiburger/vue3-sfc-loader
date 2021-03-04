@@ -42,7 +42,7 @@ const version : string = process.env.VERSION;
 /**
  * @internal
  */
-export function formatError(message : string, path : string, source : string, line : number, column : number) : string {
+export function formatError(message : string, path : string, source : string, line? : number, column? : number) : string {
 
 	const location = {
 		start: { line, column },
@@ -226,6 +226,8 @@ export function createModule(filename : string, source : string, options : Optio
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
 	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, resolve(filename, '.'), import_);
 
+	console.log(source)
+	console.log(module)
 	return module;
 }
 

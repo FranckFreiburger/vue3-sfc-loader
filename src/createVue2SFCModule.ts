@@ -1,19 +1,14 @@
 // compiler-sfc src: https://github.com/vuejs/vue-next/blob/master/packages/compiler-sfc/src/index.ts#L1
 import {
-	parse as sfc_parse,
 	compileStyleAsync as sfc_compileStyleAsync,
-	compileScript as sfc_compileScript,
 	compileTemplate as sfc_compileTemplate,
-	SFCAsyncStyleCompileOptions,
-	SFCTemplateCompileOptions,
-	SFCBlock
-} from '@vue/compiler-sfc'
+	parse as sfc_parse,
+} from '@vue/component-compiler-utils'
 
-import {
-	babelParserDefaultPlugins as vue_babelParserDefaultPlugins
-} from '@vue/shared'
+import * as vueTemplateCompiler from 'vue-template-compiler'
+import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
+import { TemplateCompileOptions } from '@vue/component-compiler-utils/dist/compileTemplate'
 
-import * as vue_CompilerDOM from '@vue/compiler-dom'
 
 import {
 	parse as babel_parse,
@@ -32,12 +27,6 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 import { formatError, withCache, hash, renameDynamicImport, parseDeps, interopRequireDefault, transformJSCode, loadDeps, createModule } from './tools.ts'
 
 import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './types.ts'
-
-
-/**
- * @ignore
- */
-type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -62,16 +51,17 @@ export async function createSFCModule(source : string, filename : string, option
 	const component = {};
 
 
-	const { delimiters, moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
-	const { descriptor, errors } = sfc_parse(source, {
+	const descriptor = sfc_parse({
+		source,
 		filename,
-		sourceMap: genSourcemap,
-	});
+		needMap: genSourcemap,
+		compiler: vueTemplateCompiler as VueTemplateCompiler}
+		);
 
-
-	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
+	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block ) => customBlockHandler(block, filename, options)) ) : [];
 
 	const componentHash = hash(filename, version);
 	const scopeId = `data-v-${componentHash}`;
@@ -83,80 +73,47 @@ export async function createSFCModule(source : string, filename : string, option
 
 	const hasScoped = descriptor.styles.some(e => e.scoped);
 
-	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
+	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
 		source: descriptor.template.content,
-		filename: descriptor.filename,
-		isProd,
-		scoped: hasScoped,
-		id: scopeId,
-		compilerOptions: {
-			delimiters,
-			scopeId: hasScoped ? scopeId : undefined,
-			mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
-		},
-		//	transformAssetUrls
+		filename,
+		compiler: vueTemplateCompiler as VueTemplateCompiler,
+		compilerOptions: undefined,
 		preprocessLang: descriptor.template.lang,
-		preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
+		isProduction: isProd,
+		prettify: false
 	} : null;
 
+	if ( descriptor.script ) {
 
-	if ( descriptor.script || descriptor.scriptSetup ) {
-
-		// eg: https://github.com/vuejs/vue-loader/blob/6ed553f70b163031457acc961901313390cde9ef/src/index.ts#L136
+		// eg: https://github.com/vuejs/vue-loader/blob/v15.9.6/lib/index.js
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script.content ], async ({ preventCache }) => {
 
 			const babelParserPlugins : babel_ParserPlugin[] = [];
 
-			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
-			const scriptBlock = sfc_compileScript(descriptor, {
-				isProd,
-				id: scopeId,
-				babelParserPlugins,
-				templateOptions: compileTemplateOptions,
-			});
+			let ast: t.File
+			try {
+				ast = babel_parse(descriptor.script.content, {
+					// doc: https://babeljs.io/docs/en/babel-parser#options
+					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
+					plugins: [
+						...babelParserPlugins
+					],
+					sourceType: 'module',
+					sourceFilename: filename
+				});
 
-			let ast;
-			if ( !scriptBlock.scriptAst ) {
-
-				// need to re-parse because script compilation errors are not reported by sfc_compileScript
-				try {
-
-					ast = babel_parse(scriptBlock.content, {
-						// doc: https://babeljs.io/docs/en/babel-parser#options
-						// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
-						plugins: [
-						 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
-							...vue_babelParserDefaultPlugins,
-							'jsx',
-							...babelParserPlugins
-						],
-						sourceType: 'module',
-						sourceFilename: filename,
-						startLine: scriptBlock.loc.start.line,
-					});
-
-				} catch(ex) {
-
-					log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
-					throw ex;
-				}
-			} else {
-
-				// scriptBlock.scriptAst is not type:Program, need to construct one
-				//   see t.file: https://babeljs.io/docs/en/babel-types#file
-				//   see t.program: https://babeljs.io/docs/en/babel-types#program
-				ast = t.file(t.program(scriptBlock.scriptAst, [], 'module'));
+			} catch(ex) {
+				log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+				throw ex;
 			}
-
 
 			renameDynamicImport(ast);
 			const depsList = parseDeps(ast);
 
 			// doc: https://babeljs.io/docs/en/babel-core#transformfromastasync
-			const transformedScript = await babel_transformFromAstAsync(ast, scriptBlock.content, {
+			const transformedScript = await babel_transformFromAstAsync(ast, descriptor.script.content, {
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
@@ -181,6 +138,8 @@ export async function createSFCModule(source : string, filename : string, option
 		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, descriptor.template.content ], async ({ preventCache }) => {
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
+			// "@vue/component-compiler-utils" does NOT assume any module system, and expose render in global scope.
+			template.code += "\nmodule.exports = {render: render, staticRenderFns: staticRenderFns}"
 
 			if ( template.errors.length ) {
 
@@ -188,14 +147,14 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of template.errors ) {
 
 					// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
-					log?.('error', 'SFC template', formatError(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+					log?.('error', 'SFC template', err );
 				}
 			}
 
 			for ( const err of template.tips )
 				log?.('info', 'SFC template', err);
 
-			return await transformJSCode(template.code, true, descriptor.filename, options);
+			return await transformJSCode(template.code, true, filename, options);
 		});
 
 		await loadDeps(filename, templateDepsList, options, loadModule);
@@ -213,14 +172,12 @@ export async function createSFCModule(source : string, filename : string, option
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 			const compiledStyle = await sfc_compileStyleAsync({
-				filename: descriptor.filename,
 				source: descStyle.content,
-				isProd,
+				filename,
 				id: scopeId,
 				scoped: descStyle.scoped,
-				trim: true,
-				preprocessLang: descStyle.lang as PreprocessLang,
-				preprocessCustomRequire: id => moduleCache[id],
+				trim: false, // Should we enable it, as it requires postcss trimPlugin ?
+				preprocessLang: descStyle.lang
 			});
 
 			if ( compiledStyle.errors.length ) {
@@ -229,7 +186,7 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of compiledStyle.errors ) {
 
 					// @ts-ignore (Property 'line' does not exist on type 'Error' and Property 'column' does not exist on type 'Error')
-					log?.('error', 'SFC style', formatError(err.message, filename, source, err.line + descStyle.loc.start.line - 1, err.column) );
+					log?.('error', 'SFC style', formatError(err.message, filename, source, err.line, err.column) );
 				}
 			}
 

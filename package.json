@@ -21,9 +21,10 @@
   "scripts": {
     "coverage": "node test/coverageTest.mjs",
     "test": "cd test && yarn run start",
+    "testVue2": "cd test && cross-env VUE_VERSION=2 yarn run start",
     "tests": "jest --runInBand \"tests/.*\\.test.js\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
-    "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
+    "build": "cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\" && cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env vueVersion=\\\"2\\\" --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "docs": "cross-env-shell node build/evalHtmlComments.js README.md $npm_package_version && node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true",
     "pushDocs": "yarn run docs && git add docs/ && cross-env-shell git commit -m \\\"chore(docs): v$npm_package_version API docs & examples \\\" docs",
     "release": "standard-version --header \"\""
@@ -62,10 +63,10 @@
     "stream-browserify": "^3.0.0",
     "url": "^0.11.0",
     "util": "^0.12.3",
-    "vm-browserify": "^1.1.2",
-    "vue": "3.0.4"
+    "vm-browserify": "^1.1.2"
   },
   "devDependencies": {
+    "@vue/component-compiler-utils": "^3.2.0",
     "babel-loader": "^8.2.2",
     "caniuse-api": "^3.0.0",
     "compression-webpack-plugin": "^7.1.2",
@@ -79,8 +80,16 @@
     "typedoc": "0.19.2",
     "typedoc-plugin-markdown": "3.1.1",
     "typescript": "^4.2.2",
+    "vue": "^3.0.7",
+    "vue-template-compiler": "^2.6.12",
+    "vue2": "npm:vue@^2.6.12",
     "webpack": "^5.24.3",
     "webpack-bundle-analyzer": "^4",
     "webpack-cli": "^4.5.0"
+  },
+  "peerDependencies": {
+    "@vue/component-compiler-utils": "^3.2.0",
+    "vue": "^2.6.12|^3.0.7",
+    "vue-template-compiler": "^2.6.12"
   }
 }
