@@ -505,44 +505,47 @@ test('should use cache', async () => {
 });
 
 
-
 /*
-xtest('should not hang on cycles', async () => {
+test('should not hang on cycles', async () => {
 
 	const { page, output } = await createPage({
 		files: {
 			...defaultFiles,
         '/component.vue': `
             <script>
-                import bar from '/foo.vue';
-
-                console.log('component');
-
-                export default {
-                }
+					import '/pre.vue';
+					import '/foo.vue';
+					console.log('component');
             </script>
         `,
-
+        '/pre.vue': `
+            <script>
+					console.log('pre');
+            </script>
+        `,
         '/foo.vue': `
             <script>
-                import component from '/component.vue';
-
-                console.log('foo');
-
-                export default {
-                }
+					import '/bar.vue';
+					console.log('foo');
+            </script>
+        `,
+        '/bar.vue': `
+            <script>
+					import '/foo.vue';
+					console.log('bar');
             </script>
         `,
 		}
 	});
 
-	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('component,foo');
+	expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('pre');
 
 	await page.close();
 });
+*/
 
 
-
+/*
 xtest('should handle cycles', async () => {
 
 	const { page, output } = await createPage({
