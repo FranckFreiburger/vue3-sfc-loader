@@ -892,37 +892,30 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 	}
 
 
-	moduleCache[path] = new Loading(
+	moduleCache[path] = new Loading((async () => {
 
-		(async () => {
+		if ( loadModule ) {
 
-			if ( loadModule ) {
+			const module = await loadModule(path, options);
+			if ( module !== undefined )
+				return moduleCache[path] = module;
+		}
 
-				const module = await loadModule(path, options);
-				if ( module !== undefined )
-					return moduleCache[path] = module;
-			}
+		const res = await getFile(path);
 
-			const res = await getFile(path);
+		const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
 
-			const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+		const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 
-			const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
+		if ( !(file.extname in moduleHandlers) )
+			throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
 
-			if ( !(file.extname in moduleHandlers) )
-				throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
+		if ( typeof file.content !== 'string' )
+			throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
 
-			if ( typeof file.content !== 'string' )
-				throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
+		return moduleCache[path] = await moduleHandlers[file.extname](file.content, path, options);
 
-
-			const module = await moduleHandlers[file.extname](file.content, path, options);
-
-			return moduleCache[path] = module;
-
-		})()
-
-	);
+	})());
 
 	return await moduleCache[path].promise;
 }
