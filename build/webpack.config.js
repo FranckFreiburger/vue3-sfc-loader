@@ -26,6 +26,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 		targetsBrowsers = 'defaults',
 		noPresetEnv = !isProd,
 		noCompress = !isProd,
+		vueVersion = '3',
 	} = env;
 
 	const genSourcemap = false;
@@ -40,10 +41,10 @@ module.exports = (env = {}, { mode = 'production' }) => {
 
 		output: {
 			path: distPath,
-			filename: 'vue3-sfc-loader.js',
+			filename: `vue${ vueVersion }-sfc-loader.js`,
 			library: {
 				type: 'umd',
-				name: 'vue3-sfc-loader',
+				name: `vue${ vueVersion }-sfc-loader`,
 			},
 			environment: {
 				// doc: https://webpack.js.org/configuration/output/#outputenvironment
@@ -161,7 +162,7 @@ ${ pkg.name } v${ pkg.version }
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
-				'./createSFCModule.ts': './createVue3SFCModule.ts',
+				'./createSFCModule.ts': `./createVue${ vueVersion }SFCModule.ts`,
 
 				// dedupe (see DuplicatePackageCheckerPlugin result)
 				'bn.js': require.resolve('bn.js'),
