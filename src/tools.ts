@@ -25,7 +25,7 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 import SparkMD5 from 'spark-md5'
 
 
-import { Cache, ValueFactory, Options, LoadModule, ModuleExport } from './common.d.ts'
+import { Cache, ValueFactory, Options, LoadModule, ModuleExport } from './types.ts'
 
 
 /**

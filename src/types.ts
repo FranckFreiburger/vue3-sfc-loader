@@ -2,7 +2,7 @@
 /**
  * @internal
  */
-interface ValueFactoryApi {
+export interface ValueFactoryApi {
 	preventCache() : void,
 }
 
@@ -10,18 +10,18 @@ interface ValueFactoryApi {
 /**
  * @internal
  */
-interface ValueFactory {
+export interface ValueFactory {
 	(api : ValueFactoryApi): Promise<any>;
 }
 
 
-interface Cache {
+export interface Cache {
 	get(key : string) : Promise<string>,
 	set(key : string, value : string) : Promise<void>,
 }
 
 
-interface PathHandlers {
+export interface PathHandlers {
 	extname(filepath : string) : string,
 	/*
 	 * relative to absolute module path resolution.
@@ -49,7 +49,7 @@ interface PathHandlers {
  *	...
  * ```
  */
-interface ModuleHandler {
+export interface ModuleHandler {
 	(source : string, path : string, options : Options) : Promise<ModuleExport>;
 }
 
@@ -57,13 +57,14 @@ interface ModuleHandler {
 /**
  * Represents the content of the file or the content and the extension name.
  */
-type File = string | { content : string, extname : string };
+export type File = string | { content : string, extname : string };
 
 
 /**
  * CustomBlockCallback function type
  */
-type CustomBlockCallback = ( component : any ) => undefined;
+export type CustomBlockCallback = ( component : ModuleExport ) => void;
+
 
 /**
  * This just represents a loaded js module exports
@@ -74,7 +75,7 @@ export interface ModuleExport {
 /**
  * This just represents a loaded js module
  */
-interface Module {
+export interface Module {
 	exports : ModuleExport,
 }
 
@@ -314,4 +315,4 @@ export interface Options {
 }
 
 
-type LoadModule = (path : string, options : Options) => Promise<ModuleExport>;
+export type LoadModule = (path : string, options : Options) => Promise<ModuleExport>;

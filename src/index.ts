@@ -3,7 +3,7 @@ import { posix as Path } from 'path'
 import { createJSModule } from './tools.ts'
 import { createSFCModule } from './createSFCModule.ts'
 
-import { ModuleExport, ModuleHandler, PathHandlers, Options } from './common.d.ts'
+import { ModuleExport, ModuleHandler, PathHandlers, Options } from './types.ts'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)

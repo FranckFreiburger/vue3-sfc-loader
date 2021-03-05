@@ -6,7 +6,7 @@ import {
 	compileTemplate as sfc_compileTemplate,
 	SFCAsyncStyleCompileOptions,
 	SFCTemplateCompileOptions,
-//	SFCBlock
+	SFCBlock
 } from '@vue/compiler-sfc'
 
 import {
@@ -30,7 +30,7 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 
 import { formatError, withCache, hash, renameDynamicImport, parseDeps, interopRequireDefault, transformJSCode, loadDeps, createModule } from './tools.ts'
 
-import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './common.d.ts'
+import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './types.ts'
 
 
 /**
@@ -74,7 +74,7 @@ export async function createSFCModule(source : string, filename : string, option
 	});
 
 
-	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map(block => customBlockHandler(block, filename, options)) ) : [];
+	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block : SFCBlock) => customBlockHandler(block, filename, options)) ) : [];
 
 	const componentHash = hash(filename, version);
 	const scopeId = `data-v-${componentHash}`;
