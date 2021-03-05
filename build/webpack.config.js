@@ -161,6 +161,8 @@ ${ pkg.name } v${ pkg.version }
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
+				'./createSFCModule.ts': './createVue3SFCModule.ts',
+
 				// dedupe (see DuplicatePackageCheckerPlugin result)
 				'bn.js': require.resolve('bn.js'),
 				'safe-buffer': require.resolve('safe-buffer'),
