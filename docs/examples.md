@@ -690,30 +690,11 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
 <!---
 
-const regexpReservedChars = '\\.+*?^$|[{()';
-
-const regexpReserved = new RegExp('([' + regexpReservedChars.split('').map(char => '\\'+char).join('') + '])', 'gu');
-
-function regexpQuote(str) {
-
-	return str.replace(regexpReserved, '\\$1');
-}
-
-function blockList(wholeContent) {
-
-  return [...wholeContent.matchAll(/<\!--(.*?)--\>/g)].map(e => e[1]);
-}
-
-const replaceBlock = (currentContent, tag, content) => {
-
-	const block = [ `<\!--${ tag }--\>`, `<\!--/${ tag }--\>` ];
-	const regexp = new RegExp(regexpQuote(block[0]) + '([ \\t]*\\r?\\n?)[^]*?(\\s*)' + regexpQuote(block[1]), 'g');
-	return currentContent.replace(regexp, block[0] + '$1' + content + '$2' + block[1]);
-}
+const { blockList, replaceBlock } = require('./evalHtmlCommentsTools.js');
 
 function ghAnchor(header) {
 
-	return header.trim().toLowerCase().replace(/[^\w\- ]+/g, '').replace(/\s/g, '-').replace(/\-+$/, '');
+  return header.trim().toLowerCase().replace(/[^\w\- ]+/g, '').replace(/\s/g, '-').replace(/\-+$/, '');
 }
 
 const toc = [...ctx.wholeContent.matchAll(/^(#{1,3}) ?([^#].*)$/mg)]
