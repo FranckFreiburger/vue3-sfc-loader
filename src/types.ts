@@ -67,6 +67,20 @@ export type CustomBlockCallback = ( component : ModuleExport ) => void;
 
 
 /**
+ * A custom block
+ */
+export interface CustomBlock {
+	type: string,
+	content: string,
+	attrs: Record<string, string | true>,
+//	loc: SourceLocation
+//	map?: RawSourceMap
+//	lang?: string
+//	src?: string
+}
+
+
+/**
  * This just represents a loaded js module exports
  */
 export interface ModuleExport {
@@ -310,7 +324,7 @@ export interface Options {
  *	...
  * ```
  */
- 	customBlockHandler?(block : SFCBlock, filename : string, options : Options) : Promise<CustomBlockCallback | undefined>,
+ 	customBlockHandler?(block : CustomBlock, filename : string, options : Options) : Promise<CustomBlockCallback | undefined>,
 
 }
 
