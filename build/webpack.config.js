@@ -1,9 +1,11 @@
 const Path = require('path');
+const zlib = require("zlib");
 
 const Webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 
 // doc: https://github.com/Nyalab/caniuse-api#api
@@ -122,6 +124,22 @@ module.exports = (env = {}, { mode = 'production' }) => {
 			] : [],
 
 			...isProd ? [
+				new CompressionPlugin({
+					filename: "[path][base].br",
+					algorithm: "brotliCompress",
+					compressionOptions: {
+						params: {
+							[zlib.constants.BROTLI_PARAM_QUALITY]: zlib.constants.BROTLI_MAX_QUALITY,
+						},
+					},
+				}),
+				new CompressionPlugin({
+					filename: "[path][base].gz",
+					algorithm: "gzip",
+					compressionOptions: {
+						level: 9,
+					},
+				}),
 				new DuplicatePackageCheckerPlugin(),
 				new BundleAnalyzerPlugin({
 					// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin

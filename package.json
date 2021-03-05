@@ -79,6 +79,7 @@
     "typescript": "^4.2.2",
     "webpack": "^5.24.3",
     "webpack-bundle-analyzer": "^4",
+    "compression-webpack-plugin": "^7.1.2",
     "webpack-cli": "^4.5.0"
   }
 }
