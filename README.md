@@ -80,10 +80,12 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## dist/
 
-  [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
-  [![bundle minified size](https://img.shields.io/bundlephobia/min/vue3-sfc-loader?label=min)](#dist)
-  [![bundle minified+zip size](https://img.shields.io/bundlephobia/minzip/vue3-sfc-loader?label=min%2Bzip)](#dist)
-  [![bundle minified+bz2 size](https://img.shields.io/badge/min%2Bbz2-even%20smaller-blue)](#dist)
+  [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=latest%20version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
+  <!-- [![bundle minified size](https://img.shields.io/bundlephobia/min/vue3-sfc-loader?label=min)](#dist) -->
+  <!-- [![bundle minified+zip size](https://img.shields.io/bundlephobia/minzip/vue3-sfc-loader?label=min%2Bzip)](#dist) -->
+  <!--update-min-br-size-->[![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-286kB-blue)](#dist)<!--/update-min-br-size-->
+  <!--update-min-gz-size-->[![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-362kB-blue)](#dist)<!--/update-min-gz-size-->
+  <!--update-min-size-->[![bundle minified size](https://img.shields.io/badge/min-1398kB-blue)](#dist)<!--/update-min-size-->
   [![Snyk Vulnerabilities for vue3-sfc-loader](https://img.shields.io/snyk/vulnerabilities/github/FranckFreiburger/vue3-sfc-loader)](https://snyk.io/vuln/npm:vue3-sfc-loader)
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
   [![compiler-sfc dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/@vue/compiler-sfc?label=embeds%20%40vue%2Fcompiler-sfc)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
@@ -130,3 +132,28 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 #
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Load%20.vue%20files%20dynamically%20from%20your%20html%2Fjs%20without%20any%20build%20step%20!&url=https://github.com/FranckFreiburger/vue3-sfc-loader&via=F_Freiburger&hashtags=vue,vue3,developers)
+
+
+<!---
+
+const Fs = require('fs');
+const Path = require('path');
+
+const { blockList, replaceBlock } = require('./evalHtmlCommentsTools.js');
+
+function fileSize(filename) {
+
+  return Fs.statSync(Path.join(__dirname, filename)).size;
+}
+
+const version = process.argv[3];
+
+let result = ctx.wholeContent;
+
+result = replaceBlock(result, 'update-min-br-size', content => content.replace(/-(.*?)-/, '-' + Math.floor(fileSize('../dist/vue3-sfc-loader.js.br')/1024) + 'kB' + '-'));
+result = replaceBlock(result, 'update-min-gz-size', content => content.replace(/-(.*?)-/, '-' + Math.floor(fileSize('../dist/vue3-sfc-loader.js.gz')/1024) + 'kB' + '-'));
+result = replaceBlock(result, 'update-min-size', content => content.replace(/-(.*?)-/, '-' + Math.floor(fileSize('../dist/vue3-sfc-loader.js')/1024) + 'kB' + '-'));
+
+result;
+
+--->
