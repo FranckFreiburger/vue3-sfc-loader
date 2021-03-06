@@ -3,8 +3,9 @@ const Path = require('path');
 const puppeteer = require('puppeteer');
 const mime = require('mime-types');
 
-
 const local = new URL('http://local/');
+
+const vueVersion = '3';
 
 async function createPage({ files }) {
 
@@ -100,13 +101,61 @@ afterAll(async () => {
 const defaultFiles = {
 	'/vue3-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue3-sfc-loader.js'), { encoding: 'utf-8' }),
 	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue/dist/vue.global.js'), { encoding: 'utf-8' }),
-	'/boot.js': `
 
-		export default function boot({ options, createApp, mountApp }) {
+	'/options.js': `
 
-			mountApp( createApp(options) );
+		class HttpError extends Error {
+
+			constructor(url, res) {
+
+				super('HTTP error ' + res.statusCode);
+				Error.captureStackTrace(this, this.constructor);
+
+				// enumerable: default false
+				Object.defineProperties(this, {
+					name: {
+						value: this.constructor.name,
+					},
+					url: {
+						value: url,
+					},
+					res: {
+						value: res,
+					},
+				});
+			}
 		}
 
+
+		const options = {
+
+			moduleCache: {
+				vue: Vue
+			},
+
+			getFile(path) {
+
+				return fetch(path).then(res => res.ok ? res.text() : Promise.reject(new HttpError(path, res)));
+			},
+
+			addStyle(textContent) {
+
+				const style = Object.assign(document.createElement('style'), { textContent });
+				const ref = document.head.getElementsByTagName('style')[0] || null;
+				document.head.insertBefore(style, ref);
+			},
+
+			log(type, ...args) {
+
+				console[type](...args);
+			}
+		}
+
+		export default options;
+	`,
+
+	'/boot.js': `
+		export default ({ options, createApp, mountApp }) => mountApp( createApp(options) );
 	`,
 
 	'/index.html': `
@@ -117,56 +166,9 @@ const defaultFiles = {
 			<script type="module">
 
 				import boot from '/boot.js'
-
-				class HttpError extends Error {
-
-					constructor(url, res) {
-
-						super('HTTP error ' + res.statusCode);
-						Error.captureStackTrace(this, this.constructor);
-
-						// enumerable: default false
-						Object.defineProperties(this, {
-							name: {
-								value: this.constructor.name,
-							},
-							url: {
-								value: url,
-							},
-							res: {
-								value: res,
-							},
-						});
-					}
-				}
-
-
-				const options = {
-
-					moduleCache: {
-						vue: Vue
-					},
-
-					getFile(path) {
-
-						return fetch(path).then(res => res.ok ? res.text() : Promise.reject(new HttpError(path, res)));
-					},
-
-					addStyle(textContent) {
-
-						const style = Object.assign(document.createElement('style'), { textContent });
-						const ref = document.head.getElementsByTagName('style')[0] || null;
-						document.head.insertBefore(style, ref);
-					},
-
-					log(type, ...args) {
-
-						console[type](...args);
-					}
-				}
+				import options from '/options.js'
 
 				const { loadModule } = window['vue3-sfc-loader'];
-
 
 				function createApp(options) {
 
