@@ -159,6 +159,7 @@ export async function createSFCModule(source : string, filename : string, option
 			renameDynamicImport(ast);
 			const depsList = parseDeps(ast);
 
+			// doc: https://babeljs.io/docs/en/babel-core#transformfromastasync
 			const transformedScript = await babel_transformFromAstAsync(ast, scriptBlock.content, {
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
