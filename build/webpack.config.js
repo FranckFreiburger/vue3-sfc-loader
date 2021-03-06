@@ -186,7 +186,10 @@ ${ pkg.name } v${ pkg.version }
 				// not needed
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
-//				'chalk': false,
+
+				'chalk': false,
+				'@babel/highlight': Path.resolve(__dirname, 'noopBabelHighlight.mjs'),
+
 				'emojis-list': false,
 				'json5': false,
 				'convert-source-map': false,
