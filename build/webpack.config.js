@@ -31,7 +31,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 
 	const genSourcemap = false;
 
-	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, genSourcemap });
+	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, genSourcemap, vueVersion });
 
 	return {
 		entry: [
