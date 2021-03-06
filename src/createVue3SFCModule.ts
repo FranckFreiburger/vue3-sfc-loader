@@ -21,7 +21,8 @@ import {
 } from '@babel/parser';
 
 import {
-	transformFromAstAsync as babel_transformFromAstAsync
+	transformFromAstAsync as babel_transformFromAstAsync,
+	types as t,
 } from '@babel/core';
 
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
@@ -114,7 +115,7 @@ export async function createSFCModule(source : string, filename : string, option
 			const babelParserPlugins : babel_ParserPlugin[] = [];
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
-			const script = sfc_compileScript(descriptor, {
+			const scriptBlock = sfc_compileScript(descriptor, {
 				isProd,
 				id: scopeId,
 				babelParserPlugins,
@@ -122,33 +123,43 @@ export async function createSFCModule(source : string, filename : string, option
 			});
 
 			let ast;
-			try {
+			if ( !scriptBlock.scriptAst ) {
 
-				ast = babel_parse(script.content, {
-					// doc: https://babeljs.io/docs/en/babel-parser#options
-					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
-					plugins: [
-					 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
-						...vue_babelParserDefaultPlugins,
-						'jsx',
-						...babelParserPlugins
-					],
-					sourceType: 'module',
-					sourceFilename: filename,
-					startLine: script.loc.start.line,
-				});
+				// need to re-parse because script compilation errors are not reported by sfc_compileScript
+				try {
 
-			} catch(ex) {
+					ast = babel_parse(scriptBlock.content, {
+						// doc: https://babeljs.io/docs/en/babel-parser#options
+						// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
+						plugins: [
+						 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
+							...vue_babelParserDefaultPlugins,
+							'jsx',
+							...babelParserPlugins
+						],
+						sourceType: 'module',
+						sourceFilename: filename,
+						startLine: scriptBlock.loc.start.line,
+					});
 
-				log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
-				throw ex;
+				} catch(ex) {
+
+					log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+					throw ex;
+				}
+			} else {
+
+				// scriptBlock.scriptAst is not type:Program, need to construct one
+				//   see t.file: https://babeljs.io/docs/en/babel-types#file
+				//   see t.program: https://babeljs.io/docs/en/babel-types#program
+				ast = t.file(t.program(scriptBlock.scriptAst, [], 'module'));
 			}
 
 
 			renameDynamicImport(ast);
 			const depsList = parseDeps(ast);
 
-			const transformedScript = await babel_transformFromAstAsync(ast, script.content, {
+			const transformedScript = await babel_transformFromAstAsync(ast, scriptBlock.content, {
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
