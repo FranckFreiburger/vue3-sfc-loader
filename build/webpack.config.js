@@ -169,6 +169,8 @@ ${ pkg.name } v${ pkg.version }
 				'safe-buffer': require.resolve('safe-buffer'),
 				//'es-abstract': require.resolve('es-abstract'),
 
+				'lodash': 'lodash-es',
+
 				'semver': require.resolve('semver'),
 				'lru-cache': require.resolve('lru-cache'),
 
