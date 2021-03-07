@@ -146,6 +146,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 					// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
 					analyzerMode: 'static',
 					openAnalyzer: false,
+					reportFilename: `vue${ vueVersion }-sfc-loader.report.html`
 				})
 			] : [],
 
@@ -157,8 +158,16 @@ ${ pkg.name } v${ pkg.version }
 @license     ${ pkg.license }
 			`.trim()),
 		],
-
+		externals: {
+			'vue': {
+				amd: 'vue',
+				commonjs: 'vue',
+				commonjs2: 'vue',
+				root: 'Vue'
+			},
+		},
 		resolve: {
+			extensions: [".ts", ".js"],
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
@@ -201,6 +210,11 @@ ${ pkg.name } v${ pkg.version }
 				'postcss-modules-values': false,
 				'postcss-modules-scope': false,
 
+				// vue2
+				'sass': false,
+				'stylus': false,
+				'less': false,
+				'prettier': false,
 
 				...!genSourcemap ? {
 					'source-map': false,
@@ -222,6 +236,8 @@ ${ pkg.name } v${ pkg.version }
 				'process': false, //require.resolve('process/'),
 				'vm': false, // or require.resolve('vm-browserify'),
 				'fs': false,
+				'os': false,
+				'module': false
 			}
 		},
 

@@ -42,7 +42,7 @@ const version : string = process.env.VERSION;
 /**
  * @internal
  */
-export function formatError(message : string, path : string, source : string, line : number, column : number) : string {
+export function formatError(message : string, path : string, source : string, line? : number, column? : number) : string {
 
 	const location = {
 		start: { line, column },

@@ -39,10 +39,6 @@ import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './types.
  */
 type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
-
-// SFCBlock : https://github.com/vuejs/vue-next/blob/cc975c1292978dc796c581b32d4b51c32c2e6370/packages/compiler-sfc/src/parse.ts#L24-L32
-//export { SFCBlock } from '@vue/compiler-sfc';
-
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
@@ -75,7 +71,7 @@ export async function createSFCModule(source : string, filename : string, option
 	});
 
 
-	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block : SFCBlock) => customBlockHandler(block, filename, options)) ) : [];
+	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
 
 	const componentHash = hash(filename, version);
 	const scopeId = `data-v-${componentHash}`;

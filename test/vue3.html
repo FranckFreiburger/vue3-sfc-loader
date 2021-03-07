@@ -11,8 +11,13 @@
       files: {
         '/component.vue': `
           <template>
-            {{ $t('hello') }}
+            <span class="vue3">{{ $t('hello') }}</span>
           </template>
+          <style scoped>
+            .vue3 {
+              background: red;
+            }
+          </style>
           <i18n>
           {
             "en": {
@@ -33,7 +38,11 @@
     const options = {
       moduleCache: { vue: Vue },
       getFile: url => config.files[url],
-      addStyle: () => {},
+      addStyle: (textContent) => {
+          const style = Object.assign(document.createElement('style'), { textContent });
+          const ref = document.head.getElementsByTagName('style')[0] || null;
+          document.head.insertBefore(style, ref);
+      },
       customBlockHandler(block, filename, options) {
 
         if ( block.type !== 'i18n' )
