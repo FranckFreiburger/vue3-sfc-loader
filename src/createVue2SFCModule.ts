@@ -24,9 +24,26 @@ import {
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
 
-import { formatError, withCache, hash, renameDynamicImport, parseDeps, interopRequireDefault, transformJSCode, loadDeps, createModule } from './tools.ts'
+import {
+	formatError,
+	formatErrorStartEnd,
+	withCache,
+	hash,
+	renameDynamicImport,
+	parseDeps,
+	interopRequireDefault,
+	transformJSCode,
+	loadDeps,
+	createModule,
+	formatErrorLineColumn
+} from './tools'
 
-import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './types.ts'
+import {
+	Options,
+	LoadModule,
+	ModuleExport,
+	CustomBlockCallback
+} from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -114,7 +131,7 @@ export async function createSFCModule(source : string, filename : string, option
 				});
 
 			} catch(ex) {
-				log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+				log?.('error', 'SFC script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
 				throw ex;
 			}
 
@@ -148,20 +165,36 @@ export async function createSFCModule(source : string, filename : string, option
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 			// "@vue/component-compiler-utils" does NOT assume any module system, and expose render in global scope.
-			template.code += `\nexport { render, staticRenderFns }`
+			template.code += `\nmodule.exports = { render, staticRenderFns }`
 
 			if ( template.errors.length ) {
 
 				preventCache();
-				for ( const err of template.errors ) {
+				for ( let err of template.errors ) {
+					if (typeof err !== 'object') {
+						err = {
+							msg: err,
+							start: undefined,
+							end: undefined
+						}
+					}
 
 					// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
-					log?.('error', 'SFC template', err );
+					log?.('error', 'SFC template', formatErrorStartEnd(err.msg, filename, compileTemplateOptions.source.trim(), err.start, err.end ));
 				}
 			}
 
-			for ( const err of template.tips )
-				log?.('info', 'SFC template', err);
+			for ( let err of template.tips ) {
+				if (typeof err !== 'object') {
+					err = {
+						msg: err,
+						start: undefined,
+						end: undefined
+					}
+				}
+
+				log?.('info', 'SFC template', formatErrorStartEnd(err.msg, filename, source, err.start, err.end ));
+			}
 
 			return await transformJSCode(template.code, true, filename, options);
 		});
@@ -185,7 +218,7 @@ export async function createSFCModule(source : string, filename : string, option
 				filename,
 				id: scopeId,
 				scoped: descStyle.scoped,
-				trim: false, // Should we enable it, as it requires postcss trimPlugin ?
+				trim: false,
 				preprocessLang: descStyle.lang
 			});
 
@@ -195,7 +228,7 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of compiledStyle.errors ) {
 
 					// @ts-ignore (Property 'line' does not exist on type 'Error' and Property 'column' does not exist on type 'Error')
-					log?.('error', 'SFC style', formatError(err.message, filename, source, err.line, err.column) );
+					log?.('error', 'SFC style', formatError(err, filename, descStyle.content));
 				}
 			}
 

@@ -28,10 +28,24 @@ import {
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
+import {
+	formatErrorLineColumn,
+	withCache,
+	hash,
+	renameDynamicImport,
+	parseDeps,
+	interopRequireDefault,
+	transformJSCode,
+	loadDeps,
+	createModule
+} from './tools'
 
-import { formatError, withCache, hash, renameDynamicImport, parseDeps, interopRequireDefault, transformJSCode, loadDeps, createModule } from './tools.ts'
-
-import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './types.ts'
+import {
+	Options,
+	LoadModule,
+	ModuleExport,
+	CustomBlockCallback
+} from './types'
 
 
 /**
@@ -140,7 +154,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 				} catch(ex) {
 
-					log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+					log?.('error', 'SFC script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
 					throw ex;
 				}
 			} else {
@@ -188,7 +202,7 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of template.errors ) {
 
 					// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
-					log?.('error', 'SFC template', formatError(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+					log?.('error', 'SFC template', formatErrorLineColumn(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
 				}
 			}
 
@@ -229,7 +243,7 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of compiledStyle.errors ) {
 
 					// @ts-ignore (Property 'line' does not exist on type 'Error' and Property 'column' does not exist on type 'Error')
-					log?.('error', 'SFC style', formatError(err.message, filename, source, err.line + descStyle.loc.start.line - 1, err.column) );
+					log?.('error', 'SFC style', formatErrorLineColumn(err.message, filename, source, err.line + descStyle.loc.start.line - 1, err.column) );
 				}
 			}
 

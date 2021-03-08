@@ -1,12 +1,15 @@
 {
   "scripts": {
     "start": "node ./serve.js",
-    "startVue2": "cross-env VUE_VERSION=2 node ./serveVue2.js"
+    "startVue2": "cross-env VUE_VERSION=2 node ./serve.js"
   },
   "dependencies": {
     "express": "^4.17.1",
     "mime-db": "^1.45.0",
     "open": "^7.3.0",
     "puppeteer": "^5.5.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

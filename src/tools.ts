@@ -15,6 +15,7 @@ import {
 
 import {
 	codeFrameColumns,
+	SourceLocation,
 } from '@babel/code-frame';
 
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
@@ -24,9 +25,12 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 // @ts-ignore (TS7016: Could not find a declaration file for module 'spark-md5')
 import SparkMD5 from 'spark-md5'
 
-
-import { Cache, ValueFactory, Options, LoadModule, ModuleExport } from './types.ts'
-
+import {
+	Cache,
+	LoadModule,
+	Options,
+	ValueFactory
+} from './types'
 
 /**
  * @internal
@@ -37,20 +41,45 @@ const version : string = process.env.VERSION;
 
 
 // tools
+/**
+ * @internal
+ */
+export function formatError(message : string, path : string, source : string) : string {
+	return path + '\n' + message;
+}
 
 
 /**
  * @internal
  */
-export function formatError(message : string, path : string, source : string, line? : number, column? : number) : string {
+export function formatErrorLineColumn(message : string, path : string, source : string, line? : number, column? : number) : string {
+	if (!line) {
+		return formatError(message, path, source)
+	}
 
-	const location = {
-		start: { line, column },
-	};
+  const location = {
+    start: { line, column },
+  };
 
-	return '\n' + path + '\n' + codeFrameColumns(source, location, {
-		message,
-	}) + '\n';
+  return formatError(codeFrameColumns(source, location, { message }), path, source)
+}
+
+/**
+ * @internal
+ */
+export function formatErrorStartEnd(message : string, path : string, source : string, start : number, end? : number) : string {
+	if (!start) {
+	  return formatError(message, path, source)
+  }
+
+  const location: SourceLocation = {
+    start: { line: 1, column: start }
+  };
+  if (end) {
+    location.end = {line: 1, column: end}
+  }
+
+  return formatError(codeFrameColumns(source, location, { message }), path, source)
 }
 
 
@@ -171,7 +200,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		});
 	} catch(ex) {
 
-		log?.('error', 'parse script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+		log?.('error', 'parse script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
 		throw ex;
 	}
 

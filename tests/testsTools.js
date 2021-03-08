@@ -5,8 +5,6 @@ const mime = require('mime-types');
 
 const local = new URL('http://local/');
 
-const vueVersion = '3';
-
 async function createPage({ files }) {
 
 	async function getFile(url, encoding) {
@@ -199,78 +197,46 @@ const defaultFiles = {
 
 const defaultFilesVue2 = {
 	'/vue2-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue2-sfc-loader.js'), { encoding: 'utf-8' }),
-	'/vue2': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.js'), { encoding: 'utf-8' }),
-	'/optionsOverride.js': `
-		export default () => {};
-	`,
-	'/appOverride.js': `
-		export default () => {};
+	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.js'), { encoding: 'utf-8' }),
+	'/options.js': defaultFiles['/options.js'],
+	'/boot.js': `
+		export default ({ options, createApp, mountApp }) => createApp(options).then(app => mountApp(app));
 	`,
 	'/index.html': `
 		<!DOCTYPE html>
 		<html><body>
-			<div id="app"><div id="app-vue2"></div></div>
-			<script src="vue2"></script>
+			<script src="vue"></script>
 			<script src="vue2-sfc-loader.js"></script>
 			<script type="module">
-
-				import optionsOverride from '/optionsOverride.js'
-				import appOverride from '/appOverride.js'
-
-				class HttpError extends Error {
-
-					constructor(url, res) {
-
-						super('HTTP error ' + res.statusCode);
-						Error.captureStackTrace(this, this.constructor);
-
-						// enumerable: default false
-						Object.defineProperties(this, {
-							name: {
-								value: this.constructor.name,
-							},
-							url: {
-								value: url,
-							},
-							res: {
-								value: res,
-							},
-						});
-					}
-				}
-
-
-				const options = {
-
-					moduleCache: {
-						vue: Vue
-					},
-
-					getFile(path) {
-
-						return fetch(path).then(res => res.ok ? res.text() : Promise.reject(new HttpError(path, res)));
-					},
-
-					addStyle(textContent) {
-
-						const style = Object.assign(document.createElement('style'), { textContent });
-						const ref = document.head.getElementsByTagName('style')[0] || null;
-						document.head.insertBefore(style, ref);
-					},
-
-					log(type, ...args) {
-
-						console[type](...args);
-					}
-				}
-
-				optionsOverride(options);
+			
+				import boot from '/boot.js'
+				import options from '/options.js'
 
 				const { loadModule } = window['vue2-sfc-loader'];
-				loadModule('./component.vue', options).then((component) => {
-			        const app = new Vue(component).$mount('#app-vue2')
-			        appOverride(app);
-				});
+
+				function createApp(options) {
+					return loadModule('./component.vue', options).then((component) => new Vue(component));
+				}
+
+				function mountApp(app, eltId = 'app') {
+				  
+				  const mountElId = eltId + 'Mount'
+					if ( !document.getElementById(mountElId) ) {
+						const parent = document.body;
+						const appElt = document.createElement('div');
+						appElt.id = eltId;
+						
+						const mountElt = document.createElement('div');
+						mountElt.id = mountElId;
+						
+						appElt.insertBefore(mountElt, appElt.firstChild);
+						parent.insertBefore(appElt, parent.firstChild);		
+					}
+
+					return app.$mount('#' + mountElId);
+				}
+
+				boot({ options, createApp, mountApp, Vue });
 
 				//window._done && window._done();
 
