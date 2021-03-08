@@ -73,12 +73,21 @@ export async function createSFCModule(source : string, filename : string, option
 
 	const hasScoped = descriptor.styles.some(e => e.scoped);
 
+	// https://github.com/vuejs/vue-loader/blob/b53ae44e4b9958db290f5918248071e9d2445d38/lib/runtime/componentNormalizer.js#L36
+	if (hasScoped) {
+		Object.assign(component, {_scopeId: scopeId});
+	}
+
 	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		source: descriptor.template.content,
 		filename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
-		compilerOptions: undefined,
+		compilerOptions: {
+			outputSourceRange: true,
+			scopeId: hasScoped ? scopeId : null,
+			comments: true
+		} as any,
 		preprocessLang: descriptor.template.lang,
 		isProduction: isProd,
 		prettify: false
@@ -139,7 +148,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 			// "@vue/component-compiler-utils" does NOT assume any module system, and expose render in global scope.
-			template.code += "\nmodule.exports = {render: render, staticRenderFns: staticRenderFns}"
+			template.code += `\nexport { render, staticRenderFns }`
 
 			if ( template.errors.length ) {
 
