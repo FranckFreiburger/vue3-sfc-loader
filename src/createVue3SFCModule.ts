@@ -30,6 +30,7 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 
 import {
 	formatErrorLineColumn,
+	formatError,
 	withCache,
 	hash,
 	renameDynamicImport,
@@ -115,7 +116,6 @@ export async function createSFCModule(source : string, filename : string, option
 		preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
 	} : null;
 
-
 	if ( descriptor.script || descriptor.scriptSetup ) {
 
 		// eg: https://github.com/vuejs/vue-loader/blob/6ed553f70b163031457acc961901313390cde9ef/src/index.ts#L136
@@ -200,9 +200,15 @@ export async function createSFCModule(source : string, filename : string, option
 
 				preventCache();
 				for ( const err of template.errors ) {
-
-					// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
-					log?.('error', 'SFC template', formatErrorLineColumn(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+					if (typeof err === 'object') {
+						if (err.loc) {
+							log?.('error', 'SFC template', formatErrorLineColumn(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+						} else {
+							log?.('error', 'SFC template', formatError(err.message, filename, source) );
+						}
+					} else {
+						log?.('error', 'SFC template', formatError(err, filename, source) );
+					}
 				}
 			}
 
