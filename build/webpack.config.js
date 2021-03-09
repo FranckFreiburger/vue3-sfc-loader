@@ -163,7 +163,7 @@ ${ pkg.name } v${ pkg.version }
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
-				'./createSFCModule.ts': `./createVue${ vueVersion }SFCModule.ts`,
+				'./createSFCModule': `./createVue${ vueVersion }SFCModule`,
 
 				// dedupe (see DuplicatePackageCheckerPlugin result)
 				'bn.js': require.resolve('bn.js'),
