@@ -158,20 +158,12 @@ ${ pkg.name } v${ pkg.version }
 @license     ${ pkg.license }
 			`.trim()),
 		],
-		externals: {
-			'vue': {
-				amd: 'vue',
-				commonjs: 'vue',
-				commonjs2: 'vue',
-				root: 'Vue'
-			},
-		},
 		resolve: {
 			extensions: [".ts", ".js"],
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
-				'./createSFCModule.ts': `./createVue${ vueVersion }SFCModule.ts`,
+				'./createSFCModule': `./createVue${ vueVersion }SFCModule`,
 
 				// dedupe (see DuplicatePackageCheckerPlugin result)
 				'bn.js': require.resolve('bn.js'),
@@ -216,9 +208,11 @@ ${ pkg.name } v${ pkg.version }
 				'less': false,
 				'prettier': false,
 				'./buble.js': Path.resolve(__dirname, 'fakeBuble.mjs'), // used by vue-template-es2015-compiler
+				'./styleProcessors': Path.resolve(__dirname, 'vue2StyleProcessors.ts'), // used by @vue/component-compiler-utils
 
 				...!genSourcemap ? {
 					'source-map': false,
+					'merge-source-map': false,
 				} : {},
 
 				...isProd ? {

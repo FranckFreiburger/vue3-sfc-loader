@@ -28,10 +28,25 @@ import {
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
+import {
+	formatErrorLineColumn,
+	formatError,
+	withCache,
+	hash,
+	renameDynamicImport,
+	parseDeps,
+	interopRequireDefault,
+	transformJSCode,
+	loadDeps,
+	createModule
+} from './tools'
 
-import { formatError, withCache, hash, renameDynamicImport, parseDeps, interopRequireDefault, transformJSCode, loadDeps, createModule } from './tools.ts'
-
-import { Options, LoadModule, ModuleExport, CustomBlockCallback } from './types.ts'
+import {
+	Options,
+	LoadModule,
+	ModuleExport,
+	CustomBlockCallback
+} from './types'
 
 
 /**
@@ -101,12 +116,11 @@ export async function createSFCModule(source : string, filename : string, option
 		preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
 	} : null;
 
-
 	if ( descriptor.script || descriptor.scriptSetup ) {
 
 		// eg: https://github.com/vuejs/vue-loader/blob/6ed553f70b163031457acc961901313390cde9ef/src/index.ts#L136
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script.content ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content ], async ({ preventCache }) => {
 
 			const babelParserPlugins : babel_ParserPlugin[] = [];
 
@@ -140,7 +154,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 				} catch(ex) {
 
-					log?.('error', 'SFC script', formatError(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+					log?.('error', 'SFC script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
 					throw ex;
 				}
 			} else {
@@ -186,9 +200,15 @@ export async function createSFCModule(source : string, filename : string, option
 
 				preventCache();
 				for ( const err of template.errors ) {
-
-					// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
-					log?.('error', 'SFC template', formatError(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+					if (typeof err === 'object') {
+						if (err.loc) {
+							log?.('error', 'SFC template', formatErrorLineColumn(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+						} else {
+							log?.('error', 'SFC template', formatError(err.message, filename, source) );
+						}
+					} else {
+						log?.('error', 'SFC template', formatError(err, filename, source) );
+					}
 				}
 			}
 
@@ -229,7 +249,7 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of compiledStyle.errors ) {
 
 					// @ts-ignore (Property 'line' does not exist on type 'Error' and Property 'column' does not exist on type 'Error')
-					log?.('error', 'SFC style', formatError(err.message, filename, source, err.line + descStyle.loc.start.line - 1, err.column) );
+					log?.('error', 'SFC style', formatErrorLineColumn(err.message, filename, source, err.line + descStyle.loc.start.line - 1, err.column) );
 				}
 			}
 
