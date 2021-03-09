@@ -152,7 +152,7 @@ const defaultFiles = {
 		export default () => {};
 	`,
 	'/boot.js': `
-		export default ({ options, createApp, mountApp }) => mountApp( createApp(options) );
+		export default ({ options, createApp, mountApp }) => createApp(options).then(app => mountApp(app));
 	`,
 
 	'/index.html': `
@@ -171,7 +171,7 @@ const defaultFiles = {
 
 				function createApp(options) {
 
-					return Vue.createApp(Vue.defineAsyncComponent( () => loadModule('./component.vue', options) ));
+					return loadModule('./component.vue', options).then((component) => Vue.createApp(component));
 				}
 
 				function mountApp(app, eltId = 'app') {
@@ -202,12 +202,8 @@ const defaultFilesVue2 = {
 	'/vue2-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue2-sfc-loader.js'), { encoding: 'utf-8' }),
 	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.runtime.js'), { encoding: 'utf-8' }),
 	'/options.js': defaultFiles['/options.js'],
-	'/optionsOverride.js': `
-		export default () => {};
-	`,
-	'/boot.js': `
-		export default ({ options, createApp, mountApp }) => createApp(options).then(app => mountApp(app));
-	`,
+	'/optionsOverride.js': defaultFiles['/optionsOverride.js'],
+	'/boot.js': defaultFiles['/boot.js'],
 	'/index.html': `
 		<!DOCTYPE html>
 		<html><body>

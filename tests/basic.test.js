@@ -435,9 +435,8 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 										component.bazComponentProperty = 'baz';
 									}
 								}
-								` +
-							(vueVersion === 2 ? `createApp(options).then(app => mountApp(app))` : `mountApp(createApp(options))`)
-							+ `;
+
+								createApp(options).then(app => mountApp(app));
 							}
 						`
 					}
@@ -484,29 +483,17 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 									}
 								});
 			
-								` +
-
-							(vueVersion === 2 ? `
-							createApp(options).then((app) => {
-								mountApp(app, 'elt1')
-		
-								options.moduleCache = {
-									vue: Vue
-								};
-		
-								createApp(options).then((app2) => {
-									mountApp(app2, 'elt2');
-								});
-							})` : `
-							mountApp(createApp(options), 'elt1');
-							
-							options.moduleCache = {
-								vue: Vue
-							};
-		
-							mountApp(createApp(options), 'elt2');`)
-							+`
+								createApp(options).then((app) => {
+									mountApp(app, 'elt1')
 			
+									options.moduleCache = {
+										vue: Vue
+									};
+			
+									createApp(options).then((app2) => {
+										mountApp(app2, 'elt2');
+									});
+								})
 							}
 						`
 					}
