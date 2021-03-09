@@ -16,7 +16,10 @@ const pkg = require('../package.json');
 
 const distPath = Path.resolve(__dirname, '..', 'dist');
 
-module.exports = (env = {}, { mode = 'production' }) => {
+const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', configName }) => {
+	if (configName && configName.includes(name)) {
+		return {name}
+	}
 
 	const isProd = mode === 'production';
 
@@ -25,8 +28,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 	const {
 		targetsBrowsers = 'defaults',
 		noPresetEnv = !isProd,
-		noCompress = !isProd,
-		vueVersion = '3',
+		noCompress = !isProd
 	} = env;
 
 	const genSourcemap = false;
@@ -34,6 +36,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, genSourcemap, vueVersion });
 
 	return {
+		name,
 		entry: [
 			'regenerator-runtime',
 			Path.resolve(__dirname, '../src/index.ts'),
@@ -156,7 +159,7 @@ ${ pkg.name } v${ pkg.version }
 @description ${ pkg.description }.
 @author      ${ pkg.author.name } <${ pkg.author.email }>
 @license     ${ pkg.license }
-			`.trim()),
+		`.trim()),
 		],
 		resolve: {
 			extensions: [".ts", ".js"],
@@ -300,3 +303,9 @@ ${ pkg.name } v${ pkg.version }
 	}
 }
 
+let configs = [
+	{name: 'vue2', vueVersion: '2' },
+	{name: 'vue3', vueVersion: '3' }
+]
+
+module.exports = configs.map(configure)
