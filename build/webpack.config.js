@@ -16,7 +16,11 @@ const pkg = require('../package.json');
 
 const distPath = Path.resolve(__dirname, '..', 'dist');
 
-const configure = ({vueVersion}) => (env = {}, { mode = 'production' }) => {
+const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', configName }) => {
+	if (configName && configName.includes(name)) {
+		return {name}
+	}
+
 	const isProd = mode === 'production';
 
 	// doc: https://github.com/browserslist/browserslist#full-list
@@ -32,6 +36,7 @@ const configure = ({vueVersion}) => (env = {}, { mode = 'production' }) => {
 	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, genSourcemap, vueVersion });
 
 	return {
+		name,
 		entry: [
 			'regenerator-runtime',
 			Path.resolve(__dirname, '../src/index.ts'),
@@ -298,9 +303,9 @@ ${ pkg.name } v${ pkg.version }
 	}
 }
 
-configs = [
-	{vueVersion: "2"},
-	{vueVersion: "3"}
+let configs = [
+	{name: 'vue2', vueVersion: '2' },
+	{name: 'vue3', vueVersion: '3' }
 ]
 
 module.exports = configs.map(configure)
