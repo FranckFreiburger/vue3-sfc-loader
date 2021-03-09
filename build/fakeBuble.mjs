@@ -26,7 +26,6 @@ export function transform(source, opts) {
 	//   babel types: https://babeljs.io/docs/en/babel-types
 	//   doc: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#toc-inserting-a-sibling-node
 	//   astexplorer: https://astexplorer.net/
-	//   buble/src/program/types/WithStatement.js : https://github.com/yyx990803/buble/blob/f5996c9cdb2e61cb7dddf0f6c6f25d0f3f600055/src/program/types/WithStatement.js
 
 	const srcAst = parse(source);
 
@@ -42,10 +41,26 @@ export function transform(source, opts) {
 	  hash[name] = true
 	})
 
-	const isDeclaration = type => /Declaration$/.test(type);
-	const isFunction = type => /Function(Expression|Declaration)$/.test(type);
 
-	// see https://github.com/yyx990803/buble/blob/f5996c9cdb2e61cb7dddf0f6c6f25d0f3f600055/src/utils/prependVm.js#L6
+	// all buble types : https://github.com/yyx990803/buble/blob/f5996c9cdb2e61cb7dddf0f6c6f25d0f3f600055/src/program/types/index.js
+
+	// ClassDeclaration,
+	// ExportNamedDeclaration,
+	// ExportDefaultDeclaration,
+	// FunctionDeclaration,
+	// ImportDeclaration,
+	// VariableDeclaration,
+
+	const isDeclaration = type => /Declaration$/.test(type); // match babel types
+
+
+	// ArrowFunctionExpression,
+	// FunctionDeclaration,
+	// FunctionExpression,
+
+	const isFunction = type => /Function(Expression|Declaration)$/.test(type); // match babel types
+
+	// see yyx990803/buble prependVm.js : https://github.com/yyx990803/buble/blob/master/src/utils/prependVm.js
 	function shouldPrependVm(identifier) {
 
 		if (
@@ -54,7 +69,7 @@ export function transform(source, opts) {
 			!(isDeclaration(identifier.parent.type) && identifier.parent.id === identifier) &&
 
 			// not a params of a function
-			!(isFunction(identifier.parent.type) && identifier.parent.params.indexOf(identifier) > -1) &&
+			!(isFunction(identifier.parent.type) && identifier.parent.params.indexOf(identifier.node) > -1) &&
 
 			// not a key of Property
 			!(identifier.parent.type === 'ObjectProperty' && identifier.parent.key === identifier.node && !identifier.parent.computed) &&
@@ -97,7 +112,9 @@ export function transform(source, opts) {
 
 	traverse(srcAst, {
 
-		// https://babeljs.io/docs/en/babel-types#withstatement
+		// babel withstatement https://babeljs.io/docs/en/babel-types#withstatement
+		// see yyx990803/buble WithStatement.js : https://github.com/yyx990803/buble/blob/master/src/program/types/WithStatement.js
+
 		WithStatement(path) {
 
 			path.traverse(withStatementVisitor);
