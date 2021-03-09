@@ -66,7 +66,7 @@ export function transform(source, opts) {
 		if (
 
 			// not id of a Declaration
-			!(isDeclaration(identifier.parent.type) && identifier.parent.id === identifier) &&
+			!(isDeclaration(identifier.parent.type) && identifier.parent.id === identifier.node) &&
 
 			// not a params of a function
 			!(isFunction(identifier.parent.type) && identifier.parent.params.indexOf(identifier.node) > -1) &&
