@@ -11,8 +11,7 @@ export interface StylePreprocessor {
   render(
     source: string,
     map: any | null,
-    options: any,
-    customRequire?: (id: string) => any
+    options: any
   ): StylePreprocessorResults
 }
 
