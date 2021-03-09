@@ -215,6 +215,7 @@ ${ pkg.name } v${ pkg.version }
 				'stylus': false,
 				'less': false,
 				'prettier': false,
+				'./buble.js': Path.resolve(__dirname, 'fakeBuble.mjs'), // used by vue-template-es2015-compiler
 
 				...!genSourcemap ? {
 					'source-map': false,

@@ -1,0 +1,118 @@
+import {
+	parse,
+} from '@babel/parser';
+
+import {
+	traverse,
+	transformFromAstSync,
+	types as t,
+} from '@babel/core';
+
+
+
+export function transform(source, opts) {
+
+	/*
+	opts:
+		objectAssign: "Object.assign"
+		transforms:
+			modules: false
+			stripWith: true
+			stripWithFunctional: false
+	*/
+
+
+	// links :
+	//   babel types: https://babeljs.io/docs/en/babel-types
+	//   doc: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#toc-inserting-a-sibling-node
+	//   astexplorer: https://astexplorer.net/
+	//   buble/src/program/types/WithStatement.js : https://github.com/yyx990803/buble/blob/f5996c9cdb2e61cb7dddf0f6c6f25d0f3f600055/src/program/types/WithStatement.js
+
+	const srcAst = parse(source);
+
+	const names = 'Infinity,undefined,NaN,isFinite,isNaN,' +
+	  'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
+	  'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
+	  'require,' + // for webpack
+	  'arguments,' + // parsed as identifier but is a special keyword...
+	  '_h,_c' // cached to save property access (_c for ^2.1.5)
+
+	const hash = Object.create(null)
+	names.split(',').forEach(name => {
+	  hash[name] = true
+	})
+
+	const isDeclaration = type => /Declaration$/.test(type);
+	const isFunction = type => /Function(Expression|Declaration)$/.test(type);
+
+	// see https://github.com/yyx990803/buble/blob/f5996c9cdb2e61cb7dddf0f6c6f25d0f3f600055/src/utils/prependVm.js#L6
+	function shouldPrependVm(identifier) {
+
+		if (
+
+			// not id of a Declaration
+			!(isDeclaration(identifier.parent.type) && identifier.parent.id === identifier) &&
+
+			// not a params of a function
+			!(isFunction(identifier.parent.type) && identifier.parent.params.indexOf(identifier) > -1) &&
+
+			// not a key of Property
+			!(identifier.parent.type === 'ObjectProperty' && identifier.parent.key === identifier.node && !identifier.parent.computed) &&
+
+			// not a property of a MemberExpression
+			!(identifier.parent.type === 'MemberExpression' && identifier.parent.property === identifier.node && !identifier.parent.computed) &&
+
+			// not in an Array destructure pattern
+			!(identifier.parent.type === 'ArrayPattern') &&
+
+			// not in an Object destructure pattern
+			!(identifier.parentPath.parent.type === 'ObjectPattern') &&
+
+			// skip globals + commonly used shorthands
+			!hash[identifier.node.name] &&
+
+			// not already in scope
+			!identifier.scope.hasBinding(identifier.node.name)
+
+		) {
+
+			return true;
+		}
+	}
+
+
+
+	const withStatementVisitor = {
+		Identifier(path) {
+
+			if ( shouldPrependVm(path) ) {
+
+				// don't know how to handle re-rentancy
+				//path.replaceWith(t.MemberExpression(t.identifier('_vm'), t.identifier(path.node.name)));
+				// then use:
+				path.node.name = '_vm.' + path.node.name;
+			}
+		}
+	};
+
+	traverse(srcAst, {
+
+		// https://babeljs.io/docs/en/babel-types#withstatement
+		WithStatement(path) {
+
+			path.traverse(withStatementVisitor);
+
+			const left = parse('var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h');
+			path.replaceWithMultiple([ ...left.program.body, ...path.node.body.body ]);
+
+		}
+
+	});
+
+	const { code, map, ast } = transformFromAstSync(srcAst, source);
+
+
+	return {
+		code,
+	}
+}
