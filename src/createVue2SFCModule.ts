@@ -184,7 +184,6 @@ export async function createSFCModule(source : string, filename : string, option
 						}
 					}
 
-					// @ts-ignore (Property 'message' does not exist on type 'string | CompilerError')
 					log?.('error', 'SFC template', formatErrorStartEnd(err.msg, filename, compileTemplateOptions.source.trim(), err.start, err.end ));
 				}
 			}
@@ -238,7 +237,6 @@ export async function createSFCModule(source : string, filename : string, option
 				preventCache();
 				for ( const err of compiledStyle.errors ) {
 
-					// @ts-ignore (Property 'line' does not exist on type 'Error' and Property 'column' does not exist on type 'Error')
 					log?.('error', 'SFC style', formatError(err, filename, descStyle.content));
 				}
 			}
