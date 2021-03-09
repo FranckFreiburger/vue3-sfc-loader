@@ -14,7 +14,7 @@ export const version : string = process.env.VERSION;
 /**
  * @internal
  */
-export class Loading {
+class Loading {
 
 	promise : Promise<ModuleExport>;
 
@@ -28,7 +28,7 @@ export class Loading {
 /**
  * @internal
  */
-export function throwNotDefined(details : string) : never {
+function throwNotDefined(details : string) : never {
 
 	throw new ReferenceError(`${ details } is not defined`);
 }
