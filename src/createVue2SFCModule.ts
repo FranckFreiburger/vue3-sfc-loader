@@ -45,8 +45,6 @@ import {
 	CustomBlockCallback
 } from './types'
 
-import { processors as styleProcessors } from './vue2/styleProcessors'
-
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
@@ -225,27 +223,12 @@ export async function createSFCModule(source : string, filename : string, option
 				filename,
 				id: scopeId,
 				scoped: descStyle.scoped,
-				trim: false
-			}
-
-			if (descStyle.lang) {
-				const processor = styleProcessors[descStyle.lang]
-				if (processor) {
-					const result = processor.render(
-						compileStyleOptions.source,
-						genSourcemap,
-						compileStyleOptions.preprocessOptions,
-						(id) => moduleCache[id]
-					)
-
-					if (result.errors.length) {
-						preventCache();
-						for ( const err of result.errors ) {
-							log?.('error', 'SFC style', formatError(err.message, filename, descStyle.content));
-						}
+				trim: false,
+				preprocessLang: descStyle.lang,
+				preprocessOptions: {
+					preprocessOptions: {
+						customRequire: (id: string) => moduleCache[id]
 					}
-
-					compileStyleOptions.source = result.code
 				}
 			}
 

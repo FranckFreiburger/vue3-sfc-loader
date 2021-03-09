@@ -22,15 +22,22 @@ export interface StylePreprocessorResults {
   errors: Array<Error>
 }
 
+const customRequire = (name: string, options?: any) => {
+  const requireFn = options?.preprocessOptions?.customRequire
+  if (requireFn) {
+    return requireFn(name)
+  }
+  return require(name)
+}
+
 // .scss/.sass processor
 const scss: StylePreprocessor = {
   render(
     source: string,
     map: any | null,
-    options: any,
-    load: (id: string)=> any = require
+    options: any
   ): StylePreprocessorResults {
-    const nodeSass = load('sass')
+    const nodeSass = customRequire('sass', options)
     const finalOptions = Object.assign({}, options, {
       data: source,
       file: options.filename,
@@ -61,13 +68,11 @@ const sass = {
     source: string,
     map: any | null,
     options: any,
-    load: (id: string)=> any = require
   ): StylePreprocessorResults {
     return scss.render(
       source,
       map,
-      Object.assign({}, options, { indentedSyntax: true }),
-      load
+      Object.assign({}, options, { indentedSyntax: true })
     )
   }
 }
@@ -77,10 +82,9 @@ const less = {
   render(
     source: string,
     map: any | null,
-    options: any,
-    load: (id: string)=> any = require
+    options: any
   ): StylePreprocessorResults {
-    const nodeLess = load('less')
+    const nodeLess = customRequire('less', options)
 
     let result: any
     let error: Error | null = null
@@ -112,10 +116,9 @@ const styl = {
   render(
     source: string,
     map: any | null,
-    options: any,
-    load: (id: string)=> any = require
+    options: any
   ): StylePreprocessorResults {
-    const nodeStylus = load('stylus')
+    const nodeStylus = customRequire('stylus', options)
     try {
       const ref = nodeStylus(source)
       Object.keys(options).forEach(key => ref.set(key, options[key]))

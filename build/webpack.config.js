@@ -208,6 +208,7 @@ ${ pkg.name } v${ pkg.version }
 				'less': false,
 				'prettier': false,
 				'./buble.js': Path.resolve(__dirname, 'fakeBuble.mjs'), // used by vue-template-es2015-compiler
+				'./styleProcessors': Path.resolve(__dirname, 'vue2StyleProcessors.ts'), // used by @vue/component-compiler-utils
 
 				...!genSourcemap ? {
 					'source-map': false,
