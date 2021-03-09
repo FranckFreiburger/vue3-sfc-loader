@@ -5,18 +5,23 @@ const mime = require('mime-types');
 
 const local = new URL('http://local/');
 
-async function createPage({ files }) {
+async function createPage({ files, processors= {} }) {
 
-	async function getFile(url, encoding) {
+	async function getFile(url) {
 
 		const { origin, pathname } = new URL(url);
 
 		if ( origin !== local.origin )
 			return null
 
+		let body = files[pathname]
+		if (processors[pathname]) {
+			body = processors[pathname](body)
+		}
+
 		const res = {
 			contentType: mime.lookup(Path.extname(pathname)) || '',
-			body: files[pathname],
+			body,
 			status: files[pathname] === undefined ? 404 : 200,
 		};
 
@@ -24,20 +29,14 @@ async function createPage({ files }) {
 	}
 
 	const page = await browser.newPage();
-
 	page.setDefaultTimeout(3000);
-
 
 	await page.setRequestInterception(true);
 	page.on('request', async interceptedRequest => {
-
-		// console.log(interceptedRequest.url())
-
 		try {
 
 			const file = await getFile(interceptedRequest.url(), 'utf-8');
-			if ( file !== null ) {
-
+			if (file) {
 				return void interceptedRequest.respond({
 					...file,
 					contentType: file.contentType + '; charset=utf-8',
@@ -45,17 +44,21 @@ async function createPage({ files }) {
 			}
 
 			interceptedRequest.continue();
-
 		} catch (ex) {
-
 			page.emit('pageerror', ex)
 		}
 	});
 
 	const output = [];
 
-	page.on('console', async msg => output.push({ type: msg.type(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) }) );
-	page.on('pageerror', error => output.push({ type: 'pageerror', content: error }) );
+	page.on('console', async msg => {
+		console.log(msg)
+		output.push({ type: msg.type(), text: msg.text(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) })
+	} );
+	page.on('pageerror', error => {
+		console.log(error)
+		output.push({ type: 'pageerror', content: error })
+	} );
 
 	page.on('error', msg => console.log('ERROR', msg));
 
@@ -99,7 +102,6 @@ afterAll(async () => {
 const defaultFiles = {
 	'/vue3-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue3-sfc-loader.js'), { encoding: 'utf-8' }),
 	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue/dist/vue.global.js'), { encoding: 'utf-8' }),
-
 	'/options.js': `
 
 		class HttpError extends Error {
@@ -132,7 +134,6 @@ const defaultFiles = {
 			},
 
 			getFile(path) {
-
 				return fetch(path).then(res => res.ok ? res.text() : Promise.reject(new HttpError(path, res)));
 			},
 
@@ -151,7 +152,9 @@ const defaultFiles = {
 
 		export default options;
 	`,
-
+	'/optionsOverride.js': `
+		export default () => {};
+	`,
 	'/boot.js': `
 		export default ({ options, createApp, mountApp }) => mountApp( createApp(options) );
 	`,
@@ -161,10 +164,12 @@ const defaultFiles = {
 		<html><body>
 			<script src="vue"></script>
 			<script src="vue3-sfc-loader.js"></script>
+			<!-- scripts -->
 			<script type="module">
 
 				import boot from '/boot.js'
 				import options from '/options.js'
+				import optionsOverride from '/optionsOverride.js'
 
 				const { loadModule } = window['vue3-sfc-loader'];
 
@@ -185,6 +190,8 @@ const defaultFiles = {
 
 					return app.mount('#' + eltId);
 				}
+				
+				optionsOverride(options)
 
 				boot({ options, createApp, mountApp, Vue });
 
@@ -199,6 +206,9 @@ const defaultFilesVue2 = {
 	'/vue2-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue2-sfc-loader.js'), { encoding: 'utf-8' }),
 	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.js'), { encoding: 'utf-8' }),
 	'/options.js': defaultFiles['/options.js'],
+	'/optionsOverride.js': `
+		export default () => {};
+	`,
 	'/boot.js': `
 		export default ({ options, createApp, mountApp }) => createApp(options).then(app => mountApp(app));
 	`,
@@ -207,10 +217,12 @@ const defaultFilesVue2 = {
 		<html><body>
 			<script src="vue"></script>
 			<script src="vue2-sfc-loader.js"></script>
+			<!-- scripts -->
 			<script type="module">
 			
 				import boot from '/boot.js'
 				import options from '/options.js'
+				import optionsOverride from '/optionsOverride.js'
 
 				const { loadModule } = window['vue2-sfc-loader'];
 
@@ -235,6 +247,8 @@ const defaultFilesVue2 = {
 
 					return app.$mount('#' + mountElId);
 				}
+
+				optionsOverride(options)
 
 				boot({ options, createApp, mountApp, Vue });
 
