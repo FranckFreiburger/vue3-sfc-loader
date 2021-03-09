@@ -37,6 +37,7 @@
   "dependencies": {
     "@babel/code-frame": "^7.12.13",
     "@babel/core": "^7.13.10",
+    "@babel/generator": "^7.13.9",
     "@babel/parser": "^7.13.10",
     "@babel/plugin-proposal-dynamic-import": "^7.13.8",
     "@babel/plugin-transform-arrow-functions": "^7.13.0",

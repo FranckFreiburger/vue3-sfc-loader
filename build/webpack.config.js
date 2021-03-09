@@ -184,6 +184,7 @@ ${ pkg.name } v${ pkg.version }
 				'@babel/types': require.resolve('@babel/types'),
 				'@babel/code-frame': require.resolve('@babel/code-frame'),
 				'@babel/core': require.resolve('@babel/core'),
+				'@babel/generator': require.resolve('@babel/generator'),
 
 				'@vue/shared': require.resolve('@vue/shared'),
 				'@vue/compiler-sfc': require.resolve('@vue/compiler-sfc'),
