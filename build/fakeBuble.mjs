@@ -29,6 +29,8 @@ export function transform(source, opts) {
 
 	const srcAst = parse(source);
 
+	// TBD: add import() ?
+
 	const names = 'Infinity,undefined,NaN,isFinite,isNaN,' +
 	  'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
 	  'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
@@ -87,7 +89,7 @@ export function transform(source, opts) {
 			!hash[identifier.node.name] &&
 
 			// not already in scope
-			!identifier.scope.hasBinding(identifier.node.name)
+			!identifier.scope.hasBinding(identifier.node.name, false /* noGlobals */) // noGlobals false mean include globals (Array, Date, ...) and contextVariables (arguments, ...)
 
 		) {
 
@@ -96,6 +98,7 @@ export function transform(source, opts) {
 	}
 
 
+	// TBD: check https://github.com/yyx990803/buble/commit/af5d322e6925d65ee6cc7fcaadbe25a4151bfcdd
 
 	const withStatementVisitor = {
 		Identifier(path) {
@@ -107,7 +110,12 @@ export function transform(source, opts) {
 				// then use:
 				path.node.name = '_vm.' + path.node.name;
 			}
-		}
+		},
+		WithStatement(path) {
+
+			// let handle this by the parent traverse
+			path.skip();
+		},
 	};
 
 	traverse(srcAst, {
@@ -115,13 +123,24 @@ export function transform(source, opts) {
 		// babel withstatement https://babeljs.io/docs/en/babel-types#withstatement
 		// see yyx990803/buble WithStatement.js : https://github.com/yyx990803/buble/blob/master/src/program/types/WithStatement.js
 
-		WithStatement(path) {
+		WithStatement: {
+			enter(path) {
 
-			path.traverse(withStatementVisitor);
+				path.traverse(withStatementVisitor);
+			},
+			exit(path) {
 
-			const left = parse('var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h');
-			path.replaceWithMultiple([ ...left.program.body, ...path.node.body.body ]);
+				const parentWithStatement = path.findParent(e => e.isWithStatement());
+				if ( parentWithStatement === null ) {
 
+					const left = parse('var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h');
+					path.replaceWithMultiple([ ...left.program.body, ...path.node.body.body ]);
+				} else {
+
+					// just remove with statement
+					path.replaceWithMultiple(path.node.body.body);
+				}
+			}
 		}
 
 	});
