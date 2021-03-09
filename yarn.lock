@@ -6572,10 +6572,10 @@ typedoc@0.19.2:
     shelljs "^0.8.4"
     typedoc-default-themes "^0.11.4"
 
-typescript@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.2.tgz#1450f020618f872db0ea17317d16d8da8ddb8c4c"
-  integrity sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
+typescript@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
+  integrity sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
 
 uglify-js@^3.1.4:
   version "3.12.8"
@@ -6846,10 +6846,10 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^5.24.3:
-  version "5.24.3"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.24.3.tgz#6ec0f5059f8d7c7961075fa553cfce7b7928acb3"
-  integrity sha512-x7lrWZ7wlWAdyKdML6YPvfVZkhD1ICuIZGODE5SzKJjqI9A4SpqGTjGJTc6CwaHqn19gGaoOR3ONJ46nYsn9rw==
+webpack@^5.24.4:
+  version "5.24.4"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.24.4.tgz#37d8cf95841dd23c809ea02931294b3455d74a59"
+  integrity sha512-RXOdxF9hFFFhg47BryCgyFrEyyu7Y/75/uiI2DoUiTMqysK+WczVSTppvkR47oZcmI/DPaXCiCiaXBP8QjkNpA==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"
