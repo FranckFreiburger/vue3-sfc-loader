@@ -120,7 +120,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 		// eg: https://github.com/vuejs/vue-loader/blob/6ed553f70b163031457acc961901313390cde9ef/src/index.ts#L136
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script.content ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content ], async ({ preventCache }) => {
 
 			const babelParserPlugins : babel_ParserPlugin[] = [];
 

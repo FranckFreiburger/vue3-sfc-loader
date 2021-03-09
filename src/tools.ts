@@ -22,8 +22,7 @@ import {
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
 
-// @ts-ignore (TS7016: Could not find a declaration file for module 'spark-md5')
-import SparkMD5 from 'spark-md5'
+import * as SparkMD5 from 'spark-md5'
 
 import {
 	Cache,
@@ -86,11 +85,9 @@ export function formatErrorStartEnd(message : string, path : string, source : st
 /**
  * @internal
  */
-export function hash(...valueList : any[]) : string {
-
+export function hash(...valueList : string[]) : string {
 	const hashInstance = new SparkMD5();
-	for ( const val of valueList )
-		hashInstance.append( typeof val === 'string' ? val : JSON.stringify(val) );
+	valueList.forEach(val => hashInstance.append(val ? val : ""))
 	return hashInstance.end().slice(0, 8);
 }
 
@@ -101,7 +98,7 @@ export function hash(...valueList : any[]) : string {
  * preventCache usage: non-fatal error
  * @internal
  */
-export async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) {
+export async function withCache( cacheInstance : Cache, key : string[], valueFactory : ValueFactory ) {
 
 	let cachePrevented = false;
 
