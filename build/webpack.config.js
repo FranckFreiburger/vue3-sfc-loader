@@ -158,14 +158,6 @@ ${ pkg.name } v${ pkg.version }
 @license     ${ pkg.license }
 			`.trim()),
 		],
-		externals: {
-			'vue': {
-				amd: 'vue',
-				commonjs: 'vue',
-				commonjs2: 'vue',
-				root: 'Vue'
-			},
-		},
 		resolve: {
 			extensions: [".ts", ".js"],
 			mainFields: ['browser', 'main', 'module'],
