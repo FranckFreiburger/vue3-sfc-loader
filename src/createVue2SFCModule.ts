@@ -68,7 +68,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const component = {};
 
 
-	const { compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const descriptor = sfc_parse({
@@ -105,10 +105,15 @@ export async function createSFCModule(source : string, filename : string, option
 			scopeId: hasScoped ? scopeId : null,
 			comments: true
 		} as any,
-		preprocessLang: descriptor.template.lang,
 		isProduction: isProd,
 		prettify: false
 	} : null;
+
+	// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
+	if (descriptor.template?.lang) {
+		const preprocess = moduleCache[descriptor.template.lang] as any
+		compileTemplateOptions.source = preprocess.render(compileTemplateOptions.source, compileTemplateOptions.preprocessOptions)
+	}
 
 	if ( descriptor.script ) {
 

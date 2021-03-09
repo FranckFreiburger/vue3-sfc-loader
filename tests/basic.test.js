@@ -513,5 +513,30 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 
 				await page.close();
 			});
+
+			test('custom template language', async () => {
+				const { page, output } = await createPage({
+					files: {
+						...files,
+						'/component.vue': `
+							<template lang="custom">
+								<span>Hello World !</span>
+							</template>
+						`,
+						'/optionsOverride.js': `
+							export default (options) => {
+								options.moduleCache.custom = {render: s => s.replace("Hello World !", "Custom Hello World !") }
+							};
+						`,
+					}
+				});
+
+				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Custom Hello World !');
+
+				await page.close();
+			});
+
 	});
+
+
 })
