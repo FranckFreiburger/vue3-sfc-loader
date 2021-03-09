@@ -16,8 +16,7 @@ const pkg = require('../package.json');
 
 const distPath = Path.resolve(__dirname, '..', 'dist');
 
-module.exports = (env = {}, { mode = 'production' }) => {
-
+const configure = ({vueVersion}) => (env = {}, { mode = 'production' }) => {
 	const isProd = mode === 'production';
 
 	// doc: https://github.com/browserslist/browserslist#full-list
@@ -25,8 +24,7 @@ module.exports = (env = {}, { mode = 'production' }) => {
 	const {
 		targetsBrowsers = 'defaults',
 		noPresetEnv = !isProd,
-		noCompress = !isProd,
-		vueVersion = '3',
+		noCompress = !isProd
 	} = env;
 
 	const genSourcemap = false;
@@ -156,7 +154,7 @@ ${ pkg.name } v${ pkg.version }
 @description ${ pkg.description }.
 @author      ${ pkg.author.name } <${ pkg.author.email }>
 @license     ${ pkg.license }
-			`.trim()),
+		`.trim()),
 		],
 		resolve: {
 			extensions: [".ts", ".js"],
@@ -300,3 +298,9 @@ ${ pkg.name } v${ pkg.version }
 	}
 }
 
+configs = [
+	{vueVersion: "2"},
+	{vueVersion: "3"}
+]
+
+module.exports = configs.map(configure)
