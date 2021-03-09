@@ -126,7 +126,7 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 					}
 				});
 
-				await expect(output.some(e => e.type === 'pageerror' && String(e.content).includes('HttpError') )).toBe(true);
+				await expect(output.filter(e => e.type === 'pageerror' && e.text).map(e => e.text)[0]).toMatch(/.*HTTP Error.*/);
 
 				await page.close();
 			});
@@ -536,6 +536,45 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 				await page.close();
 			});
 
+			test('custom style language', async () => {
+					const { page, output } = await createPage({
+						files: {
+							...files,
+							'/component.vue': `
+								<template>
+									<span class="hello-world">Hello World !</span>
+								</template>
+								<style scoped lang="sass">
+									__dot__hello-world {
+										background: red;
+									}
+								</style>
+							`,
+							// Register a fake sass module that replace "__dot__" with "."
+							'/optionsOverride.js': `
+								export default (options) => {
+									options.moduleCache.sass = {
+										renderSync: ({data}) => {
+											return {
+												css: data.replace("__dot__", "."),
+												stats: {}
+											}
+										}
+									}
+								};
+							`,
+						}
+					});
+
+					await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
+					await expect(page.$eval(
+						'head', head => {
+							return head.getElementsByTagName('style')[0].textContent.trim()
+						}))
+						.resolves.toMatch(/\.hello-world.*/);
+
+					await page.close();
+				});
 	});
 
 

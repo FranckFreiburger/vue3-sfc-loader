@@ -2,7 +2,7 @@
 import {
 	compileStyleAsync as sfc_compileStyleAsync,
 	compileTemplate as sfc_compileTemplate,
-	parse as sfc_parse,
+	parse as sfc_parse, StyleCompileOptions,
 } from '@vue/component-compiler-utils'
 
 import * as vueTemplateCompiler from 'vue-template-compiler'
@@ -44,6 +44,8 @@ import {
 	ModuleExport,
 	CustomBlockCallback
 } from './types'
+
+import { processors as styleProcessors } from './vue2/styleProcessors'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -216,17 +218,38 @@ export async function createSFCModule(source : string, filename : string, option
 			await loadModule(descStyle.lang, options);
 
 		const style = await withCache(compiledCache, [ componentHash, descStyle.content ], async ({ preventCache }) => {
-
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
-			const compiledStyle = await sfc_compileStyleAsync({
+
+			const compileStyleOptions: StyleCompileOptions = {
 				source: descStyle.content,
 				filename,
 				id: scopeId,
 				scoped: descStyle.scoped,
-				trim: false,
-				preprocessLang: descStyle.lang
-			});
+				trim: false
+			}
 
+			if (descStyle.lang) {
+				const processor = styleProcessors[descStyle.lang]
+				if (processor) {
+					const result = processor.render(
+						compileStyleOptions.source,
+						genSourcemap,
+						compileStyleOptions.preprocessOptions,
+						(id) => moduleCache[id]
+					)
+
+					if (result.errors.length) {
+						preventCache();
+						for ( const err of result.errors ) {
+							log?.('error', 'SFC style', formatError(err.message, filename, descStyle.content));
+						}
+					}
+
+					compileStyleOptions.source = result.code
+				}
+			}
+
+			const compiledStyle = await sfc_compileStyleAsync(compileStyleOptions);
 			if ( compiledStyle.errors.length ) {
 
 				preventCache();

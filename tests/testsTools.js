@@ -5,7 +5,7 @@ const mime = require('mime-types');
 
 const local = new URL('http://local/');
 
-async function createPage({ files, processors= {} }) {
+async function createPage({ files, processors= {}}) {
 
 	async function getFile(url) {
 
@@ -34,7 +34,6 @@ async function createPage({ files, processors= {} }) {
 	await page.setRequestInterception(true);
 	page.on('request', async interceptedRequest => {
 		try {
-
 			const file = await getFile(interceptedRequest.url(), 'utf-8');
 			if (file) {
 				return void interceptedRequest.respond({
@@ -52,12 +51,10 @@ async function createPage({ files, processors= {} }) {
 	const output = [];
 
 	page.on('console', async msg => {
-		console.log(msg)
 		output.push({ type: msg.type(), text: msg.text(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) })
 	} );
 	page.on('pageerror', error => {
-		console.log(error)
-		output.push({ type: 'pageerror', content: error })
+		output.push({ type: 'pageerror', text: error.message, content: error })
 	} );
 
 	page.on('error', msg => console.log('ERROR', msg));
@@ -105,13 +102,10 @@ const defaultFiles = {
 	'/options.js': `
 
 		class HttpError extends Error {
-
 			constructor(url, res) {
-
-				super('HTTP error ' + res.statusCode);
+				super('HTTP Error: ' + (res && res.statusCode ? res.statusCode : '(no status code)'));
 				Error.captureStackTrace(this, this.constructor);
 
-				// enumerable: default false
 				Object.defineProperties(this, {
 					name: {
 						value: this.constructor.name,
@@ -138,7 +132,6 @@ const defaultFiles = {
 			},
 
 			addStyle(textContent) {
-
 				const style = Object.assign(document.createElement('style'), { textContent });
 				const ref = document.head.getElementsByTagName('style')[0] || null;
 				document.head.insertBefore(style, ref);
@@ -204,7 +197,7 @@ const defaultFiles = {
 
 const defaultFilesVue2 = {
 	'/vue2-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue2-sfc-loader.js'), { encoding: 'utf-8' }),
-	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.js'), { encoding: 'utf-8' }),
+	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.runtime.js'), { encoding: 'utf-8' }),
 	'/options.js': defaultFiles['/options.js'],
 	'/optionsOverride.js': `
 		export default () => {};

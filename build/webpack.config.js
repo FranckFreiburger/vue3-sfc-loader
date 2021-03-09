@@ -219,6 +219,7 @@ ${ pkg.name } v${ pkg.version }
 
 				...!genSourcemap ? {
 					'source-map': false,
+					'merge-source-map': false,
 				} : {},
 
 				...isProd ? {
