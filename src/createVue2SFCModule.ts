@@ -117,9 +117,12 @@ export async function createSFCModule(source : string, filename : string, option
 	if (descriptor.template?.lang) {
 		const preprocess = moduleCache[descriptor.template.lang] as any
 		compileTemplateOptions.source = await new Promise((resolve, reject) => {
-			preprocess.render(compileTemplateOptions.source, compileTemplateOptions.preprocessOptions, (_err, _res) => {
-				if (_err) reject(_err)
-				resolve(_res)
+			preprocess.render(compileTemplateOptions.source, compileTemplateOptions.preprocessOptions, (_err : any, _res : any) => {
+
+				if (_err)
+					reject(_err)
+				else
+					resolve(_res)
 			})
 		})
 	}
