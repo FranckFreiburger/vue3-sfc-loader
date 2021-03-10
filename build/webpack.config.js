@@ -17,7 +17,7 @@ const pkg = require('../package.json');
 const distPath = Path.resolve(__dirname, '..', 'dist');
 
 const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', configName }) => {
-	if (configName && configName.includes(name)) {
+	if (configName && !configName.includes(name)) {
 		return {name}
 	}
 
