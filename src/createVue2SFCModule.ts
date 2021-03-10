@@ -45,6 +45,10 @@ import {
 	CustomBlockCallback
 } from './types'
 
+
+export { version as vueVersion } from 'vue-template-compiler/../../package.json'
+
+
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */

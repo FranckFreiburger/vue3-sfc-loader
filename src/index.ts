@@ -1,7 +1,7 @@
 import { posix as Path } from 'path'
 
 import { createJSModule } from './tools'
-import { createSFCModule } from './createSFCModule'
+import { createSFCModule, vueVersion } from './createSFCModule'
 
 import { ModuleExport, ModuleHandler, PathHandlers, Options } from './types'
 
@@ -9,6 +9,12 @@ import { ModuleExport, ModuleHandler, PathHandlers, Options } from './types'
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
 export const version : string = process.env.VERSION;
+
+
+/**
+ * the version of Vue that is expected by the library
+ */
+export { vueVersion } from './createSFCModule'
 
 
 /**

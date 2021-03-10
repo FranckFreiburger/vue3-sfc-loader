@@ -49,6 +49,8 @@ import {
 } from './types'
 
 
+export { version as vueVersion } from '@vue/compiler-sfc/../../package.json'
+
 /**
  * @ignore
  */
