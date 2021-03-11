@@ -1,4 +1,11 @@
 
+### [0.4.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.3.1...v0.4.1) (2021-03-11)
+
+
+### Features
+
+* **core:** add vue2 support ([0851103](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/0851103611227009d0179f349a7e4081d85cfd2a))
+
 ### [0.3.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.3.0...v0.3.1) (2021-03-03)
 
 
