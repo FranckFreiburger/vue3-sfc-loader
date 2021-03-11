@@ -45,6 +45,11 @@ import {
 	CustomBlockCallback
 } from './types'
 
+import {
+	processors,
+	StylePreprocessor,
+	StylePreprocessorResults
+} from '../build/vue2StyleProcessors'
 
 export { version as vueVersion } from 'vue-template-compiler/../../package.json'
 
@@ -222,10 +227,6 @@ export async function createSFCModule(source : string, filename : string, option
 
 	for ( const descStyle of descriptor.styles ) {
 
-		// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
-		if ( descStyle.lang )
-			await loadModule(descStyle.lang, options);
-
 		const style = await withCache(compiledCache, [ componentHash, descStyle.content ], async ({ preventCache }) => {
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 
@@ -242,6 +243,10 @@ export async function createSFCModule(source : string, filename : string, option
 					}
 				}
 			}
+
+			// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
+			if ( descStyle.lang && processors[descStyle.lang] === undefined )
+				processors[descStyle.lang] = await loadModule(descStyle.lang, options) as StylePreprocessor;
 
 			const compiledStyle = await sfc_compileStyleAsync(compileStyleOptions);
 			if ( compiledStyle.errors.length ) {
