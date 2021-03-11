@@ -28,7 +28,8 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 	const {
 		targetsBrowsers = 'defaults',
 		noPresetEnv = !isProd,
-		noCompress = !isProd
+		noCompress = !isProd,
+		noSourceMap = !isProd,
 	} = env;
 
 	const genSourcemap = false;
@@ -61,7 +62,7 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 		},
 
 		// doc: https://webpack.js.org/configuration/devtool/#devtool
-		devtool: isProd ? 'source-map' : 'cheap-source-map',
+		devtool: noSourceMap ? false : isProd ? 'source-map' : 'cheap-source-map',
 
 		performance: { hints: false },
 
@@ -128,22 +129,25 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 			] : [],
 
 			...isProd ? [
-				new CompressionPlugin({
-					filename: "[path][base].br",
-					algorithm: "brotliCompress",
-					compressionOptions: {
-						params: {
-							[zlib.constants.BROTLI_PARAM_QUALITY]: zlib.constants.BROTLI_MAX_QUALITY,
+
+				...!noCompress ? [
+					new CompressionPlugin({
+						filename: "[path][base].br",
+						algorithm: "brotliCompress",
+						compressionOptions: {
+							params: {
+								[zlib.constants.BROTLI_PARAM_QUALITY]: zlib.constants.BROTLI_MAX_QUALITY,
+							},
 						},
-					},
-				}),
-				new CompressionPlugin({
-					filename: "[path][base].gz",
-					algorithm: "gzip",
-					compressionOptions: {
-						level: 9,
-					},
-				}),
+					}),
+					new CompressionPlugin({
+						filename: "[path][base].gz",
+						algorithm: "gzip",
+						compressionOptions: {
+							level: 9,
+						},
+					}),
+				] : [],
 				new DuplicatePackageCheckerPlugin(),
 				new BundleAnalyzerPlugin({
 					// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
