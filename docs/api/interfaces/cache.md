@@ -21,7 +21,7 @@
 
 ▸ **get**(`key`: string): Promise<string\>
 
-*Defined in [index.ts:68](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L68)*
+*Defined in [types.ts:19](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L19)*
 
 #### Parameters:
 
@@ -37,7 +37,7 @@ ___
 
 ▸ **set**(`key`: string, `value`: string): Promise<void\>
 
-*Defined in [index.ts:69](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L69)*
+*Defined in [types.ts:20](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L20)*
 
 #### Parameters:
 

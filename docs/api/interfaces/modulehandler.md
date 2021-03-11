@@ -13,9 +13,9 @@ see [additionalModuleHandlers](options.md#additionalmodulehandlers)
 
 ## Callable
 
-▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise<[Module](module.md)\>
+▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise<[ModuleExport](moduleexport.md)\>
 
-*Defined in [index.ts:355](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L355)*
+*Defined in [types.ts:52](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L52)*
 
 Used by the library when it does not know how to handle a given file type (eg. `.json` files).
 see [additionalModuleHandlers](options.md#additionalmodulehandlers)
@@ -28,4 +28,4 @@ Name | Type | Description |
 `path` | string | The path of the file |
 `options` | [Options](options.md) | The options   **example:**  ```javascript  ...  additionalModuleHandlers: {   '.json': (source, path, options) => JSON.parse(source),  }  ... ```  |
 
-**Returns:** Promise<[Module](module.md)\>
+**Returns:** Promise<[ModuleExport](moduleexport.md)\>

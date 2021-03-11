@@ -33,7 +33,7 @@
 
 • `Optional` **additionalBabelPlugins**: any[]
 
-*Defined in [index.ts:209](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L209)*
+*Defined in [types.ts:212](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L212)*
 
 Additional babel plugins. [TBD]
 
@@ -48,7 +48,7 @@ ___
 
 • `Optional` **additionalModuleHandlers**: Record<string, [ModuleHandler](modulehandler.md)\>
 
-*Defined in [index.ts:216](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L216)*
+*Defined in [types.ts:219](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L219)*
 
 Additional module type handlers. see [ModuleHandler](modulehandler.md)
 
@@ -58,7 +58,7 @@ ___
 
 • `Optional` **compiledCache**: [Cache](cache.md)
 
-*Defined in [index.ts:256](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L256)*
+*Defined in [types.ts:259](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L259)*
 
 [get](cache.md#get)() and [set](cache.md#set)() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
 Since compilation consume a lot of CPU, is is always a good idea to provide this object.
@@ -100,9 +100,9 @@ ___
 
 ### delimiters
 
-• `Optional` **delimiters**: SFCTemplateCompileOptions[\"compilerOptions\"][\"delimiters\"]
+• `Optional` **delimiters**: [string, string]
 
-*Defined in [index.ts:198](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L198)*
+*Defined in [types.ts:201](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L201)*
 
 Sets the delimiters used for text interpolation within the template.
 Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax.
@@ -146,7 +146,7 @@ ___
 
 • `Optional` **moduleCache**: Record<string, [Module](module.md)\>
 
-*Defined in [index.ts:115](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L115)*
+*Defined in [types.ts:118](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L118)*
 
 Initial cache that will contain resolved dependencies. All new modules go here.
 `vue` must initially be contained in this object.
@@ -170,7 +170,7 @@ ___
 
 •  **pathHandlers**: [PathHandlers](pathhandlers.md)
 
-*Defined in [index.ts:302](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L302)*
+*Defined in [types.ts:305](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L305)*
 
 Abstact path handling
 
@@ -178,9 +178,9 @@ Abstact path handling
 
 ### addStyle
 
-▸ **addStyle**(`style`: string, `scopeId`: string): void
+▸ **addStyle**(`style`: string, `scopeId`: string \| undefined): void
 
-*Defined in [index.ts:158](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L158)*
+*Defined in [types.ts:161](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L161)*
 
 Called by the library when CSS style must be added in the HTML document.
 
@@ -189,7 +189,7 @@ Called by the library when CSS style must be added in the HTML document.
 Name | Type | Description |
 ------ | ------ | ------ |
 `style` | string | The CSS style chunk |
-`scopeId` | string | The scope ID of the CSS style chunk |
+`scopeId` | string \| undefined | The scope ID of the CSS style chunk |
 
 **Returns:** void
 
@@ -210,9 +210,9 @@ ___
 
 ### customBlockHandler
 
-▸ **customBlockHandler**(`block`: SFCBlock, `filename`: string, `options`: [Options](options.md)): Promise<[CustomBlockCallback](../README.md#customblockcallback) \| undefined\>
+▸ `Optional`**customBlockHandler**(`block`: [CustomBlock](customblock.md), `filename`: string, `options`: [Options](options.md)): Promise<[CustomBlockCallback](../README.md#customblockcallback) \| undefined\>
 
-*Defined in [index.ts:324](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L324)*
+*Defined in [types.ts:327](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L327)*
 
 Called for each custom block.
 
@@ -220,7 +220,7 @@ Called for each custom block.
 
 Name | Type |
 ------ | ------ |
-`block` | SFCBlock |
+`block` | [CustomBlock](customblock.md) |
 `filename` | string |
 `options` | [Options](options.md) |
 
@@ -249,7 +249,7 @@ ___
 
 ▸ **getFile**(`path`: string): Promise<[File](../README.md#file)\>
 
-*Defined in [index.ts:136](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L136)*
+*Defined in [types.ts:139](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L139)*
 
 Called by the library when it needs a file.
 
@@ -282,7 +282,7 @@ ___
 
 ▸ `Optional`**loadModule**(`path`: string, `options`: [Options](options.md)): Promise<[Module](module.md) \| undefined\>
 
-*Defined in [index.ts:295](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L295)*
+*Defined in [types.ts:298](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L298)*
 
 Called when the lib requires a module. Do return `undefined` to let the library handle this.
 
@@ -315,7 +315,7 @@ ___
 
 ▸ `Optional`**log**(`type`: string, ...`data`: any[]): void
 
-*Defined in [index.ts:274](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/6e3ae22/src/index.ts#L274)*
+*Defined in [types.ts:277](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L277)*
 
 Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
 
