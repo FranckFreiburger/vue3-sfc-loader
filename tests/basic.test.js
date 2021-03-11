@@ -578,7 +578,7 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 		});
 
 
-		test.only('error when using import/export in .js', async () => {
+		test('error when using import/export in .js', async () => {
 
 			const { page, output } = await createPage({
 				files: {
