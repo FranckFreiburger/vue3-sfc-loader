@@ -6,7 +6,6 @@ import {
 	compileTemplate as sfc_compileTemplate,
 	SFCAsyncStyleCompileOptions,
 	SFCTemplateCompileOptions,
-	SFCBlock
 } from '@vue/compiler-sfc'
 
 import {
