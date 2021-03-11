@@ -250,7 +250,7 @@ ${ pkg.name } v${ pkg.version }
 						loader: 'babel-loader',
 						options: {
 							compact: true,
-							sourceMaps: true,
+							sourceMaps: !noSourceMap,
 
 							presets: [
 
@@ -286,7 +286,7 @@ ${ pkg.name } v${ pkg.version }
 							configFile: Path.resolve(__dirname, 'tsconfig.json'),
 							onlyCompileBundledFiles: true,
 							compilerOptions: {
-								sourceMap: true,
+								sourceMap: !noSourceMap,
 								outDir: distPath,
 								declaration: true,
 								declarationDir: Path.resolve(distPath, 'types'),
