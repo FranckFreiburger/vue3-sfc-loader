@@ -1,17 +1,18 @@
 # vue3-sfc-loader
 
-Vue3 Single File Component loader.  
+Vue3/Vue2 Single File Component loader.  
 Load .vue files dynamically at runtime from your html/js. No node.js environment, no (webpack) build step needed.  
 
 
 ## Key Features
 
- * Only requires [Vue3 runtime](https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js)
+ * Only requires Vue runtime-only build
  * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Embedded ES6 modules support ( including `import()` )
  * SFC Custom Blocks support
  * Support custom CSS, HTML and Script language, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
+ * Also supports vue2 (see dist/vue2-sfc-loader.js)
  * You can [build your own version](#build-your-own-version) and easily customize browsers you need to support
 
 
@@ -85,7 +86,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-362kB-blue)<!--/update-min-gz-size-->](#dist)
   [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1398kB-blue)<!--/update-min-size-->](#dist)
   [![Snyk Vulnerabilities for vue3-sfc-loader](https://img.shields.io/snyk/vulnerabilities/github/FranckFreiburger/vue3-sfc-loader)](https://snyk.io/vuln/npm:vue3-sfc-loader)
+  
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
+  
   [![Vue3 compiler-sfc dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/@vue/compiler-sfc?label=embeds%20Vue3%20%40vue%2Fcompiler-sfc)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
   [![Vue2 vue-template-compiler dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/vue-template-compiler?label=embeds%20Vue2%20vue-template-compiler)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
 
@@ -123,10 +126,6 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   <!--  ask here: https://stackoverflow.com/questions/ask?tags=vue3-sfc-loader (see [previous questions](https://stackoverflow.com/questions/tagged/vue3-sfc-loader)) -->
   [:speech_balloon: ask in Discussions tab](https://github.com/FranckFreiburger/vue3-sfc-loader/discussions?discussions_q=category%3AQ%26A)
 
-
-## Previous version (for vue2)
-
-  see [http-vue-loader](https://github.com/FranckFreiburger/http-vue-loader) <sub>:zzz:</sub>
 
 #
 
