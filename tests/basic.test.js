@@ -4,7 +4,7 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 	{desc: "vue 2", vueVersion: 2, files: defaultFilesVue2},
 	{desc: "vue 3", vueVersion: 3, files: defaultFiles},
 ]
-.filter(({ vueVersion }) => !process.env.vueVersion || vueVersion === process.env.vueVersion )
+.filter(({ vueVersion }) => !process.env.vueVersion || vueVersion === Number(process.env.vueVersion) )
 .map(e => { console.log('tests vue ' + e.vueVersion); return e })
 .forEach(({desc, vueVersion, files}) => {
 	describe(desc, () => {
