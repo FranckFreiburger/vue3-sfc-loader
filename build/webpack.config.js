@@ -222,7 +222,7 @@ ${ pkg.name } v${ pkg.version }
 				} : {},
 
 				...isProd ? {
-					'debug': Path.resolve(__dirname, 'noopDebug.mjs'),
+					'debug': Path.resolve(__dirname, 'noopDebug.js'),
 				} : {},
 			},
 
