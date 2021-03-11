@@ -567,6 +567,33 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 
 					await page.close();
 				});
+
+
+		test.only('error when using import/export in .js', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+						'/test.js': `
+							export function test() {
+							}
+						`,
+						'/component.vue': `
+							<script>
+							  import './test.js'
+							</script>
+							<template>
+							</template>
+						`
+					}
+				});
+
+				await expect(output.filter(e => e.type === 'pageerror' && e.text).map(e => e.text)[0]).toMatch(`SyntaxError: 'import' and 'export' may appear only with 'sourceType: "module"'`);
+
+				await page.close();
+			});
+
+
 	});
 
 
