@@ -45,6 +45,7 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 
 		output: {
 			path: distPath,
+			clean: true,
 			filename: `vue${ vueVersion }-sfc-loader.js`,
 			library: {
 				type: 'umd',
