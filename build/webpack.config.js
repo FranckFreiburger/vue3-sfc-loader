@@ -34,7 +34,7 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 
 	const genSourcemap = false;
 
-	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, genSourcemap, vueVersion });
+	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, vueVersion });
 
 	return {
 		name,
