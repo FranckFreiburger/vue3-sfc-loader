@@ -78,7 +78,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const component = {};
 
 
-	const { delimiters, moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { delimiters, moduleCache, compiledCache, pathHandlers: { resolve }, getFile, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
@@ -102,7 +102,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
-		source: descriptor.template.content,
+		source: descriptor.template.src ? (await getFile(resolve(filename, descriptor.template.src))).content : descriptor.template.content,
 		filename: descriptor.filename,
 		isProd,
 		scoped: hasScoped,
@@ -120,6 +120,13 @@ export async function createSFCModule(source : string, filename : string, option
 	if ( descriptor.script || descriptor.scriptSetup ) {
 
 		// eg: https://github.com/vuejs/vue-loader/blob/6ed553f70b163031457acc961901313390cde9ef/src/index.ts#L136
+
+		// TBD: check if this is the right solution
+		if ( descriptor.script.src )
+			descriptor.script.content = (await getFile(resolve(filename, descriptor.script.src))).content;
+
+		// TBD: handle <script setup scr="...
+
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content ], async ({ preventCache }) => {
 
@@ -193,7 +200,7 @@ export async function createSFCModule(source : string, filename : string, option
 	if ( descriptor.template !== null ) {
 		// compiler-sfc src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L39
 		// compileTemplate eg: https://github.com/vuejs/vue-loader/blob/next/src/templateLoader.ts#L33
-		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, descriptor.template.content ], async ({ preventCache }) => {
+		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source ], async ({ preventCache }) => {
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 
@@ -230,12 +237,14 @@ export async function createSFCModule(source : string, filename : string, option
 		if ( descStyle.lang )
 			await loadModule(descStyle.lang, options);
 
-		const style = await withCache(compiledCache, [ componentHash, descStyle.content ], async ({ preventCache }) => {
+		const src = descStyle.src ? (await getFile(resolve(filename, descStyle.src))).content : descStyle.content;
+
+		const style = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 			const compiledStyle = await sfc_compileStyleAsync({
 				filename: descriptor.filename,
-				source: descStyle.content,
+				source: src,
 				isProd,
 				id: scopeId,
 				scoped: descStyle.scoped,

@@ -77,7 +77,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const component = {};
 
 
-	const { moduleCache, compiledCache, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { moduleCache, compiledCache, pathHandlers: { resolve }, getFile, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const descriptor = sfc_parse({
@@ -106,7 +106,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		source: descriptor.template.content,
+		source: descriptor.template.src ? (await getFile(resolve(filename, descriptor.template.src))).content : descriptor.template.content,
 		filename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
@@ -136,13 +136,15 @@ export async function createSFCModule(source : string, filename : string, option
 
 		// eg: https://github.com/vuejs/vue-loader/blob/v15.9.6/lib/index.js
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script.content ], async ({ preventCache }) => {
+		const src = descriptor.script.src ? (await getFile(resolve(filename, descriptor.script.src))).content : descriptor.script.content;
+
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
 
 			const babelParserPlugins : babel_ParserPlugin[] = [];
 
 			let ast: t.File
 			try {
-				ast = babel_parse(descriptor.script.content, {
+				ast = babel_parse(src, {
 					// doc: https://babeljs.io/docs/en/babel-parser#options
 					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
 					plugins: [
@@ -161,7 +163,7 @@ export async function createSFCModule(source : string, filename : string, option
 			const depsList = parseDeps(ast);
 
 			// doc: https://babeljs.io/docs/en/babel-core#transformfromastasync
-			const transformedScript = await babel_transformFromAstAsync(ast, descriptor.script.content, {
+			const transformedScript = await babel_transformFromAstAsync(ast, src, {
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
@@ -183,7 +185,7 @@ export async function createSFCModule(source : string, filename : string, option
 	if ( descriptor.template !== null ) {
 		// compiler-sfc src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L39
 		// compileTemplate eg: https://github.com/vuejs/vue-loader/blob/next/src/templateLoader.ts#L33
-		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, descriptor.template.content ], async ({ preventCache }) => {
+		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source ], async ({ preventCache }) => {
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 			// "@vue/component-compiler-utils" does NOT assume any module system, and expose render in global scope.
@@ -227,11 +229,13 @@ export async function createSFCModule(source : string, filename : string, option
 
 	for ( const descStyle of descriptor.styles ) {
 
-		const style = await withCache(compiledCache, [ componentHash, descStyle.content ], async ({ preventCache }) => {
+		const src = descStyle.src ? (await getFile(resolve(filename, descStyle.src))).content : descStyle.content;
+
+		const style = await withCache(compiledCache, [ componentHash, src, descStyle.lang ], async ({ preventCache }) => {
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 
 			const compileStyleOptions: StyleCompileOptions = {
-				source: descStyle.content,
+				source: src,
 				filename,
 				id: scopeId,
 				scoped: descStyle.scoped,
@@ -254,7 +258,7 @@ export async function createSFCModule(source : string, filename : string, option
 				preventCache();
 				for ( const err of compiledStyle.errors ) {
 
-					log?.('error', 'SFC style', formatError(err, filename, descStyle.content));
+					log?.('error', 'SFC style', formatError(err, filename, source));
 				}
 			}
 
