@@ -3,7 +3,7 @@ import { posix as Path } from 'path'
 import { createJSModule } from './tools'
 import { createSFCModule, vueVersion } from './createSFCModule'
 
-import { ModuleExport, ModuleHandler, PathHandlers, Options } from './types'
+import { ModuleExport, ModuleHandler, PathHandlers, Options, File } from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -117,11 +117,20 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		loadModule,
 	} = options_;
 
+
+	// TBD: remove this in v1.0
+	async function normalizedGetFile(path : string) : Promise<File> {
+
+		const res = await getFile(path);
+		return typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+	}
+
 	const options = {
 		moduleCache,
 		additionalModuleHandlers,
 		pathHandlers,
-		...options_
+		...options_,
+		getFile: normalizedGetFile,
 	};
 
 	if ( path in moduleCache ) {
@@ -142,9 +151,7 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 				return moduleCache[path] = module;
 		}
 
-		const res = await getFile(path);
-
-		const file = typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+		const file = await options.getFile(path);
 
 		const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
 

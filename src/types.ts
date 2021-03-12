@@ -55,10 +55,13 @@ export interface ModuleHandler {
 
 
 /**
- * Represents the content of the file or the content and the extension name.
+ * Represents a file content and the extension name.
  */
-export type File = string | { content : string, extname : string };
 
+ export interface File {
+ 	content : string,
+ 	extname : string,
+}
 
 /**
  * CustomBlockCallback function type
