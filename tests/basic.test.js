@@ -604,7 +604,7 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 
 
 
-		test.only('should handle src attribute', async () => {
+		test('should handle src attribute', async () => {
 
 			const { page, output } = await createPage({
 				files: {
