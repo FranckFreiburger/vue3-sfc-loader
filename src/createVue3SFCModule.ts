@@ -125,7 +125,7 @@ export async function createSFCModule(source : string, filename : string, option
 		if ( descriptor.script.src )
 			descriptor.script.content = (await getFile(resolve(filename, descriptor.script.src))).content;
 
-		// TBD: handle <script setup scr="...
+		// TBD: handle <script setup src="...
 
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content ], async ({ preventCache }) => {
