@@ -603,6 +603,52 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 		});
 
 
+
+		test.only('should handle src attribute', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+
+					'/template.html': `
+						<span class="test">
+							Hello {{ abc }} !
+						</span>
+					`,
+
+					'/styles.css': `
+						.test {
+							color: red
+						}
+					`,
+
+					'/script.js': `
+						export default {
+							data() {
+								return {
+									abc: "World"
+								}
+							}
+						}
+					`,
+
+					'/component.vue': `
+						<template src='./template.html'></template>
+						<style scoped src='./styles.css'></style>
+						<script src="./script.js"></script>
+					`
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
+			await expect(page.$eval('#app .test', el => JSON.parse(JSON.stringify(getComputedStyle(el))))).resolves.toMatchObject( { color: 'rgb(255, 0, 0)' } );
+
+			await page.close();
+		});
+
+
+
+
 	});
 
 
