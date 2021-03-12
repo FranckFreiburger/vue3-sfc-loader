@@ -77,7 +77,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const component = {};
 
 
-	const { moduleCache, compiledCache, pathHandlers: { resolve }, getFile, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { delimiters, moduleCache, compiledCache, pathHandlers: { resolve }, getFile, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const descriptor = sfc_parse({
@@ -110,6 +110,7 @@ export async function createSFCModule(source : string, filename : string, option
 		filename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
+			delimiters,
 			outputSourceRange: true,
 			scopeId: hasScoped ? scopeId : null,
 			comments: true
