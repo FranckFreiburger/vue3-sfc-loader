@@ -3,7 +3,7 @@ import { posix as Path } from 'path'
 import { createJSModule } from './tools'
 import { createSFCModule, vueVersion } from './createSFCModule'
 
-import { ModuleExport, ModuleHandler, PathHandlers, Options } from './types'
+import { ModuleExport, ModuleHandler, PathHandlers, Options, LangProcessor } from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -16,6 +16,30 @@ export const version : string = process.env.VERSION;
  */
 export { vueVersion } from './createSFCModule'
 
+/**
+ * Convert a function to template processor interface (consolidate)
+ */
+export function buildTemplateProcessor(processor: LangProcessor) {
+	return {
+		render: (source: string, preprocessOptions: string, cb: (_err : any, _res : any) => void) => {
+			try {
+				const ret = processor(source, preprocessOptions)
+				if (typeof ret === 'string') {
+					cb(null, ret)
+				} else {
+					ret.then(processed => {
+						cb(null, processed)
+					})
+					ret.catch(err => {
+						cb(err, null)
+					})
+				}
+			} catch (err) {
+				cb(err, null)
+			}
+		}
+	}
+}
 
 /**
  * @internal

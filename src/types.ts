@@ -30,6 +30,8 @@ export interface PathHandlers {
 }
 
 
+export type LangProcessor = (source: string, preprocessOptions?: any) => Promise<string> | string
+
 
 /**
  * Used by the library when it does not know how to handle a given file type (eg. `.json` files).
@@ -127,7 +129,7 @@ export interface Options {
  * ```javascript
  *	...
  *	async getFile(url) {
- *	
+ *
  *		const res = await fetch(url);
  *		if ( !res.ok )
  *			throw Object.assign(new Error(url+' '+res.statusText), { res });
@@ -161,13 +163,13 @@ export interface Options {
 	addStyle(style : string, scopeId : string | undefined) : void,
 
 /**
- * Sets the delimiters used for text interpolation within the template.  
+ * Sets the delimiters used for text interpolation within the template.
  * Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax.
  *
  *	```javascript
  *		...
  *		<script>
- *	
+ *
  *			// <!--
  *			const vueContent = `
  *				<template> Hello [[[[ who ]]]] !</template>
@@ -182,17 +184,17 @@ export interface Options {
  *				</script>
  *			`;
  *			// -->
- *	
+ *
  *			const options = {
  *				moduleCache: { vue: Vue },
  *				getFile: () => vueContent,
  *				addStyle: () => {},
  *				delimiters: ['[[[[', ']]]]'],
  *			}
- *	
+ *
  *			const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
  *			app.mount(document.body);
- *	
+ *
  *		</script>
  *		...
  *	```
@@ -232,24 +234,24 @@ export interface Options {
  *	...
  *	compiledCache: {
  *		set(key, str) {
- *	
+ *
  *			// naive storage space management
  *			for (;;) {
- *	
+ *
  *				try {
- *	
+ *
  *					// doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
  *					window.localStorage.setItem(key, str);
  *					break;
  *				} catch(ex) {
  *					// here we handle DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
- *	
+ *
  *					window.localStorage.removeItem(window.localStorage.key(0));
  *				}
  *			}
  *		},
  *		get(key) {
- *	
+ *
  *			return window.localStorage.getItem(key);
  *		},
  *	},
@@ -268,7 +270,7 @@ export interface Options {
  * ```javascript
  *	...
  *	log(type, ...args) {
- *	
+ *
  *		console.log(type, ...args);
  *	},
  *	...
@@ -288,7 +290,7 @@ export interface Options {
  * ```javascript
  *	...
  *	loadModule(path, options) {
- *	
+ *
  *		if ( path === 'vue' )
  *			return Vue;
  *		},
@@ -312,12 +314,12 @@ export interface Options {
  * ```javascript
  *	...
  *	customBlockHandler(block, filename, options) {
- *	
+ *
  *		if ( block.type !== 'i18n' )
  *			 return;
- *	
+ *
  *		return (component) => {
- *	
+ *
  *			component.i18n = JSON.parse(block.content);
  *		}
  *	}

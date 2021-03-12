@@ -536,6 +536,58 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 			await page.close();
 		});
 
+		test('custom template language with sync buildTemplateProcessor (sync)', async () => {
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/component.vue': `
+						<template lang="custom">
+							<span>Hello World !</span>
+						</template>
+					`,
+					'/optionsOverride.js': `
+						const { buildTemplateProcessor } = window['vue${vueVersion}-sfc-loader'];
+					
+						export default (options) => {
+							options.moduleCache.custom = buildTemplateProcessor(s => s.replace("Hello World !", "Custom Hello World !"))
+						};
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Custom Hello World !');
+
+			await page.close();
+		});
+
+		if (vueVersion !== 3) {
+			// Vue3 doesn't support async template engine
+			// https://github.com/vuejs/vue-next/blob/1fb6fbc8b8c8225441fb23918f128f7994c365ca/packages/compiler-sfc/src/compileTemplate.ts#L82-L85
+			test('custom template language with buildTemplateProcessor (async)', async () => {
+						const { page, output } = await createPage({
+							files: {
+								...files,
+								'/component.vue': `
+									<template lang="custom">
+										<span>Hello World !</span>
+									</template>
+								`,
+								'/optionsOverride.js': `
+									const { buildTemplateProcessor } = window['vue${vueVersion}-sfc-loader'];
+								
+									export default (options) => {
+										options.moduleCache.custom = buildTemplateProcessor(s => new Promise((resolve, reject) => {
+											resolve(s.replace("Hello World !", "Custom Hello World !"))
+									}))};
+								`,
+							}
+						});
+
+						await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Custom Hello World !');
+
+						await page.close();
+					});
+		}
 
 		test('custom style language', async () => {
 			const { page, output } = await createPage({
