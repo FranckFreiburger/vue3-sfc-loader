@@ -5,6 +5,15 @@ const mime = require('mime-types');
 
 const local = new URL('http://local/');
 
+// call: DEV=1 yarn run tests
+// place before page.close: await new Promise(() => {});
+//
+const isDev = !!JSON.parse(process.env.DEV ?? 0);
+
+if ( isDev )
+	jest.setTimeout(1e9);
+
+
 async function createPage({ files, processors= {}}) {
 
 	async function getFile(url) {
@@ -79,7 +88,7 @@ beforeAll(async () => {
 		return browser;
 
 	browser = await puppeteer.launch({
-		headless: true,
+		headless: !isDev,
 		pipe: true,
 		args: [
 			'--incognito',
