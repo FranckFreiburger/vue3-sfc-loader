@@ -5,7 +5,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 	{ desc: "vue 3", vueTarget: 3 },
 ]
 .filter(({ vueTarget }) => !process.env.vueTarget || vueTarget === Number(process.env.vueTarget) )
-.map(e => { console.log('tests vue ' + e.vueTarget); return e })
 .forEach(({ desc, vueTarget }) => {
 	describe(desc, () => {
 
