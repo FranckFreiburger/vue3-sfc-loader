@@ -1,14 +1,15 @@
-const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js');
+const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 [
-	{desc: "vue 2", vueTarget: 2, files: defaultFilesVue2},
-	{desc: "vue 3", vueTarget: 3, files: defaultFiles},
+	{ desc: "vue 2", vueTarget: 2 },
+	{ desc: "vue 3", vueTarget: 3 },
 ]
 .filter(({ vueTarget }) => !process.env.vueTarget || vueTarget === Number(process.env.vueTarget) )
 .map(e => { console.log('tests vue ' + e.vueTarget); return e })
-.forEach(({desc, vueTarget, files}) => {
+.forEach(({ desc, vueTarget }) => {
 	describe(desc, () => {
 
+		const files = defaultFilesFactory({ vueTarget });
 
 		test('text-only template', async () => {
 

@@ -108,9 +108,12 @@ afterAll(async () => {
 });
 
 
-const defaultFiles = {
-	'/vue3-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue3-sfc-loader.js'), { encoding: 'utf-8' }),
-	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue/dist/vue.global.js'), { encoding: 'utf-8' }),
+const defaultFilesFactory = ({ vueTarget }) => ({
+
+	[`/vue${ vueTarget }-sfc-loader.js`]: Fs.readFileSync(Path.join(__dirname, `../dist/vue${ vueTarget }-sfc-loader.js`), { encoding: 'utf-8' }),
+
+	'/vue': Fs.readFileSync(Path.join(__dirname, [,,'../node_modules/vue2/dist/vue.runtime.js','../node_modules/vue/dist/vue.global.js'][vueTarget]), { encoding: 'utf-8' }),
+
 	'/options.js': `
 
 		class HttpError extends Error {
@@ -157,9 +160,12 @@ const defaultFiles = {
 
 		export default options;
 	`,
+
+
 	'/optionsOverride.js': `
 		export default () => {};
 	`,
+
 	'/boot.js': `
 		export default ({ options, createApp, mountApp }) => createApp(options).then(app => mountApp(app));
 	`,
@@ -168,7 +174,7 @@ const defaultFiles = {
 		<!DOCTYPE html>
 		<html><body>
 			<script src="vue"></script>
-			<script src="vue3-sfc-loader.js"></script>
+			<script src="vue${ vueTarget }-sfc-loader.js"></script>
 			<!-- scripts -->
 			<script type="module">
 
@@ -176,78 +182,59 @@ const defaultFiles = {
 				import options from '/options.js'
 				import optionsOverride from '/optionsOverride.js'
 
-				const { loadModule } = window['vue3-sfc-loader'];
+				const { loadModule } = window['vue${ vueTarget }-sfc-loader'];
 
 				function createApp(options) {
 
-					return loadModule('./component.vue', options).then((component) => Vue.createApp(component));
+					switch ( ${ vueTarget } ) {
+						case 3: {
+
+							return loadModule('./component.vue', options).then((component) => Vue.createApp(component));
+						}
+
+						case 2: {
+
+							return loadModule('./component.vue', options).then((component) => new Vue(component));
+						}
+					}
 				}
 
 				function mountApp(app, eltId = 'app') {
 
-					if ( !document.getElementById(eltId) ) {
+					switch ( ${ vueTarget } ) {
+						case 3: {
 
-						const parent = document.body;
-						const elt = document.createElement('div');
-						elt.id = eltId;
-						parent.insertBefore(elt, parent.firstChild);
+							if ( !document.getElementById(eltId) ) {
+
+								const parent = document.body;
+								const elt = document.createElement('div');
+								elt.id = eltId;
+								parent.insertBefore(elt, parent.firstChild);
+							}
+
+							return app.mount('#' + eltId);
+						}
+
+						case 2: {
+
+							const mountElId = eltId + 'Mount';
+
+							if ( !document.getElementById(mountElId) ) {
+
+								const parent = document.body;
+								const appElt = document.createElement('div');
+								appElt.id = eltId;
+
+								const mountElt = document.createElement('div');
+								mountElt.id = mountElId;
+
+								appElt.insertBefore(mountElt, appElt.firstChild);
+								parent.insertBefore(appElt, parent.firstChild);
+							}
+
+							return app.$mount('#' + mountElId);
+						}
 					}
-
-					return app.mount('#' + eltId);
-				}
-				
-				optionsOverride(options)
-
-				boot({ options, createApp, mountApp, Vue })
-				.then(app => app.$el.parentNode.vueApp = app);
-
-				//window._done && window._done();
-
-			</script>
-		</body></html>
-	`
-}
-
-const defaultFilesVue2 = {
-	'/vue2-sfc-loader.js': Fs.readFileSync(Path.join(__dirname, '../dist/vue2-sfc-loader.js'), { encoding: 'utf-8' }),
-	'/vue': Fs.readFileSync(Path.join(__dirname, '../node_modules/vue2/dist/vue.runtime.js'), { encoding: 'utf-8' }),
-	'/options.js': defaultFiles['/options.js'],
-	'/optionsOverride.js': defaultFiles['/optionsOverride.js'],
-	'/boot.js': defaultFiles['/boot.js'],
-	'/index.html': `
-		<!DOCTYPE html>
-		<html><body>
-			<script src="vue"></script>
-			<script src="vue2-sfc-loader.js"></script>
-			<!-- scripts -->
-			<script type="module">
-			
-				import boot from '/boot.js'
-				import options from '/options.js'
-				import optionsOverride from '/optionsOverride.js'
-
-				const { loadModule } = window['vue2-sfc-loader'];
-
-				function createApp(options) {
-					return loadModule('./component.vue', options).then((component) => new Vue(component));
-				}
-
-				function mountApp(app, eltId = 'app') {
-				  
-				  const mountElId = eltId + 'Mount'
-					if ( !document.getElementById(mountElId) ) {
-						const parent = document.body;
-						const appElt = document.createElement('div');
-						appElt.id = eltId;
-						
-						const mountElt = document.createElement('div');
-						mountElt.id = mountElId;
-						
-						appElt.insertBefore(mountElt, appElt.firstChild);
-						parent.insertBefore(appElt, parent.firstChild);		
-					}
-
-					return app.$mount('#' + mountElId);
 				}
 
 				optionsOverride(options)
@@ -259,11 +246,11 @@ const defaultFilesVue2 = {
 
 			</script>
 		</body></html>
-	`
-}
+	`,
+});
+
 
 module.exports = {
-	defaultFiles,
-	defaultFilesVue2,
+	defaultFilesFactory,
 	createPage,
 }
