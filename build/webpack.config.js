@@ -30,14 +30,20 @@ const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', confi
 		noPresetEnv = !isProd,
 		noCompress = !isProd,
 		noSourceMap = !isProd,
+		libraryTargetModule = false,
 	} = env;
 
 	const genSourcemap = false;
 
-	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, vueTarget });
+	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, libraryTargetModule, vueTarget });
 
 	return {
 		name,
+
+		experiments: {
+			outputModule: libraryTargetModule,
+		},
+
 		entry: [
 			'regenerator-runtime',
 			Path.resolve(__dirname, '../src/index.ts'),
@@ -46,9 +52,15 @@ const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', confi
 		output: {
 			path: distPath,
 			filename: `vue${ vueTarget }-sfc-loader.js`,
-			library: {
-				type: 'umd',
-				name: `vue${ vueTarget }-sfc-loader`,
+			...libraryTargetModule ? {
+
+				libraryTarget: 'module',
+			} : {
+
+				library: {
+					type: 'umd',
+					name: `vue${ vueTarget }-sfc-loader`,
+				},
 			},
 			environment: {
 				// doc: https://webpack.js.org/configuration/output/#outputenvironment
