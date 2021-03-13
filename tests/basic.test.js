@@ -657,7 +657,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				}
 			});
 
-			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(/.*[CDATA[10]].*/);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch('[CDATA[10]]');
 		});
 
 
