@@ -778,7 +778,27 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 
 		if ( vueTarget === 2 ) { // Vue3 is not concerned
 
-		test.only('should pass vue-template-es2015-compiler test "trailing function comma"', async () => {
+			test('should pass vue-template-es2015-compiler test "trailing function comma"', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+
+						'/component.vue': `
+							<template>
+								<button @click="spy(1,)" />
+							</template>
+						`,
+					}
+				});
+
+				await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`return _vm.spy(1);`);
+				await page.close();
+			});
+		}
+
+
+		test('should pass vue-template-es2015-compiler test "v-model code"', async () => {
 
 			const { page, output } = await createPage({
 				files: {
@@ -786,13 +806,23 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 
 					'/component.vue': `
 						<template>
-							<button @click="spy(1,)" />
+							 <input v-model="text" />
 						</template>
+						<script>
+							export default {
+								data() {
+
+									return {
+										text: 'foo'
+									}
+								}
+							}
+						</script>
 					`,
 				}
 			});
 
-			await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`return _vm.spy(1);`);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`<input>`);
 			await page.close();
 		});
 
