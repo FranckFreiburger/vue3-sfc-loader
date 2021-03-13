@@ -648,6 +648,40 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 
 
 
+		test('should properly include svg image', async () => {
+
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+
+					'/image.svg': `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 125 80">
+  <text y="75" font-size="100" font-family="serif"><![CDATA[10]]></text>
+</svg>
+					`.trim(),
+
+					'/component.vue': `
+						<template>
+							<img :src="require('./image.svg')">
+						</template>
+					`,
+					'/optionsOverride.js': `
+						export default (options) => {
+
+							options.additionalModuleHandlers = {
+								'.svg': (source, path, options) => 'data:image/svg+xml,' + source,
+							};
+						};
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(/.*[CDATA[10]].*/);
+			await page.close();
+		});
+
+
 
 	});
 
