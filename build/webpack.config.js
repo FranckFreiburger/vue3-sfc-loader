@@ -16,7 +16,7 @@ const pkg = require('../package.json');
 
 const distPath = Path.resolve(__dirname, '..', 'dist');
 
-const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', configName }) => {
+const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', configName }) => {
 	if (configName && !configName.includes(name)) {
 		return {name}
 	}
@@ -34,7 +34,7 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 
 	const genSourcemap = false;
 
-	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, vueVersion });
+	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, vueTarget });
 
 	return {
 		name,
@@ -45,10 +45,10 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 
 		output: {
 			path: distPath,
-			filename: `vue${ vueVersion }-sfc-loader.js`,
+			filename: `vue${ vueTarget }-sfc-loader.js`,
 			library: {
 				type: 'umd',
-				name: `vue${ vueVersion }-sfc-loader`,
+				name: `vue${ vueTarget }-sfc-loader`,
 			},
 			environment: {
 				// doc: https://webpack.js.org/configuration/output/#outputenvironment
@@ -153,7 +153,7 @@ const configure = ({name, vueVersion}) => (env = {}, { mode = 'production', conf
 					// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
 					analyzerMode: 'static',
 					openAnalyzer: false,
-					reportFilename: `vue${ vueVersion }-sfc-loader.report.html`
+					reportFilename: `vue${ vueTarget }-sfc-loader.report.html`
 				})
 			] : [],
 
@@ -170,7 +170,7 @@ ${ pkg.name } v${ pkg.version }
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
-				'./createSFCModule': `./createVue${ vueVersion }SFCModule`,
+				'./createSFCModule': `./createVue${ vueTarget }SFCModule`,
 
 				// dedupe (see DuplicatePackageCheckerPlugin result)
 				'bn.js': require.resolve('bn.js'),
@@ -307,8 +307,8 @@ ${ pkg.name } v${ pkg.version }
 }
 
 let configs = [
-	{name: 'vue2', vueVersion: '2' },
-	{name: 'vue3', vueVersion: '3' }
+	{name: 'vue2', vueTarget: '2' },
+	{name: 'vue3', vueTarget: '3' }
 ]
 
 module.exports = configs.map(configure)
