@@ -198,7 +198,8 @@ const defaultFiles = {
 				
 				optionsOverride(options)
 
-				boot({ options, createApp, mountApp, Vue });
+				boot({ options, createApp, mountApp, Vue })
+				.then(app => app.$el.parentNode.vueApp = app);
 
 				//window._done && window._done();
 
@@ -251,7 +252,8 @@ const defaultFilesVue2 = {
 
 				optionsOverride(options)
 
-				boot({ options, createApp, mountApp, Vue });
+				boot({ options, createApp, mountApp, Vue })
+				.then(app => app.$el.parentNode.vueApp = app);
 
 				//window._done && window._done();
 

@@ -682,6 +682,120 @@ const { defaultFilesVue2, defaultFiles, createPage } = require('./testsTools.js'
 		});
 
 
+		// https://github.com/vuejs/vue-template-es2015-compiler/blob/master/test.js
+
+		test('should pass vue-template-es2015-compiler test "should work"', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+
+					'/component.vue': `
+						<template>
+							<div><div>{{ foo }}</div><div v-for="{ name } in items">{{ name }}</div><div v-bind="{ ...a, ...b }"/></div>
+						</template>
+						<script>
+							export default {
+								data() {
+
+									return {
+										foo: 'hello',
+										items: [
+											{ name: 'foo' },
+											{ name: 'bar' }
+										],
+										a: { id: 'foo' },
+										b: { class: 'bar' }
+									}
+								}
+							}
+						</script>
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`<div><div>hello</div><div>foo</div><div>bar</div><div id="foo" class="bar"></div></div>`);
+			await page.close();
+		});
+
+
+		test('should pass vue-template-es2015-compiler test "arg spread"', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+
+					'/component.vue': `
+						<template>
+							 <button @click="(...args) => { store.foo(...args) }">Go</button>
+						</template>
+					`,
+				}
+			});
+
+			// original Vue2 expected match: `_vm.store.foo.apply(_vm.store, args)`
+			// Vue3 expected match: `_ctx.store.foo(...args)`
+			await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`.store.foo(...args)`);
+			await page.close();
+		});
+
+
+		if ( vueTarget === 2 ) { // Vue 3 has no $scopedSlots
+
+			test('should pass vue-template-es2015-compiler test "rest spread in scope position"', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+
+						'/component.vue': `
+							<template>
+								<foo v-slot="{ foo, ...rest }">{{ rest }}</foo>
+							</template>
+							<script>
+								export default {
+									components: {
+										foo: {
+											render(h) {
+												return h('div', this.$scopedSlots.default({
+													foo: 1,
+													bar: 2,
+													baz: 3
+												}))
+											}
+										}
+									}
+								}
+							</script>
+						`,
+					}
+				});
+
+				await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch( JSON.stringify({ bar: 2, baz: 3 }, null, 2));
+				await page.close();
+			});
+		}
+
+		if ( vueTarget === 2 ) { // Vue3 is not concerned
+
+		test.only('should pass vue-template-es2015-compiler test "trailing function comma"', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+
+					'/component.vue': `
+						<template>
+							<button @click="spy(1,)" />
+						</template>
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`return _vm.spy(1);`);
+			await page.close();
+		});
+
 
 	});
 
