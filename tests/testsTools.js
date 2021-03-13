@@ -60,15 +60,27 @@ async function createPage({ files, processors= {}}) {
 	const output = [];
 
 	page.on('console', async msg => {
-		console.log("console", msg)
-		output.push({ type: msg.type(), text: msg.text(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) })
+
+		const entry = { type: msg.type(), text: msg.text(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) };
+		if ( isDev )
+			console.log(entry);
+		output.push(entry);
 	} );
+
 	page.on('pageerror', error => {
-		console.log("pageerror", error)
-		output.push({ type: 'pageerror', text: error.message, content: error })
+
+		// Emitted when an uncaught exception happens within the page.
+
+		const entry = { type: 'pageerror', text: error.message, content: error };
+		console.log(entry);
+		output.push(entry);
 	} );
+
 	page.on('error', msg => {
-		console.log('error', msg)
+
+		// Emitted when the page crashes.
+
+		console.log('error', msg);
 	});
 
 	//page.done = new Promise(resolve => page.exposeFunction('_done', resolve));
