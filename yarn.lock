@@ -6453,10 +6453,10 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-loader@^8.0.17:
-  version "8.0.17"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-8.0.17.tgz#98f2ccff9130074f4079fd89b946b4c637b1f2fc"
-  integrity sha512-OeVfSshx6ot/TCxRwpBHQ/4lRzfgyTkvi7ghDVrLXOHzTbSK413ROgu/xNqM72i3AFeAIJgQy78FwSMKmOW68w==
+ts-loader@^8.0.18:
+  version "8.0.18"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-8.0.18.tgz#b2385cbe81c34ad9f997915129cdde3ad92a61ea"
+  integrity sha512-hRZzkydPX30XkLaQwJTDcWDoxZHK6IrEMDQpNd7tgcakFruFkeUp/aY+9hBb7BUGb+ZWKI0jiOGMo0MckwzdDQ==
   dependencies:
     chalk "^4.1.0"
     enhanced-resolve "^4.0.0"
@@ -6843,10 +6843,10 @@ webpack-sources@^2.1.1:
     source-list-map "^2.0.1"
     source-map "^0.6.1"
 
-webpack@^5.24.4:
-  version "5.24.4"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.24.4.tgz#37d8cf95841dd23c809ea02931294b3455d74a59"
-  integrity sha512-RXOdxF9hFFFhg47BryCgyFrEyyu7Y/75/uiI2DoUiTMqysK+WczVSTppvkR47oZcmI/DPaXCiCiaXBP8QjkNpA==
+webpack@^5.25.0:
+  version "5.25.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-5.25.0.tgz#f9409977f0f3b6d4b9c4f73adc7d7cb9603a09e9"
+  integrity sha512-jqQZopNCzt9c4K6Qa7j6kIhzHfR9wgF84go58VoNp4JbZrBr2D2l5lcv72CW80yc6NJl8CR6OY8xctnIs0r2uw==
   dependencies:
     "@types/eslint-scope" "^3.7.0"
     "@types/estree" "^0.0.46"
