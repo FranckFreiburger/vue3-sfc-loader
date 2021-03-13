@@ -444,7 +444,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 								}
 							}
 
-							createApp(options).then(app => mountApp(app));
+							return createApp(options).then(app => mountApp(app));
 						}
 					`
 				}
@@ -491,7 +491,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 								}
 							});
 
-							createApp(options).then((app) => {
+							return createApp(options).then((app) => {
 								mountApp(app, 'elt1')
 
 								options.moduleCache = {
