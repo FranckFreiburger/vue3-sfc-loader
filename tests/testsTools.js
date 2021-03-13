@@ -5,14 +5,17 @@ const mime = require('mime-types');
 
 const local = new URL('http://local/');
 
-// call: DEV=1 yarn run tests
-// place before page.close: await new Promise(() => {});
-//
+// DEV
+// 1/ call: DEV=1 yarn run tests
+// 2/ use test.only(
+
 const isDev = !!JSON.parse(process.env.DEV ?? 0);
 
 if ( isDev )
 	jest.setTimeout(1e9);
 
+
+const pendingPages = [];
 
 async function createPage({ files, processors= {}}) {
 
@@ -89,8 +92,29 @@ async function createPage({ files, processors= {}}) {
 
 	await new Promise(resolve => setTimeout(resolve, 250));
 
+	pendingPages.push(page);
+
 	return { page, output };
 }
+
+
+// close all pending pages from previous test
+beforeEach(async () => {
+
+	await Promise.all(pendingPages.map(e => e.isClosed() ? undefined : e.close()));
+	pendingPages.length = 0;
+
+});
+
+
+// if dev, suspend on first test
+afterEach(async () => {
+
+	if ( isDev )
+		await new Promise(() => {});
+
+});
+
 
 let browser;
 

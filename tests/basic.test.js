@@ -24,7 +24,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
 
-			await page.close();
 		});
 
 
@@ -45,7 +44,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC template')).toBe(true);
 			//await new Promise(resolve => page.on('consoleValues', ({ type, args }) => type === 'error' && args[0] === 'SFC template' && resolve() ));
 
-			await page.close();
 		});
 
 
@@ -69,7 +67,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC style')).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -88,7 +85,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC script')).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -116,7 +112,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
 			await expect(!output.some(e => e.type === 'error')).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -135,7 +130,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.filter(e => e.type === 'pageerror' && e.text).map(e => e.text)[0]).toMatch(/.*HTTP Error.*/);
 
-			await page.close();
 		});
 
 
@@ -163,7 +157,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			)).resolves.toBe(true);
 
-			await page.close();
 		});
 
 
@@ -191,7 +184,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			)).resolves.toBe(false);
 
-			await page.close();
 		});
 
 
@@ -225,7 +217,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -259,7 +250,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -293,7 +283,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -329,7 +318,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.some(e => e.type === 'log' && e.content[0] === 'test_ok' )).toBe(true);
 
-			await page.close();
 		});
 
 
@@ -387,7 +375,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			expect(await page.content()).toEqual(expect.stringContaining('<span><span>foo (<span>bar (test)</span>)</span></span>'));
 
-			await page.close();
 		});
 
 
@@ -408,7 +395,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('error,done');
 
-			await page.close();
 		});
 
 
@@ -451,7 +437,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('foo,bar,baz');
 
-			await page.close();
 		});
 
 
@@ -508,7 +493,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			expect(output.filter(e => e.type === 'log').map(e => e.content).flat().join(',')).toBe('cache.get,cache.set,mounted,cache.get,mounted');
 
-			await page.close();
 		});
 
 
@@ -533,7 +517,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Custom Hello World !');
 
-			await page.close();
 		});
 
 
@@ -574,7 +557,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				}))
 				.resolves.toMatch(/\.hello-world.*/);
 
-			await page.close();
 		});
 
 
@@ -599,7 +581,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			await expect(output.filter(e => e.type === 'pageerror' && e.text).map(e => e.text)[0]).toMatch(`SyntaxError: 'import' and 'export' may appear only with 'sourceType: "module"'`);
 
-			await page.close();
 		});
 
 
@@ -643,7 +624,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
 			await expect(page.$eval('#app .test', el => JSON.parse(JSON.stringify(getComputedStyle(el))))).resolves.toMatchObject( { color: 'rgb(255, 0, 0)' } );
 
-			await page.close();
 		});
 
 
@@ -678,7 +658,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 
 			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(/.*[CDATA[10]].*/);
-			await page.close();
 		});
 
 
@@ -715,7 +694,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 
 			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`<div><div>hello</div><div>foo</div><div>bar</div><div id="foo" class="bar"></div></div>`);
-			await page.close();
 		});
 
 
@@ -736,7 +714,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			// original Vue2 expected match: `_vm.store.foo.apply(_vm.store, args)`
 			// Vue3 expected match: `_ctx.store.foo(...args)`
 			await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`.store.foo(...args)`);
-			await page.close();
 		});
 
 
@@ -772,7 +749,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				});
 
 				await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch( JSON.stringify({ bar: 2, baz: 3 }, null, 2));
-				await page.close();
 			});
 		}
 
@@ -793,7 +769,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				});
 
 				await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`return _vm.spy(1);`);
-				await page.close();
 			});
 		}
 
@@ -823,7 +798,6 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 
 			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`<input>`);
-			await page.close();
 		});
 
 
