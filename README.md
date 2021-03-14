@@ -11,9 +11,10 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Embedded ES6 modules support ( including `import()` )
  * SFC Custom Blocks support
- * Support custom CSS, HTML and Script language, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
+ * JSX support
+ * Custom CSS, HTML and Script language Support, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
- * You can [build your own version](#build-your-own-version) and easily customize browsers you need to support
+ * Easily [build your own version](#build-your-own-version) and customize browsers you need to support
 
 
 ## Example
@@ -82,9 +83,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 ## dist/
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=latest%20version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
-  [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-286kB-blue)<!--/update-min-br-size-->](#dist)
-  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-362kB-blue)<!--/update-min-gz-size-->](#dist)
-  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1398kB-blue)<!--/update-min-size-->](#dist)
+  [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-284kB-blue)<!--/update-min-br-size-->](#dist)
+  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-359kB-blue)<!--/update-min-gz-size-->](#dist)
+  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1395kB-blue)<!--/update-min-size-->](#dist)
   [![Snyk Vulnerabilities for vue3-sfc-loader](https://img.shields.io/snyk/vulnerabilities/github/FranckFreiburger/vue3-sfc-loader)](https://snyk.io/vuln/npm:vue3-sfc-loader)
   
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
