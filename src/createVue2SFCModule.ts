@@ -23,6 +23,11 @@ import {
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
+// https://github.com/vuejs/jsx
+// @ts-ignore
+import jsx from '@vue/babel-plugin-transform-vue-jsx'
+// @ts-ignore
+import babelSugarInjectH from '@vue/babel-sugar-inject-h'
 
 import {
 	formatError,
@@ -153,6 +158,7 @@ export async function createSFCModule(source : string, filename : string, option
 					// doc: https://babeljs.io/docs/en/babel-parser#options
 					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
 					plugins: [
+						'jsx',
 						...babelParserPlugins
 					],
 					sourceType: 'module',
@@ -172,6 +178,8 @@ export async function createSFCModule(source : string, filename : string, option
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
+					jsx,
+					babelSugarInjectH,
 					...additionalBabelPlugins,
 				],
 				babelrc: false,
