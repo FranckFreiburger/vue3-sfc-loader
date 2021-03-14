@@ -801,6 +801,27 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 		});
 
 
+		test('should handle JSX', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/component.vue': `
+						<script>
+							export default {
+								render() {
+									return <div>123</div>;
+								},
+							}
+						</script>
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch('123');
+		});
+
+
 	});
 
 
