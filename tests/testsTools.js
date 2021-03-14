@@ -66,7 +66,7 @@ async function createPage({ files, processors= {}}) {
 
 		const entry = { type: msg.type(), text: msg.text(), content: await Promise.all( msg.args().map(e => e.jsonValue()) ) };
 		if ( isDev )
-			console.log(entry);
+			console.log(expect.getState().currentTestName, entry);
 		output.push(entry);
 	} );
 
@@ -75,7 +75,7 @@ async function createPage({ files, processors= {}}) {
 		// Emitted when an uncaught exception happens within the page.
 
 		const entry = { type: 'pageerror', text: error.message, content: error };
-		console.log(entry);
+		console.log(expect.getState().currentTestName, entry);
 		output.push(entry);
 	} );
 
@@ -83,7 +83,7 @@ async function createPage({ files, processors= {}}) {
 
 		// Emitted when the page crashes.
 
-		console.log('error', msg);
+		console.log(expect.getState().currentTestName, 'error', msg);
 	});
 
 	//page.done = new Promise(resolve => page.exposeFunction('_done', resolve));
