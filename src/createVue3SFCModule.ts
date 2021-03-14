@@ -27,6 +27,9 @@ import {
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
+// https://github.com/vuejs/jsx-next
+import jsx from '@vue/babel-plugin-jsx'
+
 import {
 	formatErrorLineColumn,
 	formatError,
@@ -182,6 +185,7 @@ export async function createSFCModule(source : string, filename : string, option
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
+					jsx,
 					...additionalBabelPlugins,
 				],
 				babelrc: false,
