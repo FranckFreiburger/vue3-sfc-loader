@@ -144,9 +144,12 @@ export async function createSFCModule(source : string, filename : string, option
 			});
 
 			let ast;
-			if ( !scriptBlock.scriptAst ) {
+			if ( true /*!scriptBlock.scriptAst*/ ) {
 
-				// need to re-parse because script compilation errors are not reported by sfc_compileScript
+				// need to re-parse because
+				// - script compilation errors are not reported by sfc_compileScript
+				// - scriptAst does not contain cssVars & inheritAttrsFlag
+				//
 				try {
 
 					ast = babel_parse(scriptBlock.content, {
