@@ -15,7 +15,7 @@
     "url": "https://franck-freiburger.com/"
   },
   "license": "MIT",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead, not ie 11",
   "main": "dist/vue3-sfc-loader.js",
   "scripts": {

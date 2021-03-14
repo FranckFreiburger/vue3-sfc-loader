@@ -1,4 +1,11 @@
 
+### [0.4.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.2...v0.4.3) (2021-03-14)
+
+
+### Bug Fixes
+
+* **core:** cssVars support ([f112c45](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/f112c451f0cb95b0fa17e4876f2ebb6ac60cf884))
+
 ### [0.4.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.1...v0.4.2) (2021-03-14)
 
 
