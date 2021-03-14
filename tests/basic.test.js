@@ -822,6 +822,46 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 		});
 
 
+		if ( vueTarget === 3 ) { // Vue 2 does not handle cssVars
+
+			test.only('should handle cssVars', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+
+						'/component.vue': `
+
+							<template>
+							  Hello <span class="example">{{ msg }}</span>
+							</template>
+							<script>
+							  export default {
+							    data () {
+							      return {
+							        msg: 'World !',
+							        color: 'blue',
+							      }
+							    }
+							  }
+							</script>
+							<style scoped>
+							  .example {
+							    color: v-bind('color')
+							  }
+							</style>
+
+						`
+					}
+				});
+
+				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
+				await expect(page.$eval('#app .example', el => JSON.parse(JSON.stringify(getComputedStyle(el))))).resolves.toMatchObject( { color: 'rgb(0, 0, 255)' } );
+
+			});
+		}
+
+
 	});
 
 
