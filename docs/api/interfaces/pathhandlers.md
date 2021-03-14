@@ -21,7 +21,7 @@
 
 ▸ **extname**(`filepath`: string): string
 
-*Defined in [types.ts:25](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L25)*
+*Defined in [types.ts:25](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L25)*
 
 #### Parameters:
 
@@ -37,7 +37,7 @@ ___
 
 ▸ **resolve**(`absoluteFilepath`: string, `dependencyPath`: string): string
 
-*Defined in [types.ts:29](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L29)*
+*Defined in [types.ts:29](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L29)*
 
 #### Parameters:
 

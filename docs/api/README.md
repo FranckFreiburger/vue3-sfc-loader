@@ -10,6 +10,7 @@
 
 * [Cache](interfaces/cache.md)
 * [CustomBlock](interfaces/customblock.md)
+* [File](interfaces/file.md)
 * [Module](interfaces/module.md)
 * [ModuleExport](interfaces/moduleexport.md)
 * [ModuleHandler](interfaces/modulehandler.md)
@@ -19,7 +20,6 @@
 ### Type aliases
 
 * [CustomBlockCallback](README.md#customblockcallback)
-* [File](README.md#file)
 * [LoadModule](README.md#loadmodule)
 
 ### Variables
@@ -42,19 +42,9 @@
 
 Ƭ  **CustomBlockCallback**: (component: [ModuleExport](interfaces/moduleexport.md)) => void
 
-*Defined in [types.ts:66](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L66)*
+*Defined in [types.ts:69](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L69)*
 
 CustomBlockCallback function type
-
-___
-
-### File
-
-Ƭ  **File**: string \| { content: string ; extname: string  }
-
-*Defined in [types.ts:60](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L60)*
-
-Represents the content of the file or the content and the extension name.
 
 ___
 
@@ -62,7 +52,7 @@ ___
 
 Ƭ  **LoadModule**: (path: string, options: [Options](interfaces/options.md)) => Promise<[ModuleExport](interfaces/moduleexport.md)\>
 
-*Defined in [types.ts:332](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/types.ts#L332)*
+*Defined in [types.ts:335](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L335)*
 
 ## Variables
 
@@ -70,9 +60,9 @@ ___
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [tools.ts:39](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/tools.ts#L39)*
+*Defined in [tools.ts:39](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/tools.ts#L39)*
 
-*Defined in [index.ts:11](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/index.ts#L11)*
+*Defined in [index.ts:11](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/index.ts#L11)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -82,7 +72,7 @@ ___
 
 • `Const` **vueVersion**: string
 
-*Defined in [createSFCModule.ts:4](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/createSFCModule.ts#L4)*
+*Defined in [createSFCModule.ts:4](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/createSFCModule.ts#L4)*
 
 ## Functions
 
@@ -90,7 +80,7 @@ ___
 
 ▸ **createSFCModule**(`source`: string, `filename`: string, `options`: [Options](interfaces/options.md), `loadModule`: [LoadModule](README.md#loadmodule)): Promise<[ModuleExport](interfaces/moduleexport.md)\>
 
-*Defined in [createSFCModule.ts:3](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/createSFCModule.ts#L3)*
+*Defined in [createSFCModule.ts:3](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/createSFCModule.ts#L3)*
 
 #### Parameters:
 
@@ -109,7 +99,7 @@ ___
 
 ▸ **loadModule**(`path`: string, `options_?`: [Options](interfaces/options.md)): Promise<[ModuleExport](interfaces/moduleexport.md)\>
 
-*Defined in [index.ts:109](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/index.ts#L109)*
+*Defined in [index.ts:109](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/index.ts#L109)*
 
 This is the main function.
 This function is intended to be used only to load the entry point of your application.
@@ -119,7 +109,7 @@ If for some reason you need to use it in your components, be sure to share at le
 
 Name | Type | Default value | Description |
 ------ | ------ | ------ | ------ |
-`path` | string | - | The path of the `.vue` file. If path is not a path (eg. an string ID), your [getFile](interfaces/options.md#getfile) function must return a [File](README.md#file) object. |
+`path` | string | - | The path of the `.vue` file. If path is not a path (eg. an string ID), your [getFile](interfaces/options.md#getfile) function must return a [File](interfaces/file.md) object. |
 `options_` | [Options](interfaces/options.md) | throwNotDefined('options') | - |
 
 **Returns:** Promise<[ModuleExport](interfaces/moduleexport.md)\>
@@ -163,7 +153,7 @@ A Promise of the component
 
 ▪ `Const` **defaultPathHandlers**: object
 
-*Defined in [index.ts:56](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e87df0d/src/index.ts#L56)*
+*Defined in [index.ts:56](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/index.ts#L56)*
 
 Default implementation of PathHandlers
 
