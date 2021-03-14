@@ -1,4 +1,17 @@
 
+### [0.4.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.1...v0.4.2) (2021-03-14)
+
+
+### Features
+
+* **core:** allow output bundle as es6 module (yarn run build --env libraryTargetModule) ([2cbe3e5](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/2cbe3e5f562ad08167f92fd2f1d4c4976feaa5b7))
+
+
+### Bug Fixes
+
+* **vue2:** add jsx support ([c48e9e2](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/c48e9e24614086c476bb4ee05dc288ec3f3d9b4d))
+* **vue3:** fix jsx support ([5442edc](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/5442edc876e5680b6d5c700eef32150bb0495c62))
+
 ### [0.4.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.3.1...v0.4.1) (2021-03-11)
 
 
