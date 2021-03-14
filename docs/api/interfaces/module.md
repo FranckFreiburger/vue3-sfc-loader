@@ -22,4 +22,4 @@ This just represents a loaded js module
 
 •  **exports**: [ModuleExport](moduleexport.md)
 
-*Defined in [types.ts:96](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L96)*
+*Defined in [types.ts:96](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L96)*

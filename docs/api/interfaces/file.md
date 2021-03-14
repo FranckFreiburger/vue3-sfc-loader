@@ -23,7 +23,7 @@ Represents a file content and the extension name.
 
 •  **content**: string
 
-*Defined in [types.ts:62](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L62)*
+*Defined in [types.ts:62](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L62)*
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 •  **extname**: string
 
-*Defined in [types.ts:63](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L63)*
+*Defined in [types.ts:63](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L63)*

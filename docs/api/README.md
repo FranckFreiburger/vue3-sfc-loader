@@ -42,7 +42,7 @@
 
 Ƭ  **CustomBlockCallback**: (component: [ModuleExport](interfaces/moduleexport.md)) => void
 
-*Defined in [types.ts:69](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L69)*
+*Defined in [types.ts:69](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L69)*
 
 CustomBlockCallback function type
 
@@ -52,7 +52,7 @@ ___
 
 Ƭ  **LoadModule**: (path: string, options: [Options](interfaces/options.md)) => Promise<[ModuleExport](interfaces/moduleexport.md)\>
 
-*Defined in [types.ts:335](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/types.ts#L335)*
+*Defined in [types.ts:335](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L335)*
 
 ## Variables
 
@@ -60,9 +60,9 @@ ___
 
 • `Const` **version**: string = process.env.VERSION
 
-*Defined in [tools.ts:39](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/tools.ts#L39)*
+*Defined in [tools.ts:39](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/tools.ts#L39)*
 
-*Defined in [index.ts:11](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/index.ts#L11)*
+*Defined in [index.ts:11](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/index.ts#L11)*
 
 the version of the library (process.env.VERSION is set by webpack, at compile-time)
 
@@ -72,7 +72,7 @@ ___
 
 • `Const` **vueVersion**: string
 
-*Defined in [createSFCModule.ts:4](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/createSFCModule.ts#L4)*
+*Defined in [createSFCModule.ts:4](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/createSFCModule.ts#L4)*
 
 ## Functions
 
@@ -80,7 +80,7 @@ ___
 
 ▸ **createSFCModule**(`source`: string, `filename`: string, `options`: [Options](interfaces/options.md), `loadModule`: [LoadModule](README.md#loadmodule)): Promise<[ModuleExport](interfaces/moduleexport.md)\>
 
-*Defined in [createSFCModule.ts:3](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/createSFCModule.ts#L3)*
+*Defined in [createSFCModule.ts:3](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/createSFCModule.ts#L3)*
 
 #### Parameters:
 
@@ -99,7 +99,7 @@ ___
 
 ▸ **loadModule**(`path`: string, `options_?`: [Options](interfaces/options.md)): Promise<[ModuleExport](interfaces/moduleexport.md)\>
 
-*Defined in [index.ts:109](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/index.ts#L109)*
+*Defined in [index.ts:109](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/index.ts#L109)*
 
 This is the main function.
 This function is intended to be used only to load the entry point of your application.
@@ -153,7 +153,7 @@ A Promise of the component
 
 ▪ `Const` **defaultPathHandlers**: object
 
-*Defined in [index.ts:56](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/e2255e9/src/index.ts#L56)*
+*Defined in [index.ts:56](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/index.ts#L56)*
 
 Default implementation of PathHandlers
 
