@@ -124,8 +124,9 @@ export async function createSFCModule(source : string, filename : string, option
 
 		// eg: https://github.com/vuejs/vue-loader/blob/6ed553f70b163031457acc961901313390cde9ef/src/index.ts#L136
 
+		// doc: <script setup> cannot be used with the src attribute.
 		// TBD: check if this is the right solution
-		if ( descriptor.script.src )
+		if ( descriptor.script?.src )
 			descriptor.script.content = (await getFile(resolve(filename, descriptor.script.src))).content;
 
 		// TBD: handle <script setup src="...
