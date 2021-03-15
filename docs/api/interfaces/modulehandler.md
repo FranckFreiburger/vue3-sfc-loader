@@ -15,7 +15,7 @@ see [additionalModuleHandlers](options.md#additionalmodulehandlers)
 
 ▸ (`source`: string, `path`: string, `options`: [Options](options.md)): Promise<[ModuleExport](moduleexport.md)\>
 
-*Defined in [types.ts:52](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d3200d4/src/types.ts#L52)*
+*Defined in [types.ts:52](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/87b69d5/src/types.ts#L52)*
 
 Used by the library when it does not know how to handle a given file type (eg. `.json` files).
 see [additionalModuleHandlers](options.md#additionalmodulehandlers)
