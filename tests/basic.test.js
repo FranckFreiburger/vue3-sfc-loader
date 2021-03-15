@@ -824,7 +824,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 		if ( vueTarget === 3 ) { // Vue 2 does not handle cssVars
 
-			test.only('should handle cssVars', async () => {
+			test('should handle cssVars', async () => {
 
 				const { page, output } = await createPage({
 					files: {
@@ -860,6 +860,22 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			});
 		}
+
+
+		test('should have correct vue version', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/component.vue': '',
+				}
+			});
+
+			const versions = await page.evaluate('[window["vue'+ vueTarget +'-sfc-loader"]?.vueVersion, Vue.version]');
+			await expect(versions[0]).toBe(versions[1]);
+		});
+
+
 
 
 	});
