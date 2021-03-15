@@ -1,4 +1,11 @@
 
+### [0.4.5](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.4...v0.4.5) (2021-03-15)
+
+
+### Bug Fixes
+
+* **vue2:** fix vueVersion value ([8a58dc7](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/8a58dc7651a92b08353dbe2ce6e0cf12b60fc235))
+
 ### [0.4.4](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.3...v0.4.4) (2021-03-15)
 
 
