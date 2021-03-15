@@ -56,7 +56,7 @@ import {
 	StylePreprocessorResults
 } from '../build/vue2StyleProcessors'
 
-export { version as vueVersion } from 'vue-template-compiler/../../package.json'
+export { version as vueVersion } from 'vue-template-compiler/package.json'
 
 
 /**
