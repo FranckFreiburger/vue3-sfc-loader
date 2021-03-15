@@ -24,7 +24,7 @@ A custom block
 
 •  **attrs**: Record<string, string \| true\>
 
-*Defined in [types.ts:78](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L78)*
+*Defined in [types.ts:78](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d3200d4/src/types.ts#L78)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 •  **content**: string
 
-*Defined in [types.ts:77](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L77)*
+*Defined in [types.ts:77](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d3200d4/src/types.ts#L77)*
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 •  **type**: string
 
-*Defined in [types.ts:76](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/f112c45/src/types.ts#L76)*
+*Defined in [types.ts:76](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d3200d4/src/types.ts#L76)*
