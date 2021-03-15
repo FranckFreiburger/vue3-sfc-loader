@@ -1,4 +1,11 @@
 
+### [0.4.4](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.3...v0.4.4) (2021-03-15)
+
+
+### Bug Fixes
+
+* **vue3:** regression with `<script src=` handling (Fixes [#36](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/36)) ([d3200d4](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/d3200d467b7e629c3860a9912c4eba509792adb5))
+
 ### [0.4.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.2...v0.4.3) (2021-03-14)
 
 
