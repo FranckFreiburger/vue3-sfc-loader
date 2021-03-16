@@ -1,4 +1,3 @@
-// compiler-sfc src: https://github.com/vuejs/vue-next/blob/master/packages/compiler-sfc/src/index.ts#L1
 import {
 	compileStyleAsync as sfc_compileStyleAsync,
 	compileTemplate as sfc_compileTemplate,
@@ -84,7 +83,6 @@ export async function createSFCModule(source : string, filename : string, option
 
 	const { delimiters, moduleCache, compiledCache, pathHandlers: { resolve }, getFile, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
-	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const descriptor = sfc_parse({
 		source,
 		filename,
@@ -196,8 +194,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 
 	if ( descriptor.template !== null ) {
-		// compiler-sfc src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L39
-		// compileTemplate eg: https://github.com/vuejs/vue-loader/blob/next/src/templateLoader.ts#L33
+
 		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source ], async ({ preventCache }) => {
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
@@ -245,7 +242,6 @@ export async function createSFCModule(source : string, filename : string, option
 		const src = descStyle.src ? (await getFile(resolve(filename, descStyle.src))).content : descStyle.content;
 
 		const style = await withCache(compiledCache, [ componentHash, src, descStyle.lang ], async ({ preventCache }) => {
-			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 
 			const compileStyleOptions: StyleCompileOptions = {
 				source: src,
