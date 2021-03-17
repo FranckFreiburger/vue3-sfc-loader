@@ -1,7 +1,7 @@
 /**
  * @internal
  */
-export interface ValueFactoryApi {
+export type ValueFactoryApi = {
 	preventCache() : void,
 }
 
@@ -9,18 +9,18 @@ export interface ValueFactoryApi {
 /**
  * @internal
  */
-export interface ValueFactory {
+export type ValueFactory = {
 	(api : ValueFactoryApi): Promise<any>;
 }
 
 
-export interface Cache {
+export type Cache = {
 	get(key : string) : Promise<string>,
 	set(key : string, value : string) : Promise<void>,
 }
 
 
-export interface PathHandlers {
+export type PathHandlers = {
 	extname(filepath : string) : string,
 	/*
 	 * relative to absolute module path resolution.
@@ -48,15 +48,13 @@ export interface PathHandlers {
  *	...
  * ```
  */
-export interface ModuleHandler {
-	(source : string, path : string, options : Options) : Promise<ModuleExport>;
-}
+export type ModuleHandler = (source : string, path : string, options : Options) => Promise<ModuleExport>;
 
 
 /**
  * Represents a file content and the extension name.
  */
-export interface File {
+export type File = {
 	/** The content data */
 	content : string | ArrayBuffer,
 	/** The content type (file extension name, eg. '.svg' ) */
@@ -67,7 +65,7 @@ export interface File {
 /**
  * Represents a resource.
  */
-export interface Resource {
+export type Resource = {
 	/** 'abstract' unique id of the resource */
 	id : string,
 	/** file path of the resource */
@@ -85,7 +83,7 @@ export type CustomBlockCallback = ( component : ModuleExport ) => void;
 /**
  * A custom block
  */
-export interface CustomBlock {
+export type CustomBlock = {
 	type: string,
 	content: string,
 	attrs: Record<string, string | true>,
@@ -99,25 +97,24 @@ export interface CustomBlock {
 /**
  * This just represents a loaded js module exports
  */
-export interface ModuleExport {
+export type ModuleExport = {
 }
 
 /**
  * This just represents a loaded js module
  */
-export interface Module {
+export type Module = {
 	exports : ModuleExport,
 }
 
 /**
  * @internal
  */
- export interface LoadingType<T> {
+ export type LoadingType<T> = {
 	promise : Promise<T>,
 }
 
-export interface Options {
-// ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
+export type Options = {
 
 /**
  * Initial cache that will contain resolved dependencies. All new modules go here.
