@@ -18,6 +18,10 @@ export type Cache = {
 }
 
 
+/**
+ * A PathContext represents a path (relPath) relative to an abolute path (refPath)
+ * Note that relPath is not necessary relative, but it is, relPath is relative to refPath.
+ */
 export type PathContext = {
 	/** reference path */
 	refPath : string,
@@ -27,10 +31,9 @@ export type PathContext = {
 
 
 export type PathHandlers = {
+	/** the extension name (or type) of a file (incluting the leading dot, eg. '.svg') */
 	extname(filepath : string) : string,
-	/*
-	 * relative to absolute module path resolution.
-	 */
+	/** relative to absolute module path resolution */
 	resolve(pathCx : PathContext) : string,
 }
 
