@@ -1,7 +1,7 @@
 import { posix as Path } from 'path'
 
-import { createJSModule, Loading, loadModuleInternal } from './tools'
-import { createSFCModule, vueVersion } from './createSFCModule'
+import { createJSModule, loadModuleInternal } from './tools'
+import { createSFCModule } from './createSFCModule'
 
 import { ModuleExport, ModuleHandler, PathHandlers, Options, File, Resource } from './types'
 
