@@ -29,6 +29,7 @@ import {
 	Options,
 	ValueFactory,
 	ModuleExport,
+	Module,
 	LoadingType,
 } from './types'
 
@@ -99,7 +100,7 @@ export function hash(...valueList : string[]) : string {
  * preventCache usage: non-fatal error
  * @internal
  */
-export async function withCache( cacheInstance : Cache, key : string[], valueFactory : ValueFactory ) {
+export async function withCache( cacheInstance : Cache, key : string[], valueFactory : ValueFactory ) : Promise<any> {
 
 	let cachePrevented = false;
 
@@ -198,7 +199,7 @@ export function parseDeps(fileAst : t.File) : string[] {
 /**
  * @internal
  */
-export async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) {
+export async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) : Promise<[string[], string]> {
 
 	const { additionalBabelPlugins = [], log } = options;
 
@@ -286,7 +287,7 @@ export async function loadModuleInternal(currentPath : string, modulePath : stri
  * Create a cjs module
  * @internal
  */
-export function createModule(filename : string, source : string, options : Options) {
+export function createModule(filename : string, source : string, options : Options) : Module {
 
 	const { moduleCache, pathHandlers: { resolve }, getResource } = options;
 
@@ -319,7 +320,7 @@ export function createModule(filename : string, source : string, options : Optio
 /**
  * @internal
  */
-export async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) {
+export async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) : Promise<ModuleExport> {
 
 	const { compiledCache } = options;
 
@@ -337,7 +338,7 @@ export async function createJSModule(source : string, moduleSourceType : boolean
  * Just load and cache given dependencies.
  * @internal
  */
-export async function loadDeps(filename : string, deps : string[], options : Options) {
+export async function loadDeps(filename : string, deps : string[], options : Options) : Promise<void> {
 
 	await Promise.all(deps.map(dep => loadModuleInternal(filename, dep, options)))
 }

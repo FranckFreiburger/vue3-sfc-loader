@@ -9,9 +9,7 @@ export type ValueFactoryApi = {
 /**
  * @internal
  */
-export type ValueFactory = {
-	(api : ValueFactoryApi): Promise<any>;
-}
+export type ValueFactory = (api : ValueFactoryApi) => Promise<any>;
 
 
 export type Cache = {
