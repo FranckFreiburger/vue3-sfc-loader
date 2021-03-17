@@ -649,7 +649,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					'/optionsOverride.js': `
 						export default (options) => {
 
-							options.additionalModuleHandlers = {
+							options.moduleHandlers = {
 								'.svg': (source, path, options) => 'data:image/svg+xml,' + source,
 							};
 						};

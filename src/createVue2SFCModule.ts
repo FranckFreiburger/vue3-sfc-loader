@@ -39,12 +39,12 @@ import {
 	transformJSCode,
 	loadDeps,
 	createModule,
-	formatErrorLineColumn
+	formatErrorLineColumn,
+	loadModuleInternal,
 } from './tools'
 
 import {
 	Options,
-	LoadModule,
 	ModuleExport,
 	CustomBlockCallback
 } from './types'
@@ -76,12 +76,12 @@ const isProd : boolean = process.env.NODE_ENV === 'production';
  * @internal
  */
 
-export async function createSFCModule(source : string, filename : string, options : Options, loadModule : LoadModule) : Promise<ModuleExport> {
+export async function createSFCModule(source : string, filename : string, options : Options) : Promise<ModuleExport> {
 
 	const component = {};
 
 
-	const { delimiters, moduleCache, compiledCache, pathHandlers: { resolve }, getFile, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	const descriptor = sfc_parse({
 		source,
@@ -97,7 +97,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 	if ( descriptor.template && descriptor.template.lang )
-		await loadModule(descriptor.template.lang, options);
+		await loadModuleInternal(filename, descriptor.template.lang, options);
 
 
 	const hasScoped = descriptor.styles.some(e => e.scoped);
@@ -109,7 +109,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		source: descriptor.template.src ? (await getFile(resolve(filename, descriptor.template.src))).content : descriptor.template.content,
+		source: descriptor.template.src ? (await getResource(filename, descriptor.template.src, options).getContent()).content.toString() : descriptor.template.content,
 		filename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
@@ -144,7 +144,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 		// eg: https://github.com/vuejs/vue-loader/blob/v15.9.6/lib/index.js
 
-		const src = descriptor.script.src ? (await getFile(resolve(filename, descriptor.script.src))).content : descriptor.script.content;
+		const src = descriptor.script.src ? (await getResource(filename, descriptor.script.src, options).getContent()).content.toString() : descriptor.script.content;
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
 
@@ -188,8 +188,8 @@ export async function createSFCModule(source : string, filename : string, option
 			return [ depsList, transformedScript.code ];
 		});
 
-		await loadDeps(filename, depsList, options, loadModule);
-		Object.assign(component, interopRequireDefault(createModule(filename, transformedScriptSource, options, loadModule).exports).default);
+		await loadDeps(filename, depsList, options);
+		Object.assign(component, interopRequireDefault(createModule(filename, transformedScriptSource, options).exports).default);
 	}
 
 
@@ -232,14 +232,14 @@ export async function createSFCModule(source : string, filename : string, option
 			return await transformJSCode(template.code, true, filename, options);
 		});
 
-		await loadDeps(filename, templateDepsList, options, loadModule);
-		Object.assign(component, createModule(filename, templateTransformedSource, options, loadModule).exports);
+		await loadDeps(filename, templateDepsList, options);
+		Object.assign(component, createModule(filename, templateTransformedSource, options).exports);
 	}
 
 
 	for ( const descStyle of descriptor.styles ) {
 
-		const src = descStyle.src ? (await getFile(resolve(filename, descStyle.src))).content : descStyle.content;
+		const src = descStyle.src ? (await getResource(filename, descStyle.src, options).getContent()).content.toString() : descStyle.content;
 
 		const style = await withCache(compiledCache, [ componentHash, src, descStyle.lang ], async ({ preventCache }) => {
 
@@ -259,7 +259,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 			// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
 			if ( descStyle.lang && processors[descStyle.lang] === undefined )
-				processors[descStyle.lang] = await loadModule(descStyle.lang, options) as StylePreprocessor;
+				processors[descStyle.lang] = await loadModuleInternal(filename, descStyle.lang, options) as StylePreprocessor;
 
 			const compiledStyle = await sfc_compileStyleAsync(compileStyleOptions);
 			if ( compiledStyle.errors.length ) {

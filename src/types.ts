@@ -1,4 +1,3 @@
-
 /**
  * @internal
  */
@@ -57,10 +56,24 @@ export interface ModuleHandler {
 /**
  * Represents a file content and the extension name.
  */
+export interface File {
+	/** The content data */
+	content : string | ArrayBuffer,
+	/** The content type (file extension name, eg. '.svg' ) */
+	extname : string,
+}
 
- export interface File {
- 	content : string,
- 	extname : string,
+
+/**
+ * Represents a resource.
+ */
+export interface Resource {
+	/** 'abstract' unique id of the resource */
+	id : string,
+	/** file path of the resource */
+	path : string,
+	/** asynchronously get the content of the resource */
+	getContent : () => Promise<File>,
 }
 
 /**
@@ -96,6 +109,12 @@ export interface Module {
 	exports : ModuleExport,
 }
 
+/**
+ * @internal
+ */
+ export interface LoadingType<T> {
+	promise : Promise<T>,
+}
 
 export interface Options {
 // ts: https://www.typescriptlang.org/docs/handbook/interfaces.html#indexable-types
@@ -118,7 +137,7 @@ export interface Options {
  * ```
  *
 */
-	moduleCache?: Record<string, Module>,
+	moduleCache?: Record<string, LoadingType<ModuleExport> | ModuleExport>,
 
 
 /**
@@ -219,7 +238,7 @@ export interface Options {
  * Additional module type handlers. see [[ModuleHandler]]
  *
 */
-	additionalModuleHandlers?: Record<string, ModuleHandler>,
+	moduleHandlers?: Record<string, ModuleHandler>,
 
 
 /**
@@ -298,7 +317,7 @@ export interface Options {
  *	...
  * ```
  */
-	loadModule?(path : string, options : Options) : Promise<Module | undefined>,
+	loadModule?(path : string, options : Options) : Promise<ModuleExport | undefined>,
 
 
 /**
@@ -306,6 +325,14 @@ export interface Options {
  *
  */
  	pathHandlers : PathHandlers,
+
+
+/**
+ * Abstact resource handling
+ *
+ */
+	getResource(currentResourcePath : string, depResourcePath : string, options : Options) : Resource,
+
 
 
 /**
@@ -330,6 +357,3 @@ export interface Options {
  	customBlockHandler?(block : CustomBlock, filename : string, options : Options) : Promise<CustomBlockCallback | undefined>,
 
 }
-
-
-export type LoadModule = (path : string, options : Options) => Promise<ModuleExport>;

@@ -1,9 +1,9 @@
 import { posix as Path } from 'path'
 
-import { createJSModule } from './tools'
+import { createJSModule, Loading, loadModuleInternal } from './tools'
 import { createSFCModule, vueVersion } from './createSFCModule'
 
-import { ModuleExport, ModuleHandler, PathHandlers, Options, File } from './types'
+import { ModuleExport, ModuleHandler, PathHandlers, Options, File, Resource } from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -16,19 +16,6 @@ export const version : string = process.env.VERSION;
  */
 export { vueVersion } from './createSFCModule'
 
-
-/**
- * @internal
- */
-class Loading {
-
-	promise : Promise<ModuleExport>;
-
-	constructor(promise : Promise<ModuleExport>) {
-
-		this.promise = promise;
-	}
-}
 
 
 /**
@@ -44,9 +31,9 @@ function throwNotDefined(details : string) : never {
  * @internal
  */
 const defaultModuleHandlers : Record<string, ModuleHandler> = {
-	'.vue': (source, path, options) => createSFCModule(source, path, options, loadModule),
-	'.js': (source, path, options) => createJSModule(source, false, path, options, loadModule),
-	'.mjs': (source, path, options) => createJSModule(source, true, path, options, loadModule),
+	'.vue': (source, path, options) => createSFCModule(source, path, options),
+	'.js': (source, path, options) => createJSModule(source, false, path, options),
+	'.mjs': (source, path, options) => createJSModule(source, true, path, options),
 };
 
 
@@ -62,6 +49,18 @@ const defaultPathHandlers : PathHandlers = {
 
 		return dependencyPath[0] !== '.' ? dependencyPath : Path.normalize(Path.join(Path.dirname(absoluteFilepath), dependencyPath));
 	}
+}
+
+
+function defaultGetResource(currentResourcePath : string, depResourcePath : string, options : Options) : Resource {
+
+	const { pathHandlers: { resolve }, getFile } = options;
+	const path = resolve(currentResourcePath, depResourcePath);
+	return {
+		id: path,
+		path: path,
+		getContent: async () => await getFile(path),
+	};
 }
 
 
@@ -112,8 +111,9 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleCache = Object.create(null),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
-		additionalModuleHandlers = null,
+		moduleHandlers = null,
 		pathHandlers = defaultPathHandlers,
+		getResource = defaultGetResource,
 		loadModule,
 	} = options_;
 
@@ -127,45 +127,12 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 
 	const options = {
 		moduleCache,
-		additionalModuleHandlers,
 		pathHandlers,
+		getResource,
 		...options_,
 		getFile: normalizedGetFile,
+		moduleHandlers: { ...defaultModuleHandlers, ...moduleHandlers },
 	};
 
-	if ( path in moduleCache ) {
-
-		if ( moduleCache[path] instanceof Loading )
-			return await moduleCache[path].promise;
-		else
-			return moduleCache[path];
-	}
-
-
-	moduleCache[path] = new Loading((async () => {
-
-		if ( loadModule ) {
-
-			const module = await loadModule(path, options);
-			if ( module !== undefined )
-				return moduleCache[path] = module;
-		}
-
-		const file = await options.getFile(path);
-
-		const moduleHandlers = { ...defaultModuleHandlers, ...additionalModuleHandlers };
-
-		if ( !(file.extname in moduleHandlers) )
-			throw new TypeError(`Unable to handle ${ file.extname } files (${ path }), see additionalModuleHandlers`);
-
-		if ( typeof file.content !== 'string' )
-			throw new TypeError(`Invalid module content (${path}): ${ file.content }`);
-
-		const module = await moduleHandlers[file.extname](file.content, path, options);
-
-		return moduleCache[path] = module;
-
-	})());
-
-	return await moduleCache[path].promise;
+	return await loadModuleInternal('', path, options);
 }

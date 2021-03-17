@@ -26,9 +26,10 @@ import * as SparkMD5 from 'spark-md5'
 
 import {
 	Cache,
-	LoadModule,
 	Options,
-	ValueFactory
+	ValueFactory,
+	ModuleExport,
+	LoadingType,
 } from './types'
 
 /**
@@ -121,6 +122,20 @@ export async function withCache( cacheInstance : Cache, key : string[], valueFac
 
 	return value;
 }
+
+/**
+ * @internal
+ */
+export class Loading {
+
+	promise : Promise<ModuleExport>;
+
+	constructor(promise : Promise<ModuleExport>) {
+
+		this.promise = promise;
+	}
+}
+
 
 
 /**
@@ -222,26 +237,71 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 
 // module tools
 
+
+export async function loadModuleInternal(currentPath : string, modulePath : string, options : Options) : Promise<ModuleExport> {
+
+	const { moduleCache, loadModule, moduleHandlers } = options;
+
+	const { id, path, getContent } = options.getResource(currentPath, modulePath, options);
+
+	if ( id in moduleCache ) {
+
+		if ( moduleCache[id] instanceof Loading )
+			return await (moduleCache[id] as Loading).promise;
+		else
+			return moduleCache[id];
+	}
+
+
+	moduleCache[id] = new Loading((async () => {
+
+		if ( loadModule ) {
+
+			const module = await loadModule(id, options);
+			if ( module !== undefined )
+				return moduleCache[id] = module;
+		}
+
+		const { content, extname } = await getContent();
+
+		if ( !(extname in moduleHandlers) )
+			throw new TypeError(`Unable to handle ${ extname } files (${ path }), see moduleHandlers`);
+
+		if ( typeof content !== 'string' )
+			throw new TypeError(`Invalid module content (${ path }): ${ content }`);
+
+		const module = await moduleHandlers[extname](content, path, options);
+
+		return moduleCache[id] = module;
+
+	})());
+
+	return await (moduleCache[id] as LoadingType<ModuleExport>).promise;
+}
+
+
+
+
 /**
  * Create a cjs module
  * @internal
  */
-export function createModule(filename : string, source : string, options : Options, loadModule : LoadModule) {
+export function createModule(filename : string, source : string, options : Options) {
 
-	const { moduleCache, pathHandlers: { resolve } } = options;
+	const { moduleCache, pathHandlers: { resolve }, getResource } = options;
 
 	const require = function(path : string) {
 
-		const absPath = resolve(filename, path);
-		if ( absPath in moduleCache )
-			return moduleCache[absPath];
+		const { id } = getResource(filename, path, options);
+		if ( id in moduleCache )
+			return moduleCache[id];
 
-		throw new Error(`${ absPath } not found in moduleCache`);
+		throw new Error(`${ id } not found in moduleCache`);
 	}
 
 	const import_ = async function(path : string) {
 
-		return await loadModule(resolve(filename, path), options);
+		return await loadModuleInternal(filename, path, options);
 	}
 
 	const module = {
@@ -259,7 +319,7 @@ export function createModule(filename : string, source : string, options : Optio
 /**
  * @internal
  */
-export async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options, loadModule : LoadModule) {
+export async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) {
 
 	const { compiledCache } = options;
 
@@ -268,8 +328,8 @@ export async function createJSModule(source : string, moduleSourceType : boolean
 		return await transformJSCode(source, moduleSourceType, filename, options);
 	});
 
-	await loadDeps(filename, depsList, options, loadModule);
-	return createModule(filename, transformedSource, options, loadModule).exports;
+	await loadDeps(filename, depsList, options);
+	return createModule(filename, transformedSource, options).exports;
 }
 
 
@@ -277,9 +337,8 @@ export async function createJSModule(source : string, moduleSourceType : boolean
  * Just load and cache given dependencies.
  * @internal
  */
-export async function loadDeps(filename : string, deps : string[], options : Options, loadModule : LoadModule) {
+export async function loadDeps(filename : string, deps : string[], options : Options) {
 
-	const { pathHandlers: { resolve } } = options;
-	await Promise.all(deps.map(dep => loadModule(resolve(filename, dep), options)))
+	await Promise.all(deps.map(dep => loadModuleInternal(filename, dep, options)))
 }
 
