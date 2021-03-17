@@ -32,7 +32,7 @@ export type PathHandlers = {
 
 /**
  * Used by the library when it does not know how to handle a given file type (eg. `.json` files).
- * see [[additionalModuleHandlers]]
+ * see [[moduleHandlers]]
  * @param source The content of the file
  * @param path The path of the file
  * @param options The options
@@ -42,7 +42,7 @@ export type PathHandlers = {
  *
  * ```javascript
  *	...
- *	additionalModuleHandlers: {
+ *	moduleHandlers: {
  *		'.json': (source, path, options) => JSON.parse(source),
  *	}
  *	...
