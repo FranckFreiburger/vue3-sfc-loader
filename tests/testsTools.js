@@ -90,7 +90,7 @@ async function createPage({ files, processors= {}}) {
 
 	await page.goto(new URL('/index.html', local));
 
-	await new Promise(resolve => setTimeout(resolve, 250));
+	await new Promise(resolve => setTimeout(resolve, 350));
 
 	pendingPages.push(page);
 
