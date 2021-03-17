@@ -18,12 +18,20 @@ export type Cache = {
 }
 
 
+export type PathContext = {
+	/** reference path */
+	refPath : string,
+	/** relative to @refPath */
+	relPath : string,
+}
+
+
 export type PathHandlers = {
 	extname(filepath : string) : string,
 	/*
 	 * relative to absolute module path resolution.
 	 */
-	resolve(absoluteFilepath : string, dependencyPath : string) : string,
+	resolve(pathCx : PathContext) : string,
 }
 
 
@@ -326,7 +334,7 @@ export type Options = {
  * Abstact resource handling
  *
  */
-	getResource(currentResourcePath : string, depResourcePath : string, options : Options) : Resource,
+	getResource(pathCx : PathContext, options : Options) : Resource,
 
 
 

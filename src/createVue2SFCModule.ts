@@ -96,7 +96,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 	if ( descriptor.template && descriptor.template.lang )
-		await loadModuleInternal(filename, descriptor.template.lang, options);
+		await loadModuleInternal({ refPath: filename, relPath: descriptor.template.lang }, options);
 
 
 	const hasScoped = descriptor.styles.some(e => e.scoped);
@@ -108,7 +108,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		source: descriptor.template.src ? (await getResource(filename, descriptor.template.src, options).getContent()).content.toString() : descriptor.template.content,
+		source: descriptor.template.src ? (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).content.toString() : descriptor.template.content,
 		filename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
@@ -143,7 +143,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 		// eg: https://github.com/vuejs/vue-loader/blob/v15.9.6/lib/index.js
 
-		const src = descriptor.script.src ? (await getResource(filename, descriptor.script.src, options).getContent()).content.toString() : descriptor.script.content;
+		const src = descriptor.script.src ? (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString() : descriptor.script.content;
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
 
@@ -238,7 +238,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	for ( const descStyle of descriptor.styles ) {
 
-		const src = descStyle.src ? (await getResource(filename, descStyle.src, options).getContent()).content.toString() : descStyle.content;
+		const src = descStyle.src ? (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).content.toString() : descStyle.content;
 
 		const style = await withCache(compiledCache, [ componentHash, src, descStyle.lang ], async ({ preventCache }) => {
 
@@ -258,7 +258,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 			// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
 			if ( descStyle.lang && processors[descStyle.lang] === undefined )
-				processors[descStyle.lang] = await loadModuleInternal(filename, descStyle.lang, options) as StylePreprocessor;
+				processors[descStyle.lang] = await loadModuleInternal({ refPath: filename, relPath: descStyle.lang }, options) as StylePreprocessor;
 
 			const compiledStyle = await sfc_compileStyleAsync(compileStyleOptions);
 			if ( compiledStyle.errors.length ) {

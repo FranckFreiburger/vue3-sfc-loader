@@ -97,7 +97,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 	if ( descriptor.template && descriptor.template.lang )
-		await loadModuleInternal(filename, descriptor.template.lang, options);
+		await loadModuleInternal({ refPath: filename, relPath: descriptor.template.lang }, options);
 
 
 	const hasScoped = descriptor.styles.some(e => e.scoped);
@@ -105,7 +105,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
-		source: descriptor.template.src ? (await getResource(filename, descriptor.template.src, options).getContent()).content.toString() : descriptor.template.content,
+		source: descriptor.template.src ? (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).content.toString() : descriptor.template.content,
 		filename: descriptor.filename,
 		isProd,
 		scoped: hasScoped,
@@ -127,7 +127,7 @@ export async function createSFCModule(source : string, filename : string, option
 		// doc: <script setup> cannot be used with the src attribute.
 		// TBD: check if this is the right solution
 		if ( descriptor.script?.src )
-			descriptor.script.content = (await getResource(filename, descriptor.script.src, options).getContent()).content.toString();
+			descriptor.script.content = (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString();
 
 		// TBD: handle <script setup src="...
 
@@ -243,9 +243,9 @@ export async function createSFCModule(source : string, filename : string, option
 
 		// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 		if ( descStyle.lang )
-			await loadModuleInternal(filename, descStyle.lang, options);
+			await loadModuleInternal({ refPath: filename, relPath: descStyle.lang }, options);
 
-		const src = descStyle.src ? (await getResource(filename, descStyle.src, options).getContent()).content.toString() : descStyle.content;
+		const src = descStyle.src ? (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).content.toString() : descStyle.content;
 
 		const style = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
 

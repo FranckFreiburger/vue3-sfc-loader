@@ -3,7 +3,7 @@ import { posix as Path } from 'path'
 import { createJSModule, loadModuleInternal } from './tools'
 import { createSFCModule } from './createSFCModule'
 
-import { ModuleExport, ModuleHandler, PathHandlers, Options, File, Resource } from './types'
+import { ModuleExport, ModuleHandler, PathHandlers, Options, File, Resource, PathContext } from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -45,17 +45,17 @@ const defaultPathHandlers : PathHandlers = {
 
 		return Path.extname(filepath);
 	},
-	resolve(absoluteFilepath, dependencyPath) {
+	resolve({ refPath, relPath } : PathContext) {
 
-		return dependencyPath[0] !== '.' ? dependencyPath : Path.normalize(Path.join(Path.dirname(absoluteFilepath), dependencyPath));
+		return relPath[0] !== '.' ? relPath : Path.normalize(Path.join(Path.dirname(refPath), relPath));
 	}
 }
 
 
-function defaultGetResource(currentResourcePath : string, depResourcePath : string, options : Options) : Resource {
+function defaultGetResource(pathCx : PathContext, options : Options) : Resource {
 
 	const { pathHandlers: { resolve }, getFile } = options;
-	const path = resolve(currentResourcePath, depResourcePath);
+	const path = resolve(pathCx);
 	return {
 		id: path,
 		path: path,
@@ -134,5 +134,5 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleHandlers: { ...defaultModuleHandlers, ...moduleHandlers },
 	};
 
-	return await loadModuleInternal('', path, options);
+	return await loadModuleInternal( { refPath: '', relPath: path }, options);
 }
