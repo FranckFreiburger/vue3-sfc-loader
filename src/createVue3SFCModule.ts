@@ -141,6 +141,9 @@ export async function createSFCModule(source : string, filename : string, option
 				isProd,
 				id: scopeId,
 				babelParserPlugins,
+				// doc: https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md#inline-template-mode
+				// vue-loader next : https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/resolveScript.ts#L59
+				inlineTemplate: true,
 				templateOptions: compileTemplateOptions,
 			});
 
