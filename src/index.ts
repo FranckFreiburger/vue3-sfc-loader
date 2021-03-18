@@ -114,7 +114,6 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleHandlers = null,
 		pathHandlers = defaultPathHandlers,
 		getResource = defaultGetResource,
-		loadModule,
 	} = options_;
 
 
