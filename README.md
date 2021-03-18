@@ -28,19 +28,16 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   <script>
 
     const options = {
-
       moduleCache: {
         vue: Vue
       },
-
       async getFile(url) {
 
         const res = await fetch(url);
         if ( !res.ok )
-          throw Object.assign(new Error(url+' '+res.statusText), { res });
+          throw Object.assign(new Error(res.statusText + ' ' + url), { res });
         return await res.text();
       },
-
       addStyle(textContent) {
 
         const style = Object.assign(document.createElement('style'), { textContent });
@@ -67,7 +64,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ### More Examples
 
-  see [examples](docs/examples.md)
+  see [all examples](docs/examples.md)
 
 
 ## Try It Online
@@ -77,7 +74,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Public API documentation
 
-  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): Promise\<Module>
+  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): `Promise\<VueComponent>`
 
 
 ## dist/
