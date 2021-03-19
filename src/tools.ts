@@ -297,22 +297,22 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
  * Create a cjs module
  * @internal
  */
-export function createModule(filename : string, source : string, options : Options) : Module {
+export function createModule(refPath : string, source : string, options : Options) : Module {
 
 	const { moduleCache, pathHandlers: { resolve }, getResource } = options;
 
-	const require = function(path : string) {
+	const require = function(relPath : string) {
 
-		const { id } = getResource({ refPath: filename, relPath: path }, options);
+		const { id } = getResource({ refPath, relPath }, options);
 		if ( id in moduleCache )
 			return moduleCache[id];
 
 		throw new Error(`${ id } not found in moduleCache`);
 	}
 
-	const import_ = async function(path : string) {
+	const import_ = async function(relPath : string) {
 
-		return await loadModuleInternal({ refPath: filename, relPath: path }, options);
+		return await loadModuleInternal({ refPath, relPath }, options);
 	}
 
 	const module = {
@@ -321,7 +321,7 @@ export function createModule(filename : string, source : string, options : Optio
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, filename, resolve({ refPath: filename, relPath: '.' }), import_);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, refPath, resolve({ refPath, relPath: '.' }), import_);
 
 	return module;
 }
@@ -348,9 +348,9 @@ export async function createJSModule(source : string, moduleSourceType : boolean
  * Just load and cache given dependencies.
  * @internal
  */
-export async function loadDeps(filename : string, deps : string[], options : Options) : Promise<void> {
+export async function loadDeps(refPath : string, deps : string[], options : Options) : Promise<void> {
 
-	await Promise.all(deps.map(dep => loadModuleInternal({ refPath: filename, relPath: dep }, options)))
+	await Promise.all(deps.map(relPath => loadModuleInternal({ refPath, relPath }, options)))
 }
 
 
