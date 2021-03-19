@@ -74,7 +74,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Public API documentation
 
-  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): `Promise\<VueComponent>`
+  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): `Promise<VueComponent>`
 
 
 ## dist/
