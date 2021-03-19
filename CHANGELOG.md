@@ -1,4 +1,11 @@
 
+### [0.5.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.5.0...v0.5.1) (2021-03-19)
+
+
+### Bug Fixes
+
+* **core:** set initial refPath to '/' instead of '' ([893f1d4](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/893f1d4d6366942ada1965b25f06deca629c6bf1))
+
 ## [0.5.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.5...v0.5.0) (2021-03-19)
 
 
