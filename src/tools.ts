@@ -34,6 +34,9 @@ import {
 	PathContext,
 } from './types'
 
+import { createSFCModule } from './createSFCModule'
+
+
 /**
  * @internal
  */
@@ -241,7 +244,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 
 export async function loadModuleInternal(pathCx : PathContext, options : Options) : Promise<ModuleExport> {
 
-	const { moduleCache, loadModule, moduleHandlers } = options;
+	const { moduleCache, loadModule, handleModule } = options;
 
 	const { id, path, getContent } = options.getResource(pathCx, options);
 
@@ -265,13 +268,20 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
 
 		const { content, extname } = await getContent();
 
-		if ( !(extname in moduleHandlers) )
-			throw new TypeError(`Unable to handle ${ extname } files (${ path }), see moduleHandlers`);
-
 		if ( typeof content !== 'string' )
 			throw new TypeError(`Invalid module content (${ path }): ${ content }`);
 
-		const module = await moduleHandlers[extname](content, path, options);
+		// note: null module is accepted
+		let module : ModuleExport | undefined | null = undefined;
+
+		if ( handleModule !== undefined )
+			module = await handleModule(extname, content, path, options);
+
+		if ( module === undefined )
+			module = await defaultHandleModule(extname, content, path, options);
+
+		if ( module === undefined )
+			throw new TypeError(`Unable to handle ${ extname } files (${ path })`);
 
 		return moduleCache[id] = module;
 
@@ -343,3 +353,17 @@ export async function loadDeps(filename : string, deps : string[], options : Opt
 	await Promise.all(deps.map(dep => loadModuleInternal({ refPath: filename, relPath: dep }, options)))
 }
 
+
+/**
+ * Default implementation of handleModule
+ */
+ async function defaultHandleModule(extname : string, source : string, path : string, options : Options) : Promise<ModuleExport | null> {
+
+	switch (extname) {
+		case '.vue': return createSFCModule(source.toString(), path, options);
+		case '.js': return createJSModule(source.toString(), false, path, options);
+		case '.mjs': return createJSModule(source.toString(), true, path, options);
+	}
+
+	return null;
+}

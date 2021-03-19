@@ -57,7 +57,7 @@ export type PathHandlers = {
  *	...
  * ```
  */
-export type ModuleHandler = (source : string, path : string, options : Options) => Promise<ModuleExport>;
+export type ModuleHandler = (extname : string, source : string, path : string, options : Options) => Promise<ModuleExport | null>;
 
 
 /**
@@ -241,10 +241,10 @@ export type Options = {
 
 
 /**
- * Additional module type handlers. see [[ModuleHandler]]
+ * Handle additional module types (eg. '.svg', '.json' ). see [[ModuleHandler]]
  *
 */
-	moduleHandlers?: Record<string, ModuleHandler>,
+	handleModule?: ModuleHandler,
 
 
 /**

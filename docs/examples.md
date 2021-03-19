@@ -161,8 +161,10 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
         },
       },
 
-      additionalModuleHandlers: {
-        '.json': (source, path, options) => JSON.parse(source),
+      handleModule(extname, source, path, options) {
+        
+        if ( extname === '.json' )
+          return JSON.parse(source);
       }
     }
 

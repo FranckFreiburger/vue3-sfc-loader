@@ -1,9 +1,8 @@
 import { posix as Path } from 'path'
 
-import { createJSModule, loadModuleInternal } from './tools'
-import { createSFCModule } from './createSFCModule'
+import { loadModuleInternal } from './tools'
 
-import { ModuleExport, ModuleHandler, PathHandlers, Options, File, Resource, PathContext, LangProcessor } from './types'
+import { ModuleExport, PathHandlers, Options, File, Resource, PathContext, LangProcessor } from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -25,16 +24,6 @@ function throwNotDefined(details : string) : never {
 
 	throw new ReferenceError(`${ details } is not defined`);
 }
-
-
-/**
- * @internal
- */
-const defaultModuleHandlers : Record<string, ModuleHandler> = {
-	'.vue': (source, path, options) => createSFCModule(source, path, options),
-	'.js': (source, path, options) => createJSModule(source, false, path, options),
-	'.mjs': (source, path, options) => createJSModule(source, true, path, options),
-};
 
 
 /**
@@ -114,7 +103,6 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleCache = Object.create(null),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
-		moduleHandlers = null,
 		pathHandlers = defaultPathHandlers,
 		getResource = defaultGetResource,
 	} = options_;
@@ -133,7 +121,6 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		getResource,
 		...options_,
 		getFile: normalizedGetFile,
-		moduleHandlers: { ...defaultModuleHandlers, ...moduleHandlers },
 	};
 
 	return await loadModuleInternal( { refPath: '/', relPath: path }, options);
