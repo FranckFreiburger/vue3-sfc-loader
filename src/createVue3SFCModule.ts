@@ -143,9 +143,13 @@ export async function createSFCModule(source : string, filename : string, option
 				babelParserPlugins,
 				// doc: https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md#inline-template-mode
 				// vue-loader next : https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/resolveScript.ts#L59
-				inlineTemplate: true,
+				inlineTemplate: false,
 				templateOptions: compileTemplateOptions,
 			});
+
+			// see https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/templateLoader.ts#L54
+			if ( compileTemplateOptions !== null )
+				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
 			let ast;
 			if ( true /*!scriptBlock.scriptAst*/ ) {
@@ -182,7 +186,6 @@ export async function createSFCModule(source : string, filename : string, option
 				//   see t.program: https://babeljs.io/docs/en/babel-types#program
 				ast = t.file(t.program(scriptBlock.scriptAst, [], 'module'));
 			}
-
 
 			renameDynamicImport(ast);
 			const depsList = parseDeps(ast);

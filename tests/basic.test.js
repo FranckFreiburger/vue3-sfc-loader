@@ -875,8 +875,31 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(versions[0]).toBe(versions[1]);
 		});
 
+		if ( vueTarget === 3 ) { // Vue 3 does not have <script setup>
+		
+			test('should properly handle components in <script setup>', async () => {
 
+				const { page, output } = await createPage({
+					files: {
+						...files,
+						'/component.vue': `
+							<template>a<comp/>e</template>
+							<script setup>
+								import comp from "./comp.vue";
+							</script>
+						`,
+						'/comp.vue': `
+							<template>b{{ foo }}d</template>
+							<script setup>
+								const foo = 'c'
+							</script>
+						`,
+					}
+				});
 
+				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('abcde');
+			});
+		}
 
 	});
 
