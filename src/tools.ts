@@ -163,7 +163,7 @@ export function renameDynamicImport(fileAst : t.File) : void {
 		CallExpression(path : NodePath<t.CallExpression>) {
 
 			if ( t.isImport(path.node.callee) )
-				path.replaceWith(t.callExpression(t.identifier('import_'), path.node.arguments))
+				path.replaceWith(t.callExpression(t.identifier('import__'), path.node.arguments))
 		}
 	});
 }
@@ -310,7 +310,7 @@ export function createModule(refPath : string, source : string, options : Option
 		throw new Error(`${ id } not found in moduleCache`);
 	}
 
-	const import_ = async function(relPath : string) {
+	const importFunction = async function(relPath : string) {
 
 		return await loadModuleInternal({ refPath, relPath }, options);
 	}
@@ -321,7 +321,7 @@ export function createModule(refPath : string, source : string, options : Option
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import_', source).call(module.exports, module.exports, require, module, refPath, resolve({ refPath, relPath: '.' }), import_);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import__', source).call(module.exports, module.exports, require, module, refPath, resolve({ refPath, relPath: '.' }), importFunction);
 
 	return module;
 }
