@@ -225,12 +225,12 @@ const defaultFilesFactory = ({ vueTarget }) => ({
 					switch ( ${ vueTarget } ) {
 						case 3: {
 
-							return loadModule('./component.vue', options).then((component) => Vue.createApp(component));
+							return loadModule('./main.vue', options).then((component) => Vue.createApp(component));
 						}
 
 						case 2: {
 
-							return loadModule('./component.vue', options).then((component) => new Vue(component));
+							return loadModule('./main.vue', options).then((component) => new Vue(component));
 						}
 					}
 				}

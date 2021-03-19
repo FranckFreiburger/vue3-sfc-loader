@@ -15,7 +15,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span>Hello World !</span>
 						</template>
@@ -32,7 +32,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span>Hello World ! {{ msg }}<span>
 						</template>
@@ -52,7 +52,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span>Hello World !</span>
 						</template>
@@ -75,7 +75,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							test(
 						</script>
@@ -93,7 +93,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<b>Hello {{ msg }} !</b>
 						</template>
@@ -120,7 +120,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							require('empty.mjs');
 						</script>
@@ -138,7 +138,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span>Hello World !</span>
 						</template>
@@ -165,7 +165,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span>Hello World !</span>
 						</template>
@@ -192,7 +192,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							import { test } from './foo/test.mjs'
 							console.log( test() );
@@ -225,7 +225,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							const { test } = require('./foo/test.js')
 							console.log( test() );
@@ -258,7 +258,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							const { test } = require('./foo/test.js')
 							console.log( test() );
@@ -291,7 +291,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							const { test } = require('./foo/test.mjs')
 							console.log( test() );
@@ -326,7 +326,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span><foo><bar>test</bar></foo></span>
 						</template>
@@ -383,7 +383,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-		        '/component.vue': `
+		        '/main.vue': `
 		            <script>
 			            import('./missing_file.js')
 			            .catch(ex => console.log('error'))
@@ -403,7 +403,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							export default {
 								mounted() {
@@ -445,7 +445,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							export default {
 								mounted() {
@@ -500,7 +500,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template lang="custom">
 							<span>Hello World !</span>
 						</template>
@@ -524,7 +524,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template lang="custom">
 							<span>Hello World !</span>
 						</template>
@@ -553,7 +553,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				const { page, output } = await createPage({
 					files: {
 						...files,
-						'/component.vue': `
+						'/main.vue': `
 							<template lang="custom">
 								<span>Hello World !</span>
 							</template>
@@ -580,7 +580,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<span class="hello-world">Hello World !</span>
 						</template>
@@ -625,7 +625,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 						export function test() {
 						}
 					`,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 						  import './test.js'
 						</script>
@@ -669,7 +669,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 						}
 					`,
 
-					'/component.vue': `
+					'/main.vue': `
 						<template src='./template.html'></template>
 						<style scoped src='./styles.css'></style>
 						<script src="./script.js"></script>
@@ -697,7 +697,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 </svg>
 					`.trim(),
 
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<img :src="require('./image.svg')">
 						</template>
@@ -728,7 +728,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				files: {
 					...files,
 
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							<div><div>{{ foo }}</div><div v-for="{ name } in items">{{ name }}</div><div v-bind="{ ...a, ...b }"/></div>
 						</template>
@@ -762,7 +762,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				files: {
 					...files,
 
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							 <button @click="(...args) => { store.foo(...args) }">Go</button>
 						</template>
@@ -784,7 +784,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					files: {
 						...files,
 
-						'/component.vue': `
+						'/main.vue': `
 							<template>
 								<foo v-slot="{ foo, ...rest }">{{ rest }}</foo>
 							</template>
@@ -819,7 +819,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					files: {
 						...files,
 
-						'/component.vue': `
+						'/main.vue': `
 							<template>
 								<button @click="spy(1,)" />
 							</template>
@@ -838,7 +838,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				files: {
 					...files,
 
-					'/component.vue': `
+					'/main.vue': `
 						<template>
 							 <input v-model="text" />
 						</template>
@@ -865,7 +865,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': `
+					'/main.vue': `
 						<script>
 							export default {
 								render() {
@@ -889,7 +889,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					files: {
 						...files,
 
-						'/component.vue': `
+						'/main.vue': `
 
 							<template>
 							  Hello <span class="example">{{ msg }}</span>
@@ -926,7 +926,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			const { page, output } = await createPage({
 				files: {
 					...files,
-					'/component.vue': '',
+					'/main.vue': '',
 				}
 			});
 
@@ -941,7 +941,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				const { page, output } = await createPage({
 					files: {
 						...files,
-						'/component.vue': `
+						'/main.vue': `
 							<template>a<comp/>e</template>
 							<script setup>
 								import comp from "./comp.vue";
@@ -963,8 +963,8 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 		test('should resolve path consistently', async () => {
 
-			// pathHandlers.resolve({ refPath: '', relPath: './component.vue' }) -> 'component.vue'
-			// pathHandlers.resolve({ refPath: '/', relPath: './component.vue' }) -> './component.vue'
+			// pathHandlers.resolve({ refPath: '', relPath: './main.vue' }) -> 'component.vue'
+			// pathHandlers.resolve({ refPath: '/', relPath: './main.vue' }) -> './main.vue'
 
 			const { page, output } = await createPage({
 				files: {
@@ -972,7 +972,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					'/optionsOverride.js': `
 
 						const myFiles = {
-							'/component.vue': '<template><span>hello</span></template>',
+							'/main.vue': '<template><span>hello</span></template>',
 						}
 					
 						export default (options) => {
