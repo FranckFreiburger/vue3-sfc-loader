@@ -1,8 +1,20 @@
-import { posix as Path } from 'path'
+import {
+	posix as Path
+} from 'path'
 
-import { loadModuleInternal } from './tools'
+import {
+	loadModuleInternal
+} from './tools'
 
-import { ModuleExport, PathHandlers, Options, File, Resource, PathContext, LangProcessor } from './types'
+import {
+	ModuleExport,
+	PathHandlers,
+	Options,
+	File,
+	Resource,
+	PathContext,
+	LangProcessor,
+} from './types'
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
