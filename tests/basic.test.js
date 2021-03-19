@@ -901,6 +901,38 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 		}
 
+
+		test('should resolve path consistently', async () => {
+
+			// pathHandlers.resolve({ refPath: '', relPath: './component.vue' }) -> 'component.vue'
+			// pathHandlers.resolve({ refPath: '/', relPath: './component.vue' }) -> './component.vue'
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/optionsOverride.js': `
+
+						const myFiles = {
+							'/component.vue': '<template><span>hello</span></template>',
+						}
+					
+						export default (options) => {
+							
+							options.getFile = (path) => {
+
+								if ( path in myFiles )
+									return Promise.resolve(myFiles[path]);
+								
+								return Promise.reject(new HttpError(path, '404'));
+							}
+						};
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('hello');
+		});
+
 	});
 
 

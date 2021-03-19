@@ -47,6 +47,9 @@ const defaultPathHandlers : PathHandlers = {
 	},
 	resolve({ refPath, relPath } : PathContext) {
 
+		// note :
+		//  normalize('./test') -> 'test'
+		//  normalize('/test') -> '/test'
 		return relPath[0] !== '.' ? relPath : Path.normalize(Path.join(Path.dirname(refPath), relPath));
 	}
 }
@@ -133,5 +136,5 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		moduleHandlers: { ...defaultModuleHandlers, ...moduleHandlers },
 	};
 
-	return await loadModuleInternal( { refPath: '', relPath: path }, options);
+	return await loadModuleInternal( { refPath: '/', relPath: path }, options);
 }
