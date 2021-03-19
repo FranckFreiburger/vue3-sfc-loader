@@ -365,5 +365,5 @@ export async function loadDeps(filename : string, deps : string[], options : Opt
 		case '.mjs': return createJSModule(source.toString(), true, path, options);
 	}
 
-	return null;
+	return undefined;
 }
