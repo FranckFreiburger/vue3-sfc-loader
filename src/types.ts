@@ -363,3 +363,6 @@ export type Options = {
  	customBlockHandler?(block : CustomBlock, filename : string, options : Options) : Promise<CustomBlockCallback | undefined>,
 
 }
+
+
+export type LangProcessor = (source: string, preprocessOptions?: any) => Promise<string> | string
