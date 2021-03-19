@@ -1,4 +1,25 @@
 
+## [0.5.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.5...v0.5.0) (2021-03-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** replace recurrent (absPath, relPath) with PathContext
+* **core:** add Resource, rename additionalModuleHandlers into moduleHandlers, refactoring
+
+### Bug Fixes
+
+* **vue3:** <script setup> inlineTemplate ([7ceed8a](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/7ceed8acce96b047895af016da2d5c5a63328928))
+* **vue3:** <script setup> use bindingMetadata instead of inlineTemplate ([ce47cc1](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/ce47cc1b0eee052a0db9f986ff01e7ae93618326))
+
+
+### wip
+
+* **core:** add Resource, rename additionalModuleHandlers into moduleHandlers, refactoring ([e77324a](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/e77324a5260f921f894b19fc1dc01d0818145122))
+
+
+* **core:** replace recurrent (absPath, relPath) with PathContext ([a5bdd2d](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/a5bdd2d14e542d47e411f65efbbf3c140b7f270a))
+
 ### [0.4.5](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.4.4...v0.4.5) (2021-03-15)
 
 
