@@ -63,7 +63,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
 	return {
 		id: path,
 		path: path,
-		getContent: async () => await getFile(path),
+		getContent: () => getFile(path),
 	};
 }
 
