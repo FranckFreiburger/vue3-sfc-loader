@@ -112,7 +112,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
 export async function loadModule(path : string, options : Options = throwNotDefined('options')) : Promise<ModuleExport> {
 
 	const {
-		moduleCache = Object.create(null),
+		moduleCache = throwNotDefined('options.moduleCache'),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
 		pathHandlers = defaultPathHandlers,
