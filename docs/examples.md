@@ -410,7 +410,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 [:top:](#readme)
 
 
-## Minimalist example (just for the fun)
+## Minimalist Hello World example
 
 <!--example:source:minimalist_example-->
 ```html
@@ -421,18 +421,11 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.6.0/dist/vue3-sfc-loader.js"></script>
   <script>
 
-    /* <!-- */
-    const vueContent = `
-      <template> Hello World !</template>
-    `;
-    /* --> */
-
     const options = {
       moduleCache: { vue: Vue },
-      getFile: () => vueContent,
+      getFile: () => `<template>Hello World !</template>`,
       addStyle: () => {},
     }
-
     Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options))).mount(document.body);
 
   </script>
@@ -494,7 +487,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
 
 
-## Dynamic component (`:is` Special Attribute)
+## Dynamic component (using `:is` Special Attribute)
 
 In the following example we use a trick to preserve reactivity through the `Vue.defineAsyncComponent()` call (see the following [discussion](https://github.com/FranckFreiburger/vue3-sfc-loader/discussions/6))
 
@@ -672,7 +665,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
 
 
-## Example using SFC Custom Blocks for i18n
+## Use SFC Custom Blocks for i18n
 
 <!--example:source:custom_block_i18n-->
 ```html
@@ -739,7 +732,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 [:top:](#readme)
 
 
-## Example using getResource() and process the files like webpack does
+## Use Options.getResource() and (nearly) process the files like webpack does
 
 <!--example:source:getResource_loaders-->
 ```html
@@ -772,7 +765,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
 	const options = {
 		moduleCache: {
-			vue: Vue,
+			'vue': Vue,
 			'file!'(content, path, extname, options) {
 
 				return String(new URL(path, window.location));
@@ -789,6 +782,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
 			switch (extname) {
 				case '.svg': return source;
+        default: return undefined; // let vue3-sfc-loader handle this
 			}
 		},
 		getFile(url, options) {
@@ -830,17 +824,10 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 				}
 			};
 		},
-		addStyle(textContent) {
-
-			const style = Object.assign(document.createElement('style'), { textContent });
-			const ref = document.head.getElementsByTagName('style')[0] || null;
-			document.head.insertBefore(style, ref);
-		},
+		addStyle() { /* unused here */ },
 	}
 
-	const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options)));
-	app.mount(document.body);
-	console.log(options.moduleCache)
+	Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
 
 </script>
 </body>
