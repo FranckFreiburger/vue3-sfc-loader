@@ -246,7 +246,7 @@ export async function createSFCModule(source : string, filename : string, option
 				source: src,
 				filename,
 				id: scopeId,
-				scoped: descStyle.scoped,
+				scoped: descStyle.scoped !== undefined ? descStyle.scoped : false,
 				trim: false,
 				preprocessLang: descStyle.lang,
 				preprocessOptions: {
