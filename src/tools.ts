@@ -206,7 +206,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 
 	const { additionalBabelPlugins = [], log } = options;
 
-	let ast: t.Node;
+	let ast: t.File;
 	try {
 
 		ast = babel_parse(source, {
