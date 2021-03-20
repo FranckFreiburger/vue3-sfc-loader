@@ -43,14 +43,19 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
     /* <!-- */
     const mainComponent = `
       <template>
-        <span>Hello World !</span>
+        <span>Hello from Vue {{ require('myData').vueVersion }} !</span>
       </template>
     `;
     /* --> */
 
+    const { loadModule, vueVersion } = window['vue2-sfc-loader'];
+
     const options = {
       moduleCache: {
         vue: Vue,
+        myData: {
+          vueVersion,
+        }
       },
       getFile(url) {
 
@@ -60,7 +65,6 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
       addStyle() {},
     }
 
-    const { loadModule, vueVersion } = window['vue2-sfc-loader'];
     loadModule('./main.vue', options)
     .then(component => new Vue(component).$mount('#app'));
   </script>
@@ -68,7 +72,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 </html>
 ```
 <!--example:target:vue2_basic_example-->
-[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.6.0%2Fdist%2Fvue2-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+mainComponent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++%3Cspan%3EHello+World+!%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'%2Fmain.vue'+)%0A++++++++++return+Promise.resolve(mainComponent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule%2C+vueVersion+%7D+%3D+window%5B'vue2-sfc-loader'%5D%3B%0A++++loadModule('.%2Fmain.vue'%2C+options)%0A++++.then(component+%3D%3E+new+Vue(component).%24mount('%23app'))%3B%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.6.0%2Fdist%2Fvue2-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+mainComponent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++%3Cspan%3EHello+from+Vue+%7B%7B+require('myData').vueVersion+%7D%7D+!%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+%7B+loadModule%2C+vueVersion+%7D+%3D+window%5B'vue2-sfc-loader'%5D%3B%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++++myData%3A+%7B%0A++++++++++vueVersion%2C%0A++++++++%7D%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'%2Fmain.vue'+)%0A++++++++++return+Promise.resolve(mainComponent)%3B%0A++++++%7D%2C%0A++++++addStyle()+%7B%7D%2C%0A++++%7D%0A%0A++++loadModule('.%2Fmain.vue'%2C+options)%0A++++.then(component+%3D%3E+new+Vue(component).%24mount('%23app'))%3B%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
 <!--/example:target:vue2_basic_example-->
 [:top:](#readme)
 
