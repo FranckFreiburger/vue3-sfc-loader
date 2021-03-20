@@ -109,7 +109,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
  * ```
  *
  */
-export async function loadModule(path : string, options_ : Options = throwNotDefined('options')) : Promise<ModuleExport> {
+export async function loadModule(path : string, options : Options = throwNotDefined('options')) : Promise<ModuleExport> {
 
 	const {
 		moduleCache = Object.create(null),
@@ -117,7 +117,7 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		addStyle = throwNotDefined('options.addStyle()'),
 		pathHandlers = defaultPathHandlers,
 		getResource = defaultGetResource,
-	} = options_;
+	} = options;
 
 
 	// TBD: remove this in v1.0
@@ -127,15 +127,15 @@ export async function loadModule(path : string, options_ : Options = throwNotDef
 		return typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
 	}
 
-	const options = {
+	const normalizedOptions = {
 		moduleCache,
 		pathHandlers,
 		getResource,
-		...options_,
+		...options,
 		getFile: normalizedGetFile,
 	};
 
-	return await loadModuleInternal( { refPath: '/', relPath: path }, options);
+	return await loadModuleInternal( { refPath: '/', relPath: path }, normalizedOptions);
 }
 
 /**
