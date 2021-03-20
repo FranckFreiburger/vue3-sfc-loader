@@ -1,4 +1,15 @@
 
+## [0.6.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.5.1...v0.6.0) (2021-03-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** replace Options.moduleHandler object with Options.handleModule()
+
+### wip
+
+* **core:** replace Options.moduleHandler object with Options.handleModule() ([d7d5669](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/d7d5669969bd9d03a2eeb31cc2f92c68695199a6))
+
 ### [0.5.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.5.0...v0.5.1) (2021-03-19)
 
 
