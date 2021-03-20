@@ -63,7 +63,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
         if ( url === '/main.vue' )
           return Promise.resolve(mainComponent);
       },
-      addStyle() {},
+      addStyle() { /* unused here */ },
     }
 
     loadModule('./main.vue', options)
@@ -224,7 +224,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
         if ( url === '/myComponent.vue' )
           return Promise.resolve(sfcContent);
       },
-      addStyle() {},
+      addStyle() { /* unused here */ },
     }
 
     const { loadModule } = window['vue3-sfc-loader'];
@@ -321,7 +321,8 @@ ul
     const options = {
       moduleCache: {
         vue: Vue,
-        stylus: source => Object.assign(stylus(source), { deps: () => [] }), // note: deps() does not work in this bundle of stylus (see https://stylus-lang.com/docs/js.html#deps)
+        // note: deps() does not work in this bundle of stylus (see https://stylus-lang.com/docs/js.html#deps)
+        stylus: source => Object.assign(stylus(source), { deps: () => [] }),
       },
       getFile: () => vueContent,
       addStyle(styleStr) {
@@ -470,7 +471,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
         if ( url === '/myComponent.vue' )
           return Promise.resolve(sfcContent);
       },
-      addStyle() {},
+      addStyle() { /* unused here */ },
     }
 
     const { loadModule } = window['vue3-sfc-loader'];
@@ -523,7 +524,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
         })[url] || Promise.reject( new Error(res.statusText) );
       },
 
-      addStyle() { /* ignore styles */ },
+      addStyle() { /* unused here */ },
     }
 
     const { loadModule } = window["vue3-sfc-loader"];
@@ -827,7 +828,8 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 		addStyle() { /* unused here */ },
 	}
 
-	Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
+	const { loadModule } = window['vue3-sfc-loader'];
+	Vue.createApp(Vue.defineAsyncComponent(() => loadModule('/main.vue', options))).mount(document.body);
 
 </script>
 </body>
