@@ -1,5 +1,7 @@
 # vue3-sfc-loader
 
+###### [API](docs/api/README.md#loadmodule) | [Examples](docs/examples.md) | [dist/](#dist)
+
 Vue3/Vue2 Single File Component loader.  
 Load .vue files dynamically at runtime from your html/js. No node.js environment, no (webpack) build step needed.  
 
