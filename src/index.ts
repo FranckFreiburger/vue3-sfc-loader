@@ -119,6 +119,9 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 		getResource = defaultGetResource,
 	} = options;
 
+	// moduleCache should be defined with Object.create(null). require('constructor') etc... should not be a default module
+	if ( moduleCache instanceof Object )
+		Object.setPrototypeOf(moduleCache, null);
 
 	// TBD: remove this in v1.0
 	async function normalizedGetFile(path : string) : Promise<File> {
