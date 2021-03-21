@@ -8,7 +8,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Key Features
 
- * Supports Vue 3 and Vue 2 (see [dist/](#dist)
+ * Supports Vue 3 and Vue 2 (see [dist/](#dist))
  * Only requires Vue runtime-only build
  * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Embedded ES6 modules support ( including `import()` )
