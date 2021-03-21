@@ -307,7 +307,7 @@ export function createModule(refPath : string, source : string, options : Option
 		if ( id in moduleCache )
 			return moduleCache[id];
 
-		throw new Error(`${ id } not found in moduleCache`);
+		throw new Error(`require(${ JSON.stringify(id) }) failed. module not found in moduleCache`);
 	}
 
 	const importFunction = async function(relPath : string) {
