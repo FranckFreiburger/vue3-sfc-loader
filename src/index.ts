@@ -51,7 +51,7 @@ const defaultPathHandlers : PathHandlers = {
 		// note :
 		//  normalize('./test') -> 'test'
 		//  normalize('/test') -> '/test'
-		return relPath[0] !== '.' ? relPath : Path.normalize(Path.join(Path.dirname(refPath), relPath));
+		return (relPath[0] !== '.' && relPath[0] !== '/') ? relPath : Path.normalize(Path.join(Path.dirname(refPath), relPath));
 	}
 }
 
