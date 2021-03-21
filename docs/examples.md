@@ -842,7 +842,10 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 [:top:](#readme)
 
 
-## Handle remote components
+## Use remote components
+
+Here we import [vue-calendar-picker](https://github.com/FranckFreiburger/vue-calendar-picker) and also manage the **date-fns** dependent module.  
+This example use Vue2 because **vue-calendar-picker** is written for Vue2.
 
 <!--example:source:remote_vue_components-->
 ```html
