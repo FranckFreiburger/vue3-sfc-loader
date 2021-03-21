@@ -1,4 +1,13 @@
 
+### [0.6.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.6.0...v0.6.1) (2021-03-21)
+
+
+### Bug Fixes
+
+* **core:** fix default resolve() behavior when relPath starts with '/' ([e09cf34](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/e09cf3496ece8be62985a220802c0afbd9a7b3f5))
+* **core:** fix noop debug module ([8a9a3b5](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/8a9a3b57bc9a957ab1810faa2ef5f88700ce43a1))
+* **vue2:** compileStyleOptions scoped condition ([a9609fb](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/a9609fbcfd8c046f5da8f137d8c5cd830c71635c))
+
 ## [0.6.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.5.1...v0.6.0) (2021-03-20)
 
 
