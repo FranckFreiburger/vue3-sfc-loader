@@ -12,7 +12,7 @@
   * [Nested components](#nested-components)
   * [Use SFC Custom Blocks for i18n](#use-sfc-custom-blocks-for-i18n)
   * [Use Options.getResource() and (nearly) process the files like webpack does](#use-optionsgetresource-and-nearly-process-the-files-like-webpack-does)
-  * [Handle remote components](#handle-remote-components)
+  * [Use remote components](#use-remote-components)
 <!--/toc-->
 
 # Examples
