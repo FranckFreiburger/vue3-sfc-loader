@@ -1,6 +1,6 @@
 # vue3-sfc-loader
 
-###### [API](docs/api/README.md#loadmodule) | [Examples](docs/examples.md) | [dist/](#dist) | [Roadmap](/FranckFreiburger/vue3-sfc-loader/issues/1)
+###### [API](docs/api/README.md#loadmodule) | [Examples](docs/examples.md) | [dist](#dist) | [Roadmap](../../issues/1)
 
 Vue3/Vue2 Single File Component loader.  
 Load .vue files dynamically at runtime from your html/js. No node.js environment, no (webpack) build step needed.  
@@ -83,8 +83,8 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=latest%20version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
   [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-284kB-blue)<!--/update-min-br-size-->](#dist)
-  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-359kB-blue)<!--/update-min-gz-size-->](#dist)
-  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1395kB-blue)<!--/update-min-size-->](#dist)
+  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-360kB-blue)<!--/update-min-gz-size-->](#dist)
+  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1396kB-blue)<!--/update-min-size-->](#dist)
   [![Snyk Vulnerabilities for vue3-sfc-loader](https://img.shields.io/snyk/vulnerabilities/github/FranckFreiburger/vue3-sfc-loader)](https://snyk.io/vuln/npm:vue3-sfc-loader)
   
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
