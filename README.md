@@ -8,7 +8,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Key Features
 
- * Supports Vue 3 (`dist/vue3-sfc-loader.js`) and Vue 2 (`dist/vue2-sfc-loader.js`)
+ * Supports Vue 3 and Vue 2 (see [dist/](#dist)
  * Only requires Vue runtime-only build
  * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Embedded ES6 modules support ( including `import()` )
@@ -92,12 +92,12 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   [![Vue3 compiler-sfc dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/@vue/compiler-sfc?label=embeds%20Vue3%20%40vue%2Fcompiler-sfc)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
   [![Vue2 vue-template-compiler dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/vue-template-compiler?label=embeds%20Vue2%20vue-template-compiler)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
 
-  latest minified Vue3 version at :
+  latest minified **Vue3** version at :
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader?path=dist) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js
   - [UNPKG](https://unpkg.com/browse/vue3-sfc-loader/dist/) CDN: https://unpkg.com/vue3-sfc-loader
   - `npm install vue3-sfc-loader` (`./node_modules/vue3-sfc-loader/dist/vue3-sfc-loader.js`)
 
-  latest minified Vue2 version at :
+  latest minified **Vue2** version at :
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader?path=dist) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue2-sfc-loader.js
   - [UNPKG](https://unpkg.com/browse/vue3-sfc-loader/dist/) CDN: https://unpkg.com/vue3-sfc-loader/dist/vue2-sfc-loader.js
   - `npm install vue3-sfc-loader` (`./node_modules/vue3-sfc-loader/dist/vue2-sfc-loader.js`)
