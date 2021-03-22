@@ -14,7 +14,9 @@ import {
 	Resource,
 	PathContext,
 	LangProcessor,
+	AbstractPath,
 } from './types'
+
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
@@ -48,14 +50,25 @@ function throwNotDefined(details : string) : never {
 const defaultPathHandlers : PathHandlers = {
 	extname(filepath) {
 
-		return Path.extname(filepath);
+		return Path.extname(filepath.toString());
 	},
 	resolve({ refPath, relPath } : PathContext) {
+
+		// initial resolution: refPath is not defined
+		if ( refPath === undefined )
+			return relPath;
 
 		// note :
 		//  normalize('./test') -> 'test'
 		//  normalize('/test') -> '/test'
-		return (relPath[0] !== '.' && relPath[0] !== '/') ? relPath : Path.normalize(Path.join(Path.dirname(refPath), relPath));
+
+		const relPathStr = relPath.toString();
+
+		// a module name ?
+		if ( relPathStr[0] !== '.' && relPathStr[0] !== '/' )
+			return relPath;
+
+		return Path.normalize(Path.join(Path.dirname(refPath.toString()), relPathStr));
 	}
 }
 
@@ -65,7 +78,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
 	const { pathHandlers: { resolve }, getFile } = options;
 	const path = resolve(pathCx);
 	return {
-		id: path,
+		id: path.toString(),
 		path: path,
 		getContent: () => getFile(path),
 	};
@@ -113,7 +126,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
  * ```
  *
  */
-export async function loadModule(path : string, options : Options = throwNotDefined('options')) : Promise<ModuleExport> {
+export async function loadModule(path : AbstractPath, options : Options = throwNotDefined('options')) : Promise<ModuleExport> {
 
 	const {
 		moduleCache = throwNotDefined('options.moduleCache'),
@@ -128,7 +141,7 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 		Object.setPrototypeOf(moduleCache, null);
 
 	// TBD: remove this in v1.0
-	async function normalizedGetFile(path : string) : Promise<File> {
+	async function normalizedGetFile(path : AbstractPath) : Promise<File> {
 
 		const res = await getFile(path);
 		return typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
@@ -142,7 +155,7 @@ export async function loadModule(path : string, options : Options = throwNotDefi
 		getFile: normalizedGetFile,
 	};
 
-	return await loadModuleInternal( { refPath: '/', relPath: path }, normalizedOptions);
+	return await loadModuleInternal( { refPath: undefined, relPath: path }, normalizedOptions);
 }
 
 /**

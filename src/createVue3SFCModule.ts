@@ -47,7 +47,8 @@ import {
 import {
 	Options,
 	ModuleExport,
-	CustomBlockCallback
+	CustomBlockCallback,
+	AbstractPath
 } from './types'
 
 
@@ -76,23 +77,24 @@ const isProd : boolean = process.env.NODE_ENV === 'production';
  * @internal
  */
 
-export async function createSFCModule(source : string, filename : string, options : Options) : Promise<ModuleExport> {
+export async function createSFCModule(source : string, filename : AbstractPath, options : Options) : Promise<ModuleExport> {
+
+	const strFilename = filename.toString();
 
 	const component = {};
-
 
 	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
-		filename,
+		filename: strFilename,
 		sourceMap: genSourcemap,
 	});
 
 
 	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
 
-	const componentHash = hash(filename, version);
+	const componentHash = hash(strFilename, version);
 	const scopeId = `data-v-${componentHash}`;
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
@@ -170,13 +172,13 @@ export async function createSFCModule(source : string, filename : string, option
 							...babelParserPlugins
 						],
 						sourceType: 'module',
-						sourceFilename: filename,
+						sourceFilename: strFilename,
 						startLine: scriptBlock.loc.start.line,
 					});
 
 				} catch(ex) {
 
-					log?.('error', 'SFC script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+					log?.('error', 'SFC script', formatErrorLineColumn(ex.message, strFilename, source, ex.loc.line, ex.loc.column + 1) );
 					throw ex;
 				}
 			} else {
@@ -224,12 +226,12 @@ export async function createSFCModule(source : string, filename : string, option
 				for ( const err of template.errors ) {
 					if (typeof err === 'object') {
 						if (err.loc) {
-							log?.('error', 'SFC template', formatErrorLineColumn(err.message, filename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
+							log?.('error', 'SFC template', formatErrorLineColumn(err.message, strFilename, source, err.loc.start.line + descriptor.template.loc.start.line - 1, err.loc.start.column) );
 						} else {
-							log?.('error', 'SFC template', formatError(err.message, filename, source) );
+							log?.('error', 'SFC template', formatError(err.message, strFilename, source) );
 						}
 					} else {
-						log?.('error', 'SFC template', formatError(err, filename, source) );
+						log?.('error', 'SFC template', formatError(err, strFilename, source) );
 					}
 				}
 			}

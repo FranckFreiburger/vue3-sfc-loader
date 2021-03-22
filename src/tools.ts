@@ -32,6 +32,7 @@ import {
 	Module,
 	LoadingType,
 	PathContext,
+	AbstractPath,
 } from './types'
 
 import { createSFCModule } from './createSFCModule'
@@ -91,9 +92,9 @@ export function formatErrorStartEnd(message : string, path : string, source : st
 /**
  * @internal
  */
- export function hash(...valueList : string[]) : string {
+ export function hash(...valueList : any[]) : string {
 
-	return valueList.reduce((hashInstance, val) => hashInstance.append(val ? val : ""), new SparkMD5()).end().slice(0, 8);
+	return valueList.reduce((hashInstance, val) => hashInstance.append(String(val)), new SparkMD5()).end().slice(0, 8);
 }
 
 
@@ -103,7 +104,7 @@ export function formatErrorStartEnd(message : string, path : string, source : st
  * preventCache usage: non-fatal error
  * @internal
  */
-export async function withCache( cacheInstance : Cache, key : string[], valueFactory : ValueFactory ) : Promise<any> {
+export async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) : Promise<any> {
 
 	let cachePrevented = false;
 
@@ -202,7 +203,7 @@ export function parseDeps(fileAst : t.File) : string[] {
 /**
  * @internal
  */
-export async function transformJSCode(source : string, moduleSourceType : boolean, filename : string, options : Options) : Promise<[string[], string]> {
+export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<[string[], string]> {
 
 	const { additionalBabelPlugins = [], log } = options;
 
@@ -212,11 +213,11 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		ast = babel_parse(source, {
 			// doc: https://babeljs.io/docs/en/babel-parser#options
 			sourceType: moduleSourceType ? 'module' : 'script',
-			sourceFilename: filename,
+			sourceFilename: filename.toString(),
 		});
 	} catch(ex) {
 
-		log?.('error', 'parse script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+		log?.('error', 'parse script', formatErrorLineColumn(ex.message, filename.toString(), source, ex.loc.line, ex.loc.column + 1) );
 		throw ex;
 	}
 
@@ -297,7 +298,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
  * Create a cjs module
  * @internal
  */
-export function createModule(refPath : string, source : string, options : Options) : Module {
+export function createModule(refPath : AbstractPath, source : string, options : Options) : Module {
 
 	const { moduleCache, pathHandlers: { resolve }, getResource } = options;
 
@@ -330,7 +331,7 @@ export function createModule(refPath : string, source : string, options : Option
 /**
  * @internal
  */
-export async function createJSModule(source : string, moduleSourceType : boolean, filename : string, options : Options) : Promise<ModuleExport> {
+export async function createJSModule(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<ModuleExport> {
 
 	const { compiledCache } = options;
 
@@ -348,7 +349,7 @@ export async function createJSModule(source : string, moduleSourceType : boolean
  * Just load and cache given dependencies.
  * @internal
  */
-export async function loadDeps(refPath : string, deps : string[], options : Options) : Promise<void> {
+export async function loadDeps(refPath : AbstractPath, deps : AbstractPath[], options : Options) : Promise<void> {
 
 	await Promise.all(deps.map(relPath => loadModuleInternal({ refPath, relPath }, options)))
 }
@@ -357,7 +358,7 @@ export async function loadDeps(refPath : string, deps : string[], options : Opti
 /**
  * Default implementation of handleModule
  */
- async function defaultHandleModule(extname : string, source : string, path : string, options : Options) : Promise<ModuleExport | null> {
+ async function defaultHandleModule(extname : string, source : string, path : AbstractPath, options : Options) : Promise<ModuleExport | null> {
 
 	switch (extname) {
 		case '.vue': return createSFCModule(source.toString(), path, options);

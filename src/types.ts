@@ -18,23 +18,28 @@ export type Cache = {
 }
 
 
+export type AbstractPath = {
+	toString() : string,
+}
+
+
 /**
  * A PathContext represents a path (relPath) relative to an abolute path (refPath)
  * Note that relPath is not necessary relative, but it is, relPath is relative to refPath.
  */
 export type PathContext = {
 	/** reference path */
-	refPath : string,
+	refPath : AbstractPath,
 	/** relative to @refPath */
-	relPath : string,
+	relPath : AbstractPath,
 }
 
 
 export type PathHandlers = {
 	/** the extension name (or type) of a file (incluting the leading dot, eg. '.svg') */
-	extname(filepath : string) : string,
+	extname(filepath : AbstractPath) : string,
 	/** relative to absolute module path resolution */
-	resolve(pathCx : PathContext) : string,
+	resolve(pathCx : PathContext) : AbstractPath,
 }
 
 
@@ -57,7 +62,7 @@ export type PathHandlers = {
  *	...
  * ```
  */
-export type ModuleHandler = (extname : string, source : string, path : string, options : Options) => Promise<ModuleExport | null>;
+export type ModuleHandler = (extname : string, source : string, path : AbstractPath, options : Options) => Promise<ModuleExport | null>;
 
 
 /**
@@ -78,7 +83,7 @@ export type Resource = {
 	/** 'abstract' unique id of the resource */
 	id : string,
 	/** file path of the resource */
-	path : string,
+	path : AbstractPath,
 	/** asynchronously get the content of the resource */
 	getContent : () => Promise<File>,
 }
@@ -164,7 +169,7 @@ export type Options = {
  *	...
  * ```
 */
-	getFile(path : string) : Promise<File>,
+	getFile(path : AbstractPath) : Promise<File>,
 
 
 /**
@@ -323,7 +328,7 @@ export type Options = {
  *	...
  * ```
  */
-	loadModule?(path : string, options : Options) : Promise<ModuleExport | undefined>,
+	loadModule?(path : AbstractPath, options : Options) : Promise<ModuleExport | undefined>,
 
 
 /**
@@ -360,7 +365,7 @@ export type Options = {
  *	...
  * ```
  */
- 	customBlockHandler?(block : CustomBlock, filename : string, options : Options) : Promise<CustomBlockCallback | undefined>,
+ 	customBlockHandler?(block : CustomBlock, filename : AbstractPath, options : Options) : Promise<CustomBlockCallback | undefined>,
 
 }
 

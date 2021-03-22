@@ -46,7 +46,8 @@ import {
 import {
 	Options,
 	ModuleExport,
-	CustomBlockCallback
+	CustomBlockCallback,
+	AbstractPath
 } from './types'
 
 import {
@@ -75,23 +76,24 @@ const isProd : boolean = process.env.NODE_ENV === 'production';
  * @internal
  */
 
-export async function createSFCModule(source : string, filename : string, options : Options) : Promise<ModuleExport> {
+export async function createSFCModule(source : string, filename : AbstractPath, options : Options) : Promise<ModuleExport> {
+
+	const strFilename = filename.toString();
 
 	const component = {};
-
 
 	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
 
 	const descriptor = sfc_parse({
 		source,
-		filename,
+		filename: strFilename,
 		needMap: genSourcemap,
 		compiler: vueTemplateCompiler as VueTemplateCompiler}
 		);
 
 	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block ) => customBlockHandler(block, filename, options)) ) : [];
 
-	const componentHash = hash(filename, version);
+	const componentHash = hash(strFilename, version);
 	const scopeId = `data-v-${componentHash}`;
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
@@ -109,7 +111,7 @@ export async function createSFCModule(source : string, filename : string, option
 	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		source: descriptor.template.src ? (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).content.toString() : descriptor.template.content,
-		filename,
+		filename: strFilename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
 			delimiters,
@@ -159,11 +161,11 @@ export async function createSFCModule(source : string, filename : string, option
 						...babelParserPlugins
 					],
 					sourceType: 'module',
-					sourceFilename: filename
+					sourceFilename: strFilename
 				});
 
 			} catch(ex) {
-				log?.('error', 'SFC script', formatErrorLineColumn(ex.message, filename, source, ex.loc.line, ex.loc.column + 1) );
+				log?.('error', 'SFC script', formatErrorLineColumn(ex.message, strFilename, source, ex.loc.line, ex.loc.column + 1) );
 				throw ex;
 			}
 
@@ -212,7 +214,7 @@ export async function createSFCModule(source : string, filename : string, option
 						}
 					}
 
-					log?.('error', 'SFC template', formatErrorStartEnd(err.msg, filename, compileTemplateOptions.source.trim(), err.start, err.end ));
+					log?.('error', 'SFC template', formatErrorStartEnd(err.msg, strFilename, compileTemplateOptions.source.trim(), err.start, err.end ));
 				}
 			}
 
@@ -225,7 +227,7 @@ export async function createSFCModule(source : string, filename : string, option
 					}
 				}
 
-				log?.('info', 'SFC template', formatErrorStartEnd(err.msg, filename, source, err.start, err.end ));
+				log?.('info', 'SFC template', formatErrorStartEnd(err.msg, strFilename, source, err.start, err.end ));
 			}
 
 			return await transformJSCode(template.code, true, filename, options);
@@ -244,7 +246,7 @@ export async function createSFCModule(source : string, filename : string, option
 
 			const compileStyleOptions: StyleCompileOptions = {
 				source: src,
-				filename,
+				filename: strFilename,
 				id: scopeId,
 				scoped: descStyle.scoped !== undefined ? descStyle.scoped : false,
 				trim: false,
@@ -266,7 +268,7 @@ export async function createSFCModule(source : string, filename : string, option
 				preventCache();
 				for ( const err of compiledStyle.errors ) {
 
-					log?.('error', 'SFC style', formatError(err, filename, source));
+					log?.('error', 'SFC style', formatError(err, strFilename, source));
 				}
 			}
 
