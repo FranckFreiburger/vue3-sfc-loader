@@ -39,7 +39,11 @@ function throwNotDefined(details : string) : never {
 
 
 /**
- * Default implementation of PathHandlers
+ * Default implementation of PathHandlers.
+ * resolve() should handle 3 situations :
+ *  - resolve a relative path ( eg. import './details.vue' )
+ *  - resolve an absolute path ( eg. import '/components/card.vue' )
+ *  - resolve a module name ( eg. import { format } from 'date-fns' )
  */
 const defaultPathHandlers : PathHandlers = {
 	extname(filepath) {
