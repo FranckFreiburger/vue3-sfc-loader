@@ -128,7 +128,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				}
 			});
 
-			await expect(output.filter(e => e.type === 'pageerror' && e.text).map(e => e.text)[0]).toMatch(/.*HTTP Error.*/);
+			await expect(output.filter(e => e.type === 'pageerror' && e.text).map(e => e.text)[0]).toMatch('HttpError');
 
 		});
 
@@ -476,6 +476,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 							});
 
 							return createApp(options).then((app) => {
+								
 								mountApp(app, 'elt1')
 
 								options.moduleCache = {
@@ -485,6 +486,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 								createApp(options).then((app2) => {
 									mountApp(app2, 'elt2');
 								});
+								
 							})
 						}
 					`
