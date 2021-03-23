@@ -126,7 +126,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
 	if (descriptor.template?.lang) {
 		const preprocess = moduleCache[descriptor.template.lang] as any;
-		compileTemplateOptions.source = await withCache(compiledCache, [ compileTemplateOptions.source, descriptor.template.lang ], async ({ preventCache }) => {
+		compileTemplateOptions.source = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source, descriptor.template.lang ], async ({ preventCache }) => {
 
 			return await new Promise((resolve, reject) => {
 				preprocess.render(compileTemplateOptions.source, compileTemplateOptions.preprocessOptions, (_err : any, _res : any) => {
