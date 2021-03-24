@@ -30,6 +30,13 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 // https://github.com/vuejs/jsx-next
 import jsx from '@vue/babel-plugin-jsx'
 
+// @ts-ignore
+import pluginProposalOptionalChaining from "@babel/plugin-proposal-optional-chaining"
+
+// @ts-ignore
+import pluginProposalNullishCoalescingOperator from '@babel/plugin-proposal-nullish-coalescing-operator'
+
+
 import {
 	formatErrorLineColumn,
 	formatError,
@@ -198,6 +205,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
 					jsx,
+					pluginProposalOptionalChaining,
+					pluginProposalNullishCoalescingOperator,
 					...additionalBabelPlugins,
 				],
 				babelrc: false,

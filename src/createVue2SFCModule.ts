@@ -28,6 +28,13 @@ import jsx from '@vue/babel-plugin-transform-vue-jsx'
 // @ts-ignore
 import babelSugarInjectH from '@vue/babel-sugar-inject-h'
 
+// @ts-ignore
+import pluginProposalOptionalChaining from "@babel/plugin-proposal-optional-chaining"
+
+// @ts-ignore
+import pluginProposalNullishCoalescingOperator from '@babel/plugin-proposal-nullish-coalescing-operator'
+
+
 import {
 	formatError,
 	formatErrorStartEnd,
@@ -178,6 +185,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
 					jsx,
+					pluginProposalOptionalChaining,
+					pluginProposalNullishCoalescingOperator,
 					babelSugarInjectH,
 					...additionalBabelPlugins,
 				],
