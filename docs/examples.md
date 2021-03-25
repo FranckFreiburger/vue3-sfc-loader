@@ -745,26 +745,30 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.6.1/dist/vue3-sfc-loader.js"></script>
 <script>
 
-	/* <!-- */
 	const config = {
 		files: {
-			'/main.vue': `
-				<template>
-					<pre><b>'url!./circle.svg' -> </b>{{ require('url!./circle.svg') }}</pre>
-					<img width="50" height="50" src="~url!./circle.svg" />
-					<pre><b>'file!./circle.svg' -> </b>{{ require('file!./circle.svg') }}</pre>
-					<img width="50" height="50" src="~file!./circle.svg" />
-				</template>
-			`,
-			'/circle.svg': `
-				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-					<circle cx="50" cy="50" r="50" />
-				</svg>
-			`,
+      '/main.vue': {
+        content: /* <!-- */`
+          <template>
+            <pre><b>'url!./circle.svg' -> </b>{{ require('url!./circle.svg') }}</pre>
+            <img width="50" height="50" src="~url!./circle.svg" />
+            <pre><b>'file!./circle.svg' -> </b>{{ require('file!./circle.svg') }}</pre>
+            <img width="50" height="50" src="~file!./circle.svg" />
+          </template>
+        `/* --> */,
+        type: '.vue',
+      },
+			'/circle.svg': {
+        content: /* <!-- */`
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" />
+          </svg>
+  			`/* --> */,
+        type: '.svg',
+      }
 		}
 	};
-	/* --> */
-
+	
 	const options = {
 		moduleCache: {
 			'vue': Vue,
@@ -788,6 +792,8 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 			}
 		},
 		getFile(url, options) {
+
+
 
 			return config.files[url] || (() => { throw new Error('404 ' + url) })();
 		},
