@@ -58,7 +58,7 @@ import {
 	AbstractPath
 } from './types'
 
-
+// @ts-ignore (Cannot find module '@vue/compiler-sfc/../../package.json' or its corresponding type declarations.)
 export { version as vueVersion } from '@vue/compiler-sfc/../../package.json'
 
 /**
