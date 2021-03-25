@@ -242,7 +242,7 @@ export type Options = {
  *		...
  *	```
 */
-	additionalBabelPlugins?: any[],
+	additionalBabelPlugins?: Record<string, any>,
 
 
 /**

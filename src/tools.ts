@@ -205,7 +205,7 @@ export function parseDeps(fileAst : t.File) : string[] {
  */
 export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<[string[], string]> {
 
-	const { additionalBabelPlugins = [], log } = options;
+	const { additionalBabelPlugins = {}, log } = options;
 
 	let ast: t.File;
 	try {
@@ -228,7 +228,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		sourceMaps: genSourcemap, // doc: https://babeljs.io/docs/en/options#sourcemaps
 		plugins: [ // https://babeljs.io/docs/en/options#plugins
 			babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
-			...additionalBabelPlugins
+			...Object.values(additionalBabelPlugins),
 		],
 		babelrc: false,
 		configFile: false,

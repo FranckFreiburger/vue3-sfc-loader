@@ -89,7 +89,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component = {};
 
-	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = [], customBlockHandler } = options;
+	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = {}, customBlockHandler } = options;
 
 	const descriptor = sfc_parse({
 		source,
@@ -154,9 +154,9 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descriptor.script.src ? (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString() : descriptor.script.content;
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
+		const babelParserPlugins : babel_ParserPlugin[] = [];
 
-			const babelParserPlugins : babel_ParserPlugin[] = [];
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, JSON.stringify(babelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
 			let ast: t.File
 			try {
@@ -188,7 +188,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 					pluginProposalOptionalChaining,
 					pluginProposalNullishCoalescingOperator,
 					babelSugarInjectH,
-					...additionalBabelPlugins,
+					...Object.values(additionalBabelPlugins),
 				],
 				babelrc: false,
 				configFile: false,
