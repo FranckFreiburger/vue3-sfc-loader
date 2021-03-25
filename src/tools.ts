@@ -21,6 +21,12 @@ import {
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
+// @ts-ignore
+import pluginProposalOptionalChaining from "@babel/plugin-proposal-optional-chaining"
+
+// @ts-ignore
+import pluginProposalNullishCoalescingOperator from '@babel/plugin-proposal-nullish-coalescing-operator'
+
 
 import * as SparkMD5 from 'spark-md5'
 
@@ -214,6 +220,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 			// doc: https://babeljs.io/docs/en/babel-parser#options
 			sourceType: moduleSourceType ? 'module' : 'script',
 			sourceFilename: filename.toString(),
+			plugins:  [ 'optionalChaining', 'nullishCoalescingOperator' ],
 		});
 	} catch(ex) {
 
@@ -228,6 +235,8 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		sourceMaps: genSourcemap, // doc: https://babeljs.io/docs/en/options#sourcemaps
 		plugins: [ // https://babeljs.io/docs/en/options#plugins
 			babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
+			pluginProposalOptionalChaining,
+			pluginProposalNullishCoalescingOperator,
 			...Object.values(additionalBabelPlugins),
 		],
 		babelrc: false,
