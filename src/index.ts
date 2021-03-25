@@ -144,7 +144,7 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 	async function normalizedGetFile(path : AbstractPath) : Promise<File> {
 
 		const res = await getFile(path);
-		return typeof res === 'object' ? res : { content: res, extname: pathHandlers.extname(path) };
+		return typeof res === 'object' ? res : { content: res, type: pathHandlers.extname(path) };
 	}
 
 	const normalizedOptions = {

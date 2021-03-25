@@ -62,7 +62,7 @@ export type PathHandlers = {
  *	...
  * ```
  */
-export type ModuleHandler = (extname : string, source : string, path : AbstractPath, options : Options) => Promise<ModuleExport | null>;
+export type ModuleHandler = (type : string, source : string, path : AbstractPath, options : Options) => Promise<ModuleExport | null>;
 
 
 /**
@@ -72,7 +72,7 @@ export type File = {
 	/** The content data */
 	content : string | ArrayBuffer,
 	/** The content type (file extension name, eg. '.svg' ) */
-	extname : string,
+	type : string,
 }
 
 

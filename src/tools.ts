@@ -276,7 +276,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
 				return moduleCache[id] = module;
 		}
 
-		const { content, extname } = await getContent();
+		const { content, type } = await getContent();
 
 		if ( typeof content !== 'string' )
 			throw new TypeError(`Invalid module content (${ path }): ${ content }`);
@@ -285,13 +285,13 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
 		let module : ModuleExport | undefined | null = undefined;
 
 		if ( handleModule !== undefined )
-			module = await handleModule(extname, content, path, options);
+			module = await handleModule(type, content, path, options);
 
 		if ( module === undefined )
-			module = await defaultHandleModule(extname, content, path, options);
+			module = await defaultHandleModule(type, content, path, options);
 
 		if ( module === undefined )
-			throw new TypeError(`Unable to handle ${ extname } files (${ path })`);
+			throw new TypeError(`Unable to handle ${ type } files (${ path })`);
 
 		return moduleCache[id] = module;
 
@@ -367,9 +367,9 @@ export async function loadDeps(refPath : AbstractPath, deps : AbstractPath[], op
 /**
  * Default implementation of handleModule
  */
- async function defaultHandleModule(extname : string, source : string, path : AbstractPath, options : Options) : Promise<ModuleExport | null> {
+ async function defaultHandleModule(type : string, source : string, path : AbstractPath, options : Options) : Promise<ModuleExport | null> {
 
-	switch (extname) {
+	switch (type) {
 		case '.vue': return createSFCModule(source.toString(), path, options);
 		case '.js': return createJSModule(source.toString(), false, path, options);
 		case '.mjs': return createJSModule(source.toString(), true, path, options);
