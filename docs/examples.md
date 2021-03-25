@@ -793,7 +793,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 		},
 		getResource({ refPath, relPath }, options) {
 
-			const { moduleCache, pathHandlers: { resolve }, getFile } = options;
+			const { moduleCache, pathResolve, getFile } = options;
 
 			const [ resourceRelPath, ...loaders ] = relPath.match(/([^!]+!)|[^!]+$/g).reverse();
 
@@ -807,7 +807,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 			}
 
 			// get the actual path of the file
-			const path = resolve({ refPath, relPath: resourceRelPath });
+			const path = pathResolve({ refPath, relPath: resourceRelPath });
 
 			// the resource id must be unique in its path context
 			const id = loaders.join('') + path;
@@ -855,7 +855,6 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
   <div id="app"></div>
   <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.6.1/dist/vue2-sfc-loader.js"></script>
- 
   <script>
     
     const options = {
@@ -863,63 +862,59 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
         vue: Vue,
         'date-fns/locale/en/index.js': {}, // handle require('date-fns/locale/' + this.locale.toLowerCase() + '/index.js');
       },
-      pathHandlers: {
-        extname(filepath) {
+      pathResolve({ refPath, relPath }) {
 
-          const { pathname } = new URL(filepath, window.location);
-          return /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/.exec(pathname)[4];
-        },
-        resolve({ refPath, relPath }) {
+        if ( relPath === 'date-fns' )
+          return 'https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js';
 
-          if ( relPath === 'date-fns' )
-            return 'https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js';
+        if ( relPath === '.' ) // self
+          return refPath;
+        
+        // relPath is a module name ?
+        if ( relPath[0] !== '.' && relPath[0] !== '/' )
+          return relPath;
 
-          if ( relPath === '.' ) // self
-            return refPath;
-          
-          // relPath is a module name ?
-          if ( relPath[0] !== '.' && relPath[0] !== '/' )
-            return relPath;
-
-          return String(new URL(relPath, refPath === '/' ? window.location : refPath));
-        }
+        return String(new URL(relPath, refPath === undefined ? window.location : refPath));
       },
-      async getFile(url) {
-  
-        if ( new URL(url).pathname === '/main.vue' ) {
-  
-          return /*<!--*/`
-            <template>
-              <div>
-                <calendar-range locale="EN" :selection="selection" :events="calendarEvents"/>
-                <button @click="add">add</button>
-              </div>
-            </template>
-            <script>
-              import calendarRange from 'https://raw.githubusercontent.com/FranckFreiburger/vue-calendar-picker/v1.2.1/src/calendarRange.vue'
+      getFile: async (url) => {
 
-              export default {
-                components: {
-                  calendarRange,
-                },
-                data: {
-                  selection: { start: Date.now(), end: Date.now() },
-                  calendarEvents: []
-                },
-                methods: {
-                  add: function() {
-                    this.calendarEvents.push({
-                      color: '#'+Math.floor(Math.random()*16777215).toString(16),
-                      start: this.selection.start,
-                      end: this.selection.end
-                    });
+        if ( new URL(url).pathname === '/main.vue' ) {
+
+          return {
+            content: /*<!--*/`
+              <template>
+                <div>
+                  <calendar-range locale="EN" :selection="selection" :events="calendarEvents"/>
+                  <button @click="add">add</button>
+                </div>
+              </template>
+              <script>
+                import calendarRange from 'https://raw.githubusercontent.com/FranckFreiburger/vue-calendar-picker/v1.2.1/src/calendarRange.vue'
+
+                export default {
+                  components: {
+                    calendarRange,
+                  },
+                  data: {
+                    selection: { start: Date.now(), end: Date.now() },
+                    calendarEvents: []
+                  },
+                  methods: {
+                    add: function() {
+                      this.calendarEvents.push({
+                        color: '#'+Math.floor(Math.random()*16777215).toString(16),
+                        start: this.selection.start,
+                        end: this.selection.end
+                      });
+                    }
                   }
                 }
-              }
-            </script>
-          `/* --> */;
+              </script>
+            `/* --> */,
+            type: '.vue',
+          }
         }
-  
+
         return fetch(url).then(res => res.text());
       },
       addStyle(textContent) {
@@ -929,19 +924,19 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
         document.head.insertBefore(style, ref);
       },
     }
-  
+
     const { loadModule } = window['vue2-sfc-loader'];
 
     loadModule('/main.vue', options)
     .then(component => new Vue(component).$mount('#app'))
-  
+
   </script>
 
 </body>
 </html>
 ```
 <!--example:target:remote_vue_components-->
-[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%402%2Fdist%2Fvue.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.6.1%2Fdist%2Fvue2-sfc-loader.js%22%3E%3C%2Fscript%3E%0A+%0A++%3Cscript%3E%0A++++%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++++'date-fns%2Flocale%2Fen%2Findex.js'%3A+%7B%7D%2C+%2F%2F+handle+require('date-fns%2Flocale%2F'+%2B+this.locale.toLowerCase()+%2B+'%2Findex.js')%3B%0A++++++%7D%2C%0A++++++pathHandlers%3A+%7B%0A++++++++type(filepath)+%7B%0A%0A++++++++++const+%7B+pathname+%7D+%3D+new+URL(filepath%2C+window.location)%3B%0A++++++++++return+%2F%5E(%5C%2F%3F%7C)(%5B%5Cs%5CS%5D*%3F)((%3F%3A%5C.%7B1%2C2%7D%7C%5B%5E%5C%2F%5D%2B%3F%7C)(%5C.%5B%5E.%5C%2F%5D*%7C))(%3F%3A%5B%5C%2F%5D*)%24%2F.exec(pathname)%5B4%5D%3B%0A++++++++%7D%2C%0A++++++++resolve(%7B+refPath%2C+relPath+%7D)+%7B%0A%0A++++++++++if+(+relPath+%3D%3D%3D+'date-fns'+)%0A++++++++++++return+'https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fdate-fns%2F1.30.1%2Fdate_fns.min.js'%3B%0A%0A++++++++++if+(+relPath+%3D%3D%3D+'.'+)+%2F%2F+self%0A++++++++++++return+refPath%3B%0A++++++++++%0A++++++++++%2F%2F+relPath+is+a+module+name+%3F%0A++++++++++if+(+relPath%5B0%5D+!%3D%3D+'.'+%26%26+relPath%5B0%5D+!%3D%3D+'%2F'+)%0A++++++++++++return+relPath%3B%0A%0A++++++++++return+String(new+URL(relPath%2C+refPath+%3D%3D%3D+'%2F'+%3F+window.location+%3A+refPath))%3B%0A++++++++%7D%0A++++++%7D%2C%0A++++++async+getFile(url)+%7B%0A++%0A++++++++if+(+new+URL(url).pathname+%3D%3D%3D+'%2Fmain.vue'+)+%7B%0A++%0A++++++++++return+%2F*%3C!--*%2F%60%0A++++++++++++%3Ctemplate%3E%0A++++++++++++++%3Cdiv%3E%0A++++++++++++++++%3Ccalendar-range+locale%3D%22EN%22+%3Aselection%3D%22selection%22+%3Aevents%3D%22calendarEvents%22%2F%3E%0A++++++++++++++++%3Cbutton+%40click%3D%22add%22%3Eadd%3C%2Fbutton%3E%0A++++++++++++++%3C%2Fdiv%3E%0A++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%3Cscript%3E%0A++++++++++++++import+calendarRange+from+'https%3A%2F%2Fraw.githubusercontent.com%2FFranckFreiburger%2Fvue-calendar-picker%2Fv1.2.1%2Fsrc%2FcalendarRange.vue'%0A%0A++++++++++++++export+default+%7B%0A++++++++++++++++components%3A+%7B%0A++++++++++++++++++calendarRange%2C%0A++++++++++++++++%7D%2C%0A++++++++++++++++data%3A+%7B%0A++++++++++++++++++selection%3A+%7B+start%3A+Date.now()%2C+end%3A+Date.now()+%7D%2C%0A++++++++++++++++++calendarEvents%3A+%5B%5D%0A++++++++++++++++%7D%2C%0A++++++++++++++++methods%3A+%7B%0A++++++++++++++++++add%3A+function()+%7B%0A++++++++++++++++++++this.calendarEvents.push(%7B%0A++++++++++++++++++++++color%3A+'%23'%2BMath.floor(Math.random()*16777215).toString(16)%2C%0A++++++++++++++++++++++start%3A+this.selection.start%2C%0A++++++++++++++++++++++end%3A+this.selection.end%0A++++++++++++++++++++%7D)%3B%0A++++++++++++++++++%7D%0A++++++++++++++++%7D%0A++++++++++++++%7D%0A++++++++++++%3C%2Fscript%3E%0A++++++++++%60%2F*+--%3E+*%2F%3B%0A++++++++%7D%0A++%0A++++++++return+fetch(url).then(res+%3D%3E+res.text())%3B%0A++++++%7D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++%7D%0A++%0A++++const+%7B+loadModule+%7D+%3D+window%5B'vue2-sfc-loader'%5D%3B%0A%0A++++loadModule('%2Fmain.vue'%2C+options)%0A++++.then(component+%3D%3E+new+Vue(component).%24mount('%23app'))%0A++%0A++%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:remote_vue_components-->
+<!--/example:target:remote_vue_components-->
 
 [:top:](#readme)
 

@@ -35,13 +35,8 @@ export type PathContext = {
 }
 
 
-export type PathHandlers = {
-	/** the extension name (or type) of a file (incluting the leading dot, eg. '.svg') */
-	extname(filepath : AbstractPath) : string,
-	/** relative to absolute module path resolution */
-	resolve(pathCx : PathContext) : AbstractPath,
-}
-
+/** relative to absolute module path resolution */
+export type PathResolve = (pathCx : PathContext) => AbstractPath;
 
 
 /**
@@ -335,7 +330,7 @@ export type Options = {
  * Abstact path handling
  *
  */
- 	pathHandlers : PathHandlers,
+ 	pathResolve : PathResolve,
 
 
 /**

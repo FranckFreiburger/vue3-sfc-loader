@@ -8,7 +8,7 @@ import {
 
 import {
 	ModuleExport,
-	PathHandlers,
+	PathResolve,
 	Options,
 	File,
 	Resource,
@@ -41,46 +41,47 @@ function throwNotDefined(details : string) : never {
 
 
 /**
- * Default implementation of PathHandlers.
+ * Default resolve implementation
  * resolve() should handle 3 situations :
  *  - resolve a relative path ( eg. import './details.vue' )
  *  - resolve an absolute path ( eg. import '/components/card.vue' )
  *  - resolve a module name ( eg. import { format } from 'date-fns' )
  */
-const defaultPathHandlers : PathHandlers = {
-	extname(filepath) {
+const defaultPathResolve : PathResolve = ({ refPath, relPath } : PathContext) => {
 
-		return Path.extname(filepath.toString());
-	},
-	resolve({ refPath, relPath } : PathContext) {
+	// initial resolution: refPath is not defined
+	if ( refPath === undefined )
+		return relPath;
 
-		// initial resolution: refPath is not defined
-		if ( refPath === undefined )
-			return relPath;
+	// note :
+	//  normalize('./test') -> 'test'
+	//  normalize('/test') -> '/test'
 
-		// note :
-		//  normalize('./test') -> 'test'
-		//  normalize('/test') -> '/test'
+	const relPathStr = relPath.toString();
 
-		const relPathStr = relPath.toString();
+	// a module name ?
+	if ( relPathStr[0] !== '.' && relPathStr[0] !== '/' )
+		return relPath;
 
-		// a module name ?
-		if ( relPathStr[0] !== '.' && relPathStr[0] !== '/' )
-			return relPath;
-
-		return Path.normalize(Path.join(Path.dirname(refPath.toString()), relPathStr));
-	}
+	return Path.normalize(Path.join(Path.dirname(refPath.toString()), relPathStr));
 }
 
-
+/**
+ * Default getResource implementation
+ * by default, getContent() use the file extension as file type.
+ */
 function defaultGetResource(pathCx : PathContext, options : Options) : Resource {
 
-	const { pathHandlers: { resolve }, getFile } = options;
-	const path = resolve(pathCx);
+	const { pathResolve, getFile } = options;
+	const path = pathResolve(pathCx);
 	return {
 		id: path.toString(),
 		path: path,
-		getContent: () => getFile(path),
+		getContent: async () => {
+
+			const res = await getFile(path);
+			return typeof res === 'object' ? res : { content: res, type: Path.extname(path.toString()) };
+		}
 	};
 }
 
@@ -132,7 +133,7 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 		moduleCache = throwNotDefined('options.moduleCache'),
 		getFile = throwNotDefined('options.getFile()'),
 		addStyle = throwNotDefined('options.addStyle()'),
-		pathHandlers = defaultPathHandlers,
+		pathResolve = defaultPathResolve,
 		getResource = defaultGetResource,
 	} = options;
 
@@ -140,19 +141,11 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 	if ( moduleCache instanceof Object )
 		Object.setPrototypeOf(moduleCache, null);
 
-	// TBD: remove this in v1.0
-	async function normalizedGetFile(path : AbstractPath) : Promise<File> {
-
-		const res = await getFile(path);
-		return typeof res === 'object' ? res : { content: res, type: pathHandlers.extname(path) };
-	}
-
 	const normalizedOptions = {
 		moduleCache,
-		pathHandlers,
+		pathResolve,
 		getResource,
 		...options,
-		getFile: normalizedGetFile,
 	};
 
 	return await loadModuleInternal( { refPath: undefined, relPath: path }, normalizedOptions);

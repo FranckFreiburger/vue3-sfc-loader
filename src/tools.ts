@@ -309,7 +309,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
  */
 export function createModule(refPath : AbstractPath, source : string, options : Options) : Module {
 
-	const { moduleCache, pathHandlers: { resolve }, getResource } = options;
+	const { moduleCache, pathResolve, getResource } = options;
 
 	const require = function(relPath : string) {
 
@@ -331,7 +331,7 @@ export function createModule(refPath : AbstractPath, source : string, options : 
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import__', source).call(module.exports, module.exports, require, module, refPath, resolve({ refPath, relPath: '.' }), importFunction);
+	Function('exports', 'require', 'module', '__filename', '__dirname', 'import__', source).call(module.exports, module.exports, require, module, refPath, pathResolve({ refPath, relPath: '.' }), importFunction);
 
 	return module;
 }
