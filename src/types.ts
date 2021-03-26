@@ -18,6 +18,9 @@ export type Cache = {
 }
 
 
+export type ModuleCacheId = string;
+
+
 export type AbstractPath = {
 	toString() : string,
 }
@@ -75,8 +78,11 @@ export type File = {
  * Represents a resource.
  */
 export type Resource = {
-	/** 'abstract' unique id of the resource */
-	id : string,
+	/**
+	 * 'abstract' unique id of the resource.
+	 * This id is used as the key of the [[Options.moduleCache]]
+	 */
+	id : ModuleCacheId,
 	/** file path of the resource */
 	path : AbstractPath,
 	/** asynchronously get the content of the resource */
@@ -143,7 +149,7 @@ export type Options = {
  * ```
  *
 */
-	moduleCache?: Record<string, LoadingType<ModuleExport> | ModuleExport>,
+	moduleCache?: Record<ModuleCacheId, LoadingType<ModuleExport> | ModuleExport>,
 
 
 /**
