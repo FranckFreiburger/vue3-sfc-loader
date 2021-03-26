@@ -1,4 +1,23 @@
 
+## [0.7.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.6.1...v0.7.0) (2021-03-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** remove extname from PathHandlers, then replace PathHandlers with PathResolve
+* **core:** rename extname into type (since extname is not abstract enough)
+* **core:** make path(s) abstract
+
+### Features
+
+* **core:** make path(s) abstract ([e20b864](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/e20b86494abe5522cfe20b9d607f8ff54a0d7af5))
+
+
+### wip
+
+* **core:** remove extname from PathHandlers, then replace PathHandlers with PathResolve ([0deb95f](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/0deb95f3ef061625a642b2db59c6b71248e5b34c))
+* **core:** rename extname into type (since extname is not abstract enough) ([6a7e722](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/6a7e72252d0957c9880bf7c32ae1afe245caec34))
+
 ### [0.6.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.6.0...v0.6.1) (2021-03-21)
 
 
