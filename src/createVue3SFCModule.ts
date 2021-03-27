@@ -88,7 +88,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const strFilename = filename.toString();
 
-	const component = {};
+	const component : { [key: string]: any } = {};
 
 	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = {}, customBlockHandler } = options;
 
@@ -104,12 +104,19 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	const componentHash = hash(strFilename, version);
 	const scopeId = `data-v-${componentHash}`;
 
+	const hasScoped = descriptor.styles.some(e => e.scoped);
+
+	if ( hasScoped ) {
+
+		// see https://github.com/vuejs/vue-next/blob/4549e65baea54bfd10116241a6a5eba91ec3f632/packages/runtime-core/src/component.ts#L87
+		// vue-loader: https://github.com/vuejs/vue-loader/blob/65c91108e5ace3a8c00c569f08e9a847be5754f6/src/index.ts#L223
+		component.__scopeId = scopeId;
+	}
+
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 	if ( descriptor.template && descriptor.template.lang )
 		await loadModuleInternal({ refPath: filename, relPath: descriptor.template.lang }, options);
 
-
-	const hasScoped = descriptor.styles.some(e => e.scoped);
 
 	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
@@ -119,6 +126,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		isProd,
 		scoped: hasScoped,
 		id: scopeId,
+		slotted: descriptor.slotted,
 		compilerOptions: {
 			delimiters,
 			scopeId: hasScoped ? scopeId : undefined,
