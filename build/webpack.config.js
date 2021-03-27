@@ -200,7 +200,12 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'@babel/code-frame': require.resolve('@babel/code-frame'),
 				'@babel/core': require.resolve('@babel/core'),
 				'@babel/generator': require.resolve('@babel/generator'),
-
+				'@babel/helper-member-expression-to-functions': require.resolve('@babel/helper-member-expression-to-functions'),
+				'@babel/helper-module-imports': require.resolve('@babel/helper-module-imports'),
+				'@babel/helper-module-transforms': require.resolve('@babel/helper-module-transforms'),
+				'@babel/helper-replace-supers': require.resolve('@babel/helper-replace-supers'),
+				'@babel/helper-simple-access': require.resolve('@babel/helper-simple-access'),
+				
 				'@vue/shared': require.resolve('@vue/shared'),
 				'@vue/compiler-sfc': require.resolve('@vue/compiler-sfc'),
 				'@vue/compiler-dom': require.resolve('@vue/compiler-dom'),
