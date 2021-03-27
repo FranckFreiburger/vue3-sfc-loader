@@ -251,7 +251,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'vm': false, // or require.resolve('vm-browserify'),
 				'fs': false,
 				'os': false,
-				'module': false
+				'module': false,
+				'v8': false,
 			}
 		},
 
