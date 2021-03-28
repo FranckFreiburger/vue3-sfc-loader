@@ -61,7 +61,7 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
       },
       getFile(url) {
 
-        if ( url === '/main.vue' )
+        if ( url === './main.vue' )
           return Promise.resolve(mainComponent);
       },
       addStyle() { /* unused here */ },
