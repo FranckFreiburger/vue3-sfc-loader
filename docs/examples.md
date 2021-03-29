@@ -745,8 +745,8 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.7.0/dist/vue3-sfc-loader.js"></script>
 <script>
 
-	const config = {
-		files: {
+  const config = {
+    files: {
       '/main.vue': {
         content: /* <!-- */`
           <template>
@@ -758,85 +758,85 @@ In the following example we use a trick to preserve reactivity through the `Vue.
         `/* --> */,
         type: '.vue',
       },
-			'/circle.svg': {
+      '/circle.svg': {
         content: /* <!-- */`
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="50" />
           </svg>
-  			`/* --> */,
+        `/* --> */,
         type: '.svg',
       }
-		}
-	};
-	
-	const options = {
-		moduleCache: {
-			'vue': Vue,
-			'file!'(content, path, type, options) {
+    }
+  };
+  
+  const options = {
+    moduleCache: {
+      'vue': Vue,
+      'file!'(content, path, type, options) {
 
-				return String(new URL(path, window.location));
-			},
-			'url!'(content, path, type, options) {
+        return String(new URL(path, window.location));
+      },
+      'url!'(content, path, type, options) {
 
-				if ( type === '.svg' )
-					return `data:image/svg+xml;base64,${ btoa(content) }`;
+        if ( type === '.svg' )
+          return `data:image/svg+xml;base64,${ btoa(content) }`;
 
-				throw new Error(`${ type } not handled by url!`);
-			},
-		},
-		handleModule(type, source, path, options) {
+        throw new Error(`${ type } not handled by url!`);
+      },
+    },
+    handleModule(type, source, path, options) {
 
-			switch (type) {
-				case '.svg': return source;
+      switch (type) {
+        case '.svg': return source;
         default: return undefined; // let vue3-sfc-loader handle this
-			}
-		},
-		getFile(url, options) {
+      }
+    },
+    getFile(url, options) {
 
 
 
-			return config.files[url] || (() => { throw new Error('404 ' + url) })();
-		},
-		getResource({ refPath, relPath }, options) {
+      return config.files[url] || (() => { throw new Error('404 ' + url) })();
+    },
+    getResource({ refPath, relPath }, options) {
 
-			const { moduleCache, pathResolve, getFile } = options;
+      const { moduleCache, pathResolve, getFile } = options;
 
-			const [ resourceRelPath, ...loaders ] = relPath.match(/([^!]+!)|[^!]+$/g).reverse();
+      const [ resourceRelPath, ...loaders ] = relPath.match(/([^!]+!)|[^!]+$/g).reverse();
 
-			// process a content through the loaders
-			const processContentThroughLoaders = (content, path, type, options) => {
-				
-				return loaders.reduce((content, loader) => {
+      // process a content through the loaders
+      const processContentThroughLoaders = (content, path, type, options) => {
+        
+        return loaders.reduce((content, loader) => {
 
-					return moduleCache[loader](content, path, type);
-				}, content);
-			}
+          return moduleCache[loader](content, path, type);
+        }, content);
+      }
 
-			// get the actual path of the file
-			const path = pathResolve({ refPath, relPath: resourceRelPath });
+      // get the actual path of the file
+      const path = pathResolve({ refPath, relPath: resourceRelPath });
 
-			// the resource id must be unique in its path context
-			const id = loaders.join('') + path;
+      // the resource id must be unique in its path context
+      const id = loaders.join('') + path;
 
-			return {
-				id,
-				path,
-				async getContent() {
+      return {
+        id,
+        path,
+        async getContent() {
 
-					const { content, type } = await getFile(path);
+          const { content, type } = await getFile(path);
 
-					return {
-						content: processContentThroughLoaders(content, path, type),
-						type,
-					};
-				}
-			};
-		},
-		addStyle() { /* unused here */ },
-	}
+          return {
+            content: processContentThroughLoaders(content, path, type),
+            type,
+          };
+        }
+      };
+    },
+    addStyle() { /* unused here */ },
+  }
 
-	const { loadModule } = window['vue3-sfc-loader'];
-	Vue.createApp(Vue.defineAsyncComponent(() => loadModule('/main.vue', options))).mount(document.body);
+  const { loadModule } = window['vue3-sfc-loader'];
+  Vue.createApp(Vue.defineAsyncComponent(() => loadModule('/main.vue', options))).mount(document.body);
 
 </script>
 </body>
