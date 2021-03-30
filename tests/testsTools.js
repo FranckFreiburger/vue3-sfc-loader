@@ -86,11 +86,14 @@ async function createPage({ files, processors= {}}) {
 		console.log(expect.getState().currentTestName, 'error', msg);
 	});
 
-	//page.done = new Promise(resolve => page.exposeFunction('_done', resolve));
-
+	
 	await page.goto(new URL('/index.html', local));
 
-	await new Promise(resolve => setTimeout(resolve, 350));
+	await Promise.race([
+		page.waitForTimeout(350),
+		//page.waitForSelector('#done'),
+		//new Promise(resolve => page.exposeFunction('_done', resolve)),
+	]);
 
 	pendingPages.push(page);
 
@@ -277,8 +280,6 @@ const defaultFilesFactory = ({ vueTarget }) => ({
 
 				boot({ options, createApp, mountApp, Vue })
 				.then(app => app && (app.$el.parentNode.vueApp = app));
-
-				//window._done && window._done();
 
 			</script>
 		</body></html>
