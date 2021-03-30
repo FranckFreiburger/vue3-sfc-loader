@@ -53,15 +53,15 @@ const defaultPathResolve : PathResolve = ({ refPath, relPath } : PathContext) =>
 	if ( refPath === undefined )
 		return relPath;
 
+	const relPathStr = relPath.toString();
+	
+	// is non-relative path ?
+	if ( relPathStr[0] !== '.' )
+		return relPath;
+		
 	// note :
 	//  normalize('./test') -> 'test'
 	//  normalize('/test') -> '/test'
-
-	const relPathStr = relPath.toString();
-
-	// a module name ?
-	if ( relPathStr[0] !== '.' && relPathStr[0] !== '/' )
-		return relPath;
 
 	return Path.normalize(Path.join(Path.dirname(refPath.toString()), relPathStr));
 }
