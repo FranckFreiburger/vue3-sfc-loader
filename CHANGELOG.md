@@ -1,4 +1,11 @@
 
+### [0.7.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.0...v0.7.1) (2021-03-30)
+
+
+### Bug Fixes
+
+* **core:** fix absolute path handling ([8caf159](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/8caf159e664c45b7b92ecc60890ebb97961fb499))
+
 ## [0.7.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.6.1...v0.7.0) (2021-03-26)
 
 
