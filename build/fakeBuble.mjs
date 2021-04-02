@@ -23,6 +23,7 @@ export function transform(source, opts) {
 
 
 	// links :
+	//   used by vue-template-es2015-compiler: https://github.com/vuejs/vue-template-es2015-compiler
 	//   babel types: https://babeljs.io/docs/en/babel-types
 	//   doc: https://github.com/jamiebuilds/babel-handbook/blob/master/translations/en/plugin-handbook.md#toc-inserting-a-sibling-node
 	//   astexplorer: https://astexplorer.net/
@@ -89,7 +90,13 @@ export function transform(source, opts) {
 			!hash[identifier.node.name] &&
 
 			// not already in scope
-			!identifier.scope.hasBinding(identifier.node.name, false /* noGlobals */) // noGlobals false mean include globals (Array, Date, ...) and contextVariables (arguments, ...)
+			!identifier.scope.hasBinding(identifier.node.name, false /* noGlobals */) && // noGlobals false mean include globals (Array, Date, ...) and contextVariables (arguments, ...)
+
+			
+			// additional conditions:
+
+			// not in an Optional chaining expression
+			!(identifier.parent.type === 'OptionalMemberExpression' )
 
 		) {
 
