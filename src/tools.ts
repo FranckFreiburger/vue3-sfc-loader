@@ -9,7 +9,8 @@ import {
 } from '@babel/core';
 
 import {
-	parse as babel_parse
+	parse as babel_parse,
+	ParserPlugin as babel_ParserPlugin,
 } from '@babel/parser';
 
 
@@ -213,6 +214,8 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 
 	const { additionalBabelPlugins = {}, log } = options;
 
+	const additionalBabelParserPlugins : babel_ParserPlugin[] = [];
+
 	let ast: t.File;
 	try {
 
@@ -220,7 +223,11 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 			// doc: https://babeljs.io/docs/en/babel-parser#options
 			sourceType: moduleSourceType ? 'module' : 'script',
 			sourceFilename: filename.toString(),
-			plugins:  [ 'optionalChaining', 'nullishCoalescingOperator' ],
+			plugins:  [
+				'optionalChaining',
+				'nullishCoalescingOperator',
+				...additionalBabelParserPlugins,
+			],
 		});
 	} catch(ex) {
 
