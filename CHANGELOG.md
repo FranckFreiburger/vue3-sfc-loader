@@ -1,4 +1,11 @@
 
+### [0.7.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.1...v0.7.2) (2021-04-03)
+
+
+### Bug Fixes
+
+* **vue2:** fix Optional chaining expression support in templates ([0b2d274](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/0b2d2746574c0d1b8fbd1c55ff83d010d88a59fd))
+
 ### [0.7.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.0...v0.7.1) (2021-03-30)
 
 
