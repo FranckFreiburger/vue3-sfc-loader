@@ -64,6 +64,8 @@ export function transform(source, opts) {
 	const isFunction = type => /Function(Expression|Declaration)$/.test(type); // match babel types
 
 	// see yyx990803/buble prependVm.js : https://github.com/yyx990803/buble/blob/master/src/utils/prependVm.js
+
+	// see vue3 : https://github.com/vuejs/vue-next/blob/55d99d729e147fae515c12148590f0100508c49d/packages/compiler-core/src/transforms/transformExpression.ts#L382-L443
 	function shouldPrependVm(identifier) {
 
 		if (
@@ -78,7 +80,7 @@ export function transform(source, opts) {
 			!(identifier.parent.type === 'ObjectProperty' && identifier.parent.key === identifier.node && !identifier.parent.computed) &&
 
 			// not a property of a MemberExpression
-			!(identifier.parent.type === 'MemberExpression' && identifier.parent.property === identifier.node && !identifier.parent.computed) &&
+			!( (identifier.parent.type === 'MemberExpression' || identifier.parent.type === 'OptionalMemberExpression') && identifier.parent.property === identifier.node && !identifier.parent.computed) &&
 
 			// not in an Array destructure pattern
 			!(identifier.parent.type === 'ArrayPattern') &&
@@ -90,13 +92,7 @@ export function transform(source, opts) {
 			!hash[identifier.node.name] &&
 
 			// not already in scope
-			!identifier.scope.hasBinding(identifier.node.name, false /* noGlobals */) && // noGlobals false mean include globals (Array, Date, ...) and contextVariables (arguments, ...)
-
-			
-			// additional conditions:
-
-			// not in an Optional chaining expression
-			!(identifier.parent.type === 'OptionalMemberExpression' )
+			!identifier.scope.hasBinding(identifier.node.name, false /* noGlobals */) // noGlobals false mean include globals (Array, Date, ...) and contextVariables (arguments, ...)
 
 		) {
 
