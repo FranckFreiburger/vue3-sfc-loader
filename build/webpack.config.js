@@ -16,7 +16,7 @@ const pkg = require('../package.json');
 
 const distPath = Path.resolve(__dirname, '..', 'dist');
 
-const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', configName }) => {
+const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode = 'production', configName }) => {
 	if (configName && !configName.includes(name)) {
 		return {name}
 	}
@@ -30,7 +30,6 @@ const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', confi
 		noPresetEnv = !isProd,
 		noCompress = !isProd,
 		noSourceMap = !isProd,
-		libraryTargetModule = false,
 	} = env;
 
 	const genSourcemap = false;
@@ -51,7 +50,7 @@ const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', confi
 
 		output: {
 			path: distPath,
-			filename: `vue${ vueTarget }-sfc-loader.js`,
+			filename: `vue${ vueTarget }-sfc-loader${ libraryTargetModule ? '.esm' : '' }.js`,
 			...libraryTargetModule ? {
 
 				libraryTarget: 'module',
@@ -165,7 +164,7 @@ const configure = ({name, vueTarget}) => (env = {}, { mode = 'production', confi
 					// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
 					analyzerMode: 'static',
 					openAnalyzer: false,
-					reportFilename: `vue${ vueTarget }-sfc-loader.report.html`
+					reportFilename: `vue${ vueTarget }-sfc-loader.report${ libraryTargetModule ? '.esm' : '' }.html`
 				})
 			] : [],
 
@@ -326,8 +325,10 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 }
 
 let configs = [
-	{name: 'vue2', vueTarget: '2' },
-	{name: 'vue3', vueTarget: '3' }
+	{name: 'vue2', vueTarget: '2', libraryTargetModule: false },
+	{name: 'vue2esm', vueTarget: '2', libraryTargetModule: true },
+	{name: 'vue3', vueTarget: '3', libraryTargetModule: false },
+	{name: 'vue3esm', vueTarget: '3', libraryTargetModule: true },
 ]
 
 module.exports = configs.map(configure)
