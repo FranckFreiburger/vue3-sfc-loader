@@ -861,6 +861,52 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`<input>`);
 		});
 
+		test('should support OptionalMemberExpression in template', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/main.vue': `
+						<template>
+							<div>
+								<span v-if="foo?.bar?.baz === 123">ok1</span>
+								<span v-if="foo?.bar?.['baz'] === 123">ok1a</span>
+
+								<span v-if="foo.bar?.baz === 123">ok2</span>
+								<span v-if="foo.bar?.['baz'] === 123">ok2a</span>
+
+								<span v-if="foo?.baz === undefined">ok3</span>
+								<span v-if="foo?.['baz'] === undefined">ok3a</span>
+							</div>
+						</template>
+						<script>
+							export default {
+								data() {
+
+									return {
+										foo: {
+											bar: {
+												baz: 123,
+											}
+										}
+									}
+								}
+							}
+						</script>
+					`,
+				}
+			});
+
+			//await new Promise(resolve => setTimeout(resolve, 1000));
+
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`ok1`);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`ok1a`);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`ok2`);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`ok2a`);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`ok3`);
+			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch(`ok3a`);
+		});
+
 
 		test('should handle JSX', async () => {
 
