@@ -734,7 +734,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 [:top:](#readme)
 
 
-## Use Options.getResource() and (nearly) process the files like webpack does
+## Use Options.getResource() and process the files (nearly) like webpack does
 
 <!--example:source:getResource_loaders-->
 ```html
@@ -793,22 +793,21 @@ In the following example we use a trick to preserve reactivity through the `Vue.
     },
     getFile(url, options) {
 
-
-
       return config.files[url] || (() => { throw new Error('404 ' + url) })();
     },
     getResource({ refPath, relPath }, options) {
 
       const { moduleCache, pathResolve, getFile } = options;
 
+      // split relPath into loaders[] and file path (eg. 'foo!bar!file.ext' => ['file.ext', 'bar!', 'foo!'])
       const [ resourceRelPath, ...loaders ] = relPath.match(/([^!]+!)|[^!]+$/g).reverse();
 
-      // process a content through the loaders
+      // helper function: process a content through the loaders
       const processContentThroughLoaders = (content, path, type, options) => {
         
         return loaders.reduce((content, loader) => {
 
-          return moduleCache[loader](content, path, type);
+          return moduleCache[loader](content, path, type, options);
         }, content);
       }
 
@@ -826,7 +825,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
           const { content, type } = await getFile(path);
 
           return {
-            content: processContentThroughLoaders(content, path, type),
+            content: processContentThroughLoaders(content, path, type, options),
             type,
           };
         }
