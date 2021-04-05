@@ -1,4 +1,16 @@
 
+### [0.7.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.2...v0.7.3) (2021-04-05)
+
+
+### Features
+
+* **build:** add vue2 & vue3 esm target (dist/vue*-sfc-loader.esm.js) ([cd98dd8](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/cd98dd8e2ba527ce2a794d919f7e04d114145685))
+
+
+### Bug Fixes
+
+* **vue2:** fix Optional chaining expression support in templates (take 2) ([042fb7a](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/042fb7a2258d1cec6648d75a1b73b1bc14d959f3))
+
 ### [0.7.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.1...v0.7.2) (2021-04-03)
 
 
