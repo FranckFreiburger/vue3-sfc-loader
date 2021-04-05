@@ -144,6 +144,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 				...!noCompress ? [
 					new CompressionPlugin({
 						filename: "[path][base].br",
+						exclude: /\.map$/,
 						algorithm: "brotliCompress",
 						compressionOptions: {
 							params: {
@@ -153,19 +154,25 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 					}),
 					new CompressionPlugin({
 						filename: "[path][base].gz",
+						exclude: /\.map$/,
 						algorithm: "gzip",
 						compressionOptions: {
 							level: 9,
 						},
 					}),
 				] : [],
-				new DuplicatePackageCheckerPlugin(),
-				new BundleAnalyzerPlugin({
-					// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
-					analyzerMode: 'static',
-					openAnalyzer: false,
-					reportFilename: `vue${ vueTarget }-sfc-loader.report${ libraryTargetModule ? '.esm' : '' }.html`
-				})
+
+				...!libraryTargetModule ? [
+
+					new DuplicatePackageCheckerPlugin(),
+					new BundleAnalyzerPlugin({
+						// doc: https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
+						analyzerMode: 'static',
+						openAnalyzer: false,
+						reportFilename: `vue${ vueTarget }-sfc-loader.report${ libraryTargetModule ? '.esm' : '' }.html`
+					})
+
+				] : [],
 			] : [],
 
 			new Webpack.BannerPlugin(`
