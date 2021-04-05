@@ -79,6 +79,34 @@ node -e "require('express')().use(require('express').static(__dirname, {index:'i
 [:top:](#readme)
 
 
+## using esm version
+
+<!--example:source:esm_version_example-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <script type="module">
+
+    import * as Vue from 'https://unpkg.com/vue@3/dist/vue.runtime.esm-browser.prod.js'
+    import { loadModule } from 'https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.7.2/dist/vue3-sfc-loader.esm.js'
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: () => `<template>vue3-sfc-loader esm version</template>`,
+      addStyle: () => {},
+    }
+    Vue.createApp(Vue.defineAsyncComponent(() => loadModule('file.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+```
+<!--example:target:esm_version_example-->
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.7.2%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+()+%3D%3E+%60%3Ctemplate%3EHello+World+!%3C%2Ftemplate%3E%60%2C%0A++++++addStyle%3A+()+%3D%3E+%7B%7D%2C%0A++++%7D%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('file.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
+<!--/example:target:esm_version_example-->
+[:top:](#readme)
+
 
 ## A more complete API usage example
 
