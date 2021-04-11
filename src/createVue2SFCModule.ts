@@ -162,6 +162,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 					// doc: https://babeljs.io/docs/en/babel-parser#options
 					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
 					plugins: [
+						'optionalChaining',
+						'nullishCoalescingOperator',
 						'jsx',
 						...additionalBabelParserPlugins,
 					],
