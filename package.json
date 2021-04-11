@@ -94,7 +94,7 @@
     "vue": "3",
     "vue-template-compiler": "^2.6.12",
     "vue2": "npm:vue@^2.6.12",
-    "webpack": "^5.30.0",
+    "webpack": "^5.31.2",
     "webpack-bundle-analyzer": "^4",
     "webpack-cli": "^4.5.0"
   }
