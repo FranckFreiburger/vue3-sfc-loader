@@ -130,7 +130,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descriptor.script.src ? (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString() : descriptor.script.content;
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, JSON.stringify(additionalBabelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
 			return await transformJSCode(src, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins, jsx, babelSugarInjectH }, log);
 		});
