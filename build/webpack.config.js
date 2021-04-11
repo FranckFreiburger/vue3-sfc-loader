@@ -178,7 +178,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 			new Webpack.BannerPlugin(`
 ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 
-@description ${ pkg.description }.
+@description Vue${ vueTarget } ${ pkg.description }.
 @author      ${ pkg.author.name } <${ pkg.author.email }>
 @license     ${ pkg.license }
 @sources     https://github.com/FranckFreiburger/vue3-sfc-loader
