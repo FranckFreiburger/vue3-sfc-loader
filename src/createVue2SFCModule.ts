@@ -89,7 +89,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component = {};
 
-	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = {}, customBlockHandler } = options;
+	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
 
 	const descriptor = sfc_parse({
 		source,
@@ -154,9 +154,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descriptor.script.src ? (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString() : descriptor.script.content;
 
-		const babelParserPlugins : babel_ParserPlugin[] = [];
-
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, JSON.stringify(babelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, JSON.stringify(additionalBabelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
 			let ast: t.File
 			try {
@@ -165,7 +163,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
 					plugins: [
 						'jsx',
-						...babelParserPlugins
+						...additionalBabelParserPlugins,
 					],
 					sourceType: 'module',
 					sourceFilename: strFilename
@@ -184,11 +182,11 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
 				plugins: [ // https://babeljs.io/docs/en/options#plugins
 					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
-					jsx,
 					pluginProposalOptionalChaining,
 					pluginProposalNullishCoalescingOperator,
-					babelSugarInjectH,
 					...Object.values(additionalBabelPlugins),
+					jsx,
+					babelSugarInjectH,
 				],
 				babelrc: false,
 				configFile: false,

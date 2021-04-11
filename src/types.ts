@@ -1,3 +1,8 @@
+import {
+	ParserPlugin as babel_ParserPlugin,
+} from '@babel/parser';
+
+
 /**
  * @internal
  */
@@ -233,6 +238,17 @@ export type Options = {
 */
 
 	delimiters?: [string, string],
+
+
+/**
+ * Additional babel parser plugins. [TBD]
+ *
+ *	```javascript
+ *		...
+ *		...
+ *	```
+*/
+	additionalBabelParserPlugins?: babel_ParserPlugin[],
 
 
 /**

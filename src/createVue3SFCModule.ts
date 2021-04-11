@@ -90,7 +90,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component : { [key: string]: any } = {};
 
-	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelPlugins = {}, customBlockHandler } = options;
+	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
@@ -148,15 +148,13 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		// TBD: handle <script setup src="...
 
-		const babelParserPlugins : babel_ParserPlugin[] = [];
-
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content, JSON.stringify(babelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content, JSON.stringify(additionalBabelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const scriptBlock = sfc_compileScript(descriptor, {
 				isProd,
 				id: scopeId,
-				babelParserPlugins, //  [...babelParserDefaultPlugins, 'jsx'] + babelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
+				babelParserPlugins: additionalBabelParserPlugins, //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
 				// doc: https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md#inline-template-mode
 				// vue-loader next : https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/resolveScript.ts#L59
 				inlineTemplate: false,
@@ -183,7 +181,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 						 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
 							...vue_babelParserDefaultPlugins, // [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
 							'jsx',
-							...babelParserPlugins
+							...additionalBabelParserPlugins
 						],
 						sourceType: 'module',
 						sourceFilename: strFilename,

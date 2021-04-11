@@ -212,9 +212,7 @@ export function parseDeps(fileAst : t.File) : string[] {
  */
 export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<[string[], string]> {
 
-	const { additionalBabelPlugins = {}, log } = options;
-
-	const additionalBabelParserPlugins : babel_ParserPlugin[] = [];
+	const { additionalBabelParserPlugins = [], additionalBabelPlugins = {}, log } = options;
 
 	let ast: t.File;
 	try {
