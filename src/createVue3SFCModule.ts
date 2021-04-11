@@ -14,36 +14,14 @@ import {
 
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
-import {
-	parse as babel_parse,
-	ParserPlugin as babel_ParserPlugin
-} from '@babel/parser';
-
-import {
-	transformFromAstAsync as babel_transformFromAstAsync,
-	types as t,
-} from '@babel/core';
-
-// @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
-import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
-
 // https://github.com/vuejs/jsx-next
 import jsx from '@vue/babel-plugin-jsx'
-
-// @ts-ignore
-import pluginProposalOptionalChaining from "@babel/plugin-proposal-optional-chaining"
-
-// @ts-ignore
-import pluginProposalNullishCoalescingOperator from '@babel/plugin-proposal-nullish-coalescing-operator'
-
 
 import {
 	formatErrorLineColumn,
 	formatError,
 	withCache,
 	hash,
-	renameDynamicImport,
-	parseDeps,
 	interopRequireDefault,
 	transformJSCode,
 	loadDeps,
@@ -165,61 +143,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			if ( compileTemplateOptions !== null )
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
-			let ast;
-			if ( true /*!scriptBlock.scriptAst*/ ) {
+			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, ...vue_babelParserDefaultPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log);
 
-				// need to re-parse because
-				// - script compilation errors are not reported by sfc_compileScript
-				// - scriptAst does not contain cssVars & inheritAttrsFlag
-				//
-				try {
-
-					ast = babel_parse(scriptBlock.content, {
-						// doc: https://babeljs.io/docs/en/babel-parser#options
-						// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
-						plugins: [
-						 	// see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L63
-							...vue_babelParserDefaultPlugins, // [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
-							'jsx',
-							...additionalBabelParserPlugins
-						],
-						sourceType: 'module',
-						sourceFilename: strFilename,
-						startLine: scriptBlock.loc.start.line,
-					});
-
-				} catch(ex) {
-
-					log?.('error', 'SFC script', formatErrorLineColumn(ex.message, strFilename, source, ex.loc.line, ex.loc.column + 1) );
-					throw ex;
-				}
-			} else {
-
-				// scriptBlock.scriptAst is not type:Program, need to construct one
-				//   see t.file: https://babeljs.io/docs/en/babel-types#file
-				//   see t.program: https://babeljs.io/docs/en/babel-types#program
-				ast = t.file(t.program(scriptBlock.scriptAst, [], 'module'));
-			}
-
-			renameDynamicImport(ast);
-			const depsList = parseDeps(ast);
-
-			// doc: https://babeljs.io/docs/en/babel-core#transformfromastasync
-			const transformedScript = await babel_transformFromAstAsync(ast, scriptBlock.content, {
-				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
-				plugins: [ // https://babeljs.io/docs/en/options#plugins
-					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
-					jsx,
-					pluginProposalOptionalChaining,
-					pluginProposalNullishCoalescingOperator,
-					...Object.values(additionalBabelPlugins),
-				],
-				babelrc: false,
-				configFile: false,
-				highlightCode: false,
-			});
-
-			return [ depsList, transformedScript.code ];
 		});
 
 		await loadDeps(filename, depsList, options);
@@ -253,7 +178,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			for ( const err of template.tips )
 				log?.('info', 'SFC template', err);
 
-			return await transformJSCode(template.code, true, descriptor.filename, options);
+			return await transformJSCode(template.code, true, descriptor.filename, additionalBabelParserPlugins, additionalBabelPlugins, log);
 		});
 
 		await loadDeps(filename, templateDepsList, options);

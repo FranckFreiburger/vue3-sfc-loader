@@ -10,7 +10,6 @@ import {
 
 import {
 	parse as babel_parse,
-	ParserPlugin as babel_ParserPlugin,
 } from '@babel/parser';
 
 
@@ -210,9 +209,7 @@ export function parseDeps(fileAst : t.File) : string[] {
 /**
  * @internal
  */
-export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<[string[], string]> {
-
-	const { additionalBabelParserPlugins = [], additionalBabelPlugins = {}, log } = options;
+export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, additionalBabelParserPlugins : Options['additionalBabelParserPlugins'], additionalBabelPlugins : Options['additionalBabelPlugins'], log : Options['log']) : Promise<[string[], string]> {
 
 	let ast: t.File;
 	try {
@@ -224,7 +221,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 			plugins:  [
 				'optionalChaining',
 				'nullishCoalescingOperator',
-				...additionalBabelParserPlugins,
+				...additionalBabelParserPlugins !== undefined ? additionalBabelParserPlugins : [],
 			],
 		});
 	} catch(ex) {
@@ -239,10 +236,10 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 	const transformedScript = await babel_transformFromAstAsync(ast, source, {
 		sourceMaps: genSourcemap, // doc: https://babeljs.io/docs/en/options#sourcemaps
 		plugins: [ // https://babeljs.io/docs/en/options#plugins
-			babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
+			...moduleSourceType ? [ babelPluginTransformModulesCommonjs ] : [], // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
 			pluginProposalOptionalChaining,
 			pluginProposalNullishCoalescingOperator,
-			...Object.values(additionalBabelPlugins),
+			...additionalBabelPlugins !== undefined ? Object.values(additionalBabelPlugins) : [],
 		],
 		babelrc: false,
 		configFile: false,
@@ -347,11 +344,11 @@ export function createModule(refPath : AbstractPath, source : string, options : 
  */
 export async function createJSModule(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<ModuleExport> {
 
-	const { compiledCache } = options;
+	const { compiledCache, additionalBabelParserPlugins, additionalBabelPlugins, log } = options;
 
 	const [ depsList, transformedSource ] = await withCache(compiledCache, [ version, source, filename ], async () => {
 
-		return await transformJSCode(source, moduleSourceType, filename, options);
+		return await transformJSCode(source, moduleSourceType, filename, additionalBabelParserPlugins, additionalBabelPlugins, log);
 	});
 
 	await loadDeps(filename, depsList, options);

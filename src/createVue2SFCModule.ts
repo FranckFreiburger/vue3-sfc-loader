@@ -8,45 +8,21 @@ import * as vueTemplateCompiler from 'vue-template-compiler'
 import { VueTemplateCompiler } from '@vue/component-compiler-utils/dist/types'
 import { TemplateCompileOptions } from '@vue/component-compiler-utils/dist/compileTemplate'
 
-
-import {
-	parse as babel_parse,
-	ParserPlugin as babel_ParserPlugin
-} from '@babel/parser';
-
-import {
-	transformFromAstAsync as babel_transformFromAstAsync,
-	types as t,
-} from '@babel/core';
-
-// @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
-import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
-
 // https://github.com/vuejs/jsx
 // @ts-ignore
 import jsx from '@vue/babel-plugin-transform-vue-jsx'
 // @ts-ignore
 import babelSugarInjectH from '@vue/babel-sugar-inject-h'
 
-// @ts-ignore
-import pluginProposalOptionalChaining from "@babel/plugin-proposal-optional-chaining"
-
-// @ts-ignore
-import pluginProposalNullishCoalescingOperator from '@babel/plugin-proposal-nullish-coalescing-operator'
-
-
 import {
 	formatError,
 	formatErrorStartEnd,
 	withCache,
 	hash,
-	renameDynamicImport,
-	parseDeps,
 	interopRequireDefault,
 	transformJSCode,
 	loadDeps,
 	createModule,
-	formatErrorLineColumn,
 	loadModuleInternal,
 } from './tools'
 
@@ -156,46 +132,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, JSON.stringify(additionalBabelParserPlugins), Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
-			let ast: t.File
-			try {
-				ast = babel_parse(src, {
-					// doc: https://babeljs.io/docs/en/babel-parser#options
-					// if: https://github.com/babel/babel/blob/main/packages/babel-parser/typings/babel-parser.d.ts#L24
-					plugins: [
-						'optionalChaining',
-						'nullishCoalescingOperator',
-						'jsx',
-						...additionalBabelParserPlugins,
-					],
-					sourceType: 'module',
-					sourceFilename: strFilename
-				});
-
-			} catch(ex) {
-				log?.('error', 'SFC script', formatErrorLineColumn(ex.message, strFilename, source, ex.loc.line, ex.loc.column + 1) );
-				throw ex;
-			}
-
-			renameDynamicImport(ast);
-			const depsList = parseDeps(ast);
-
-			// doc: https://babeljs.io/docs/en/babel-core#transformfromastasync
-			const transformedScript = await babel_transformFromAstAsync(ast, src, {
-				sourceMaps: genSourcemap, // https://babeljs.io/docs/en/options#sourcemaps
-				plugins: [ // https://babeljs.io/docs/en/options#plugins
-					babelPluginTransformModulesCommonjs, // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
-					pluginProposalOptionalChaining,
-					pluginProposalNullishCoalescingOperator,
-					...Object.values(additionalBabelPlugins),
-					jsx,
-					babelSugarInjectH,
-				],
-				babelrc: false,
-				configFile: false,
-				highlightCode: false,
-			});
-
-			return [ depsList, transformedScript.code ];
+			return await transformJSCode(src, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins, jsx, babelSugarInjectH }, log);
 		});
 
 		await loadDeps(filename, depsList, options);
@@ -239,7 +176,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				log?.('info', 'SFC template', formatErrorStartEnd(err.msg, strFilename, source, err.start, err.end ));
 			}
 
-			return await transformJSCode(template.code, true, filename, options);
+			return await transformJSCode(template.code, true, filename, additionalBabelParserPlugins, additionalBabelPlugins, log);
 		});
 
 		await loadDeps(filename, templateDepsList, options);

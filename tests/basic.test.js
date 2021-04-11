@@ -83,7 +83,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				}
 			});
 
-			await expect(output.some(e => e.type === 'error' && e.content[0] === 'SFC script')).toBe(true);
+			await expect(output.some(e => e.type === 'error' && e.content[0] === 'parse script')).toBe(true);
 
 		});
 
