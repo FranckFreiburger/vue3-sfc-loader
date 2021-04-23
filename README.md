@@ -92,21 +92,26 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   [![Vue3 compiler-sfc dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/@vue/compiler-sfc?label=embeds%20Vue3%20%40vue%2Fcompiler-sfc)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
   [![Vue2 vue-template-compiler dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/vue-template-compiler?label=embeds%20Vue2%20vue-template-compiler)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
 -->
+  <br>
 
 
   ![Vue3](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/@vue/compiler-sfc?label=For%20Vue%203)
   - `npm install vue3-sfc-loader`
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader?path=dist) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js
   - [UNPKG](https://unpkg.com/browse/vue3-sfc-loader/dist/) CDN: https://unpkg.com/vue3-sfc-loader
-  - **esm version**: `dist/vue3-sfc-loader.esm.js`
-  - **umd version**: `dist/vue3-sfc-loader.js`
+
+  **esm version**: `dist/vue3-sfc-loader.esm.js`  
+  **umd version**: `dist/vue3-sfc-loader.js`  
+  
+  <br>
 
   ![Vue2](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/vue-template-compiler?label=For%20Vue%202)
   - `npm install vue3-sfc-loader`
   - [jsDelivr](https://www.jsdelivr.com/package/npm/vue3-sfc-loader?path=dist) CDN: https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue2-sfc-loader.js
   - [UNPKG](https://unpkg.com/browse/vue3-sfc-loader/dist/) CDN: https://unpkg.com/vue3-sfc-loader/dist/vue2-sfc-loader.js
-  - **esm version**: `dist/vue2-sfc-loader.esm.js`
-  - **umd version**: `dist/vue2-sfc-loader.js`
+  
+  **esm version**: `dist/vue2-sfc-loader.esm.js`  
+  **umd version**: `dist/vue2-sfc-loader.js`  
 
 
 
