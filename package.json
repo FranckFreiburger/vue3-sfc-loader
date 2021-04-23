@@ -84,7 +84,7 @@
     "standard-version": "^9.2.0",
     "stream-browserify": "^3.0.0",
     "terser-webpack-plugin": "^5.1.1",
-    "ts-loader": "^8.0.18",
+    "ts-loader": "^8.2.0",
     "typedoc": "0.19.2",
     "typedoc-plugin-markdown": "3.1.1",
     "typescript": "^4.2.4",
@@ -94,7 +94,7 @@
     "vue": "3",
     "vue-template-compiler": "^2.6.12",
     "vue2": "npm:vue@^2.6.12",
-    "webpack": "^5.33.2",
+    "webpack": "^5.35.1",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "^4.5.0"
   }
