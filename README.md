@@ -17,6 +17,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Custom CSS, HTML and Script language Support, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * Easily [build your own version](#build-your-own-version) and customize browsers you need to support
+ * **esm** and **umd** bundles available
 
 
 ## Example
