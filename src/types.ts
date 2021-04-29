@@ -139,7 +139,7 @@ export type Options = {
 /**
  * Initial cache that will contain resolved dependencies. All new modules go here.
  * `vue` must initially be contained in this object.
- * [[moduleCache]] is mandatory for the lib. If you do not provide it, the library will create one.
+ * [[moduleCache]] is mandatory and should be shared between options objects used for you application (note that you can also pass the same options object through multiple loadModule calls)
  * It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
 ​ *
  * See also [[options.loadModule]].
@@ -154,7 +154,7 @@ export type Options = {
  * ```
  *
 */
-	moduleCache?: Record<ModuleCacheId, LoadingType<ModuleExport> | ModuleExport>,
+	moduleCache: Record<ModuleCacheId, LoadingType<ModuleExport> | ModuleExport>,
 
 
 /**
