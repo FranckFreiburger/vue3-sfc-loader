@@ -77,7 +77,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Public API documentation
 
-  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](docs/api/interfaces/options.md)): `Promise<VueComponent>`
+  **[loadModule](docs/api/README.md#loadmodule)**(`path`: string, `options`: [Options](/docs/api/README.md#options)): `Promise<VueComponent>`
 
 
 ## dist/
@@ -123,6 +123,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   _see [`package.json`](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/package.json) "build" script_  
   _see [browserslist queries](https://github.com/browserslist/browserslist#queries)_  
 
+  **preliminary steps:**  
+  1. clone `vue3-sfc-loader`
+  1. run `yarn add`
 
 ## How It Works
 

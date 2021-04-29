@@ -1,5 +1,13 @@
 # FAQ
 
+## Can I use vue3-sfc-loader source code directly (./src/index.ts)
+
+Loading from sources "vue3-sfc-loader/src/index" will not work. Sources are intended to be processed by webpack before being usable.
+
+
+Note that you can [build vue3-sfc-loader yourself](https://github.com/FranckFreiburger/vue3-sfc-loader#build-your-own-version).
+
+
 ## How to use 3rd party plugins or components
 
 #### From a `<script>` tag
