@@ -17,6 +17,8 @@ import {
 	AbstractPath,
 } from './types'
 
+export * from './types'
+
 
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)

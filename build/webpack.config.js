@@ -1,25 +1,62 @@
 const Path = require('path');
-const zlib = require("zlib");
+const zlib = require('zlib')
+const fs = require('fs');
 
 const Webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const dts = require('dts-bundle');
 
+class DtsBundlePlugin {
+	constructor (options) {
+		if (!options) {
+			options = {};
+		}
+		this.options = options;
+	}
+
+	_bundle (compiler, options) {
+		const logger = compiler.getInfrastructureLogger('DtsBundlePlugin');
+
+		return () => {
+			const createSFCModuleNewPath = Path.resolve(this.options.baseDir, 'createSFCModule.d.ts')
+			const createSFCModuleVue2Path = Path.resolve(this.options.baseDir, 'createVue2SFCModule.d.ts')
+			const createSFCModuleVue3Path = Path.resolve(this.options.baseDir, 'createVue3SFCModule.d.ts')
+
+			if (fs.existsSync(createSFCModuleVue2Path)) {
+				fs.renameSync(createSFCModuleVue2Path, createSFCModuleNewPath)
+			} else if (fs.existsSync(createSFCModuleVue3Path)) {
+				fs.renameSync(createSFCModuleVue3Path, createSFCModuleNewPath)
+			}
+
+			logger.info("Creating dts bundle")
+			dts.bundle(options);
+		}
+	}
+
+	apply (compiler) {
+		const bundle = (compilation) => {
+			return this._bundle(compiler, this.options);
+		}
+
+		compiler.hooks.afterEmit.tap('DtsBundlePlugin', bundle());
+	}
+}
 
 // doc: https://github.com/Nyalab/caniuse-api#api
 const caniuse = require('caniuse-api')
 
 const pkg = require('../package.json');
 
-
-const distPath = Path.resolve(__dirname, '..', 'dist');
-
 const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode = 'production', configName }) => {
 	if (configName && !configName.includes(name)) {
 		return {name}
 	}
+
+	const distPath = Path.resolve(__dirname, '..', 'dist');
+	const distTypesPath = Path.resolve(distPath, 'types', `vue${ vueTarget }${ libraryTargetModule ? '-esm' : ''}`)
 
 	const isProd = mode === 'production';
 
@@ -86,6 +123,14 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 		},
 
 		plugins: [
+			...!libraryTargetModule ? [
+				new DtsBundlePlugin({
+				name: `vue${ vueTarget }-sfc-loader`,
+				main:`${distTypesPath}/src/index.d.ts`,
+				baseDir: `${distTypesPath}/src`,
+				out: `${distPath}/vue${ vueTarget }-sfc-loader.d.ts`
+			})] : [],
+
 			new Webpack.DefinePlugin({
 
 				'process.env.NODE_ENV': JSON.stringify(mode), // see also: https://webpack.js.org/configuration/optimization/#optimizationnodeenv
@@ -211,7 +256,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'@babel/helper-module-transforms': require.resolve('@babel/helper-module-transforms'),
 				'@babel/helper-replace-supers': require.resolve('@babel/helper-replace-supers'),
 				'@babel/helper-simple-access': require.resolve('@babel/helper-simple-access'),
-				
+
 				'@vue/shared': require.resolve('@vue/shared'),
 				'@vue/compiler-sfc': require.resolve('@vue/compiler-sfc'),
 				'@vue/compiler-dom': require.resolve('@vue/compiler-dom'),
@@ -314,7 +359,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 								sourceMap: !noSourceMap,
 								outDir: distPath,
 								declaration: true,
-								declarationDir: Path.resolve(distPath, 'types'),
+								declarationDir: distTypesPath,
 							}
 						}
 					}
