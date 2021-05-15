@@ -680,7 +680,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 
 			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
-			await expect(page.$eval('#app .test', el => JSON.parse(JSON.stringify(getComputedStyle(el))))).resolves.toMatchObject( { color: 'rgb(255, 0, 0)' } );
+			await expect(page.$eval('#app .test', el => getComputedStyle(el).color)).resolves.toBe('rgb(255, 0, 0)');
 
 		});
 
@@ -997,7 +997,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				});
 
 				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('Hello World !');
-				await expect(page.$eval('#app .example', el => JSON.parse(JSON.stringify(getComputedStyle(el))))).resolves.toMatchObject( { color: 'rgb(0, 0, 255)' } );
+				await expect(page.$eval('#app .example', el => getComputedStyle(el).color)).resolves.toBe('rgb(0, 0, 255)');
 
 			});
 		}
