@@ -19,7 +19,7 @@ const pendingPages = [];
 
 async function createPage({ files, processors= {}}) {
 
-	async function getFile(url) {
+	async function getRequestResource(url) {
 
 		const { origin, pathname } = new URL(url);
 
@@ -27,14 +27,28 @@ async function createPage({ files, processors= {}}) {
 			return null
 
 		let body = files[pathname]
+
+		if ( body === undefined ) {
+			
+			return {
+				status: 404,
+			}
+		}
+
+		if ( typeof body !== 'string' && !(body instanceof Buffer) )
+			throw new Error('response body must be a string of a Buffer');
+
 		if (processors[pathname]) {
+
 			body = processors[pathname](body)
 		}
 
+		const contentType = mime.lookup(Path.extname(pathname)) || '';
+		const charset = mime.charset(contentType);
+
 		const res = {
-			contentType: mime.lookup(Path.extname(pathname)) || '',
+			contentType: contentType + (charset ? '; charset=' + charset : ''),
 			body,
-			status: files[pathname] === undefined ? 404 : 200,
 		};
 
 		return res;
@@ -46,13 +60,9 @@ async function createPage({ files, processors= {}}) {
 	await page.setRequestInterception(true);
 	page.on('request', async interceptedRequest => {
 		try {
-			const file = await getFile(interceptedRequest.url(), 'utf-8');
-			if (file) {
-				return void interceptedRequest.respond({
-					...file,
-					contentType: file.contentType + '; charset=utf-8',
-				});
-			}
+			const response = await getRequestResource(interceptedRequest.url());
+			if (response)
+				return void interceptedRequest.respond(response);
 
 			interceptedRequest.continue();
 		} catch (ex) {
@@ -181,8 +191,21 @@ const defaultFilesFactory = ({ vueTarget }) => ({
 				vue: Vue
 			},
 
-			getFile(path) {
-				return fetch(path).then(res => res.ok ? res.text() : Promise.reject(new HttpError(path, res)));
+			async getFile(path) {
+				//return fetch(path).then(res => res.ok ? res.text() : Promise.reject(new HttpError(path, res)));
+
+				const res = await fetch(path);
+				if ( !res.ok )
+					throw new HttpError(path, res);
+
+				return {
+					//type: res.headers.get('content-type'),
+					getContentData(asBinary) {
+
+						return asBinary ? res.arrayBuffer() : res.text();
+					}
+				}
+
 			},
 
 			addStyle(textContent) {

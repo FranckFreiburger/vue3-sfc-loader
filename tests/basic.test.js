@@ -707,10 +707,10 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					'/optionsOverride.js': `
 						export default (options) => {
 
-							options.handleModule = (extname, source, path, options) => {
+							options.handleModule = async (type, getContentData, path, options) => {
 
-								switch (extname) {
-									case '.svg': return 'data:image/svg+xml,' + source.toString();
+								switch (type) {
+									case '.svg': return 'data:image/svg+xml,' + await getContentData(false);
 								}
 							};
 						};
@@ -719,6 +719,40 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			});
 
 			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch('[CDATA[10]]');
+		});
+
+		test('should properly include png image', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+
+					'/image.png': Buffer.from(Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAAAAADlzNgyAAAAEklEQVQI12P8z8DAwMDEQJgEAConAQ0Jet0iAAAAAElFTkSuQmCC'), c => c.charCodeAt(0)).buffer),
+
+					'/main.vue': `
+						<template>
+							<div>
+								<img :src="require('./image.png')">
+							</div>
+						</template>
+					`,
+					'/optionsOverride.js': `
+						export default (options) => {
+
+							options.handleModule = async (type, getContentData, path, options) => {
+
+								switch (type) {
+									case '.png':
+										var data = await getContentData(true);
+										return 'data:image/png;base64,' + btoa(String.fromCharCode(...new Uint8Array(data)));
+								}
+							};
+						};
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app img', el => el.naturalWidth)).resolves.toBe(5); // img is 5x7 px
 		});
 
 

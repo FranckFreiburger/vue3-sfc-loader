@@ -93,7 +93,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const compileTemplateOptions : TemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		source: descriptor.template.src ? (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).content.toString() : descriptor.template.content,
+		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
 		filename: strFilename,
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
@@ -128,7 +128,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		// eg: https://github.com/vuejs/vue-loader/blob/v15.9.6/lib/index.js
 
-		const src = descriptor.script.src ? (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString() : descriptor.script.content;
+		const src = descriptor.script.src ? (await (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).getContentData(false)) as string : descriptor.script.content;
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
@@ -186,7 +186,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	for ( const descStyle of descriptor.styles ) {
 
-		const src = descStyle.src ? (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).content.toString() : descStyle.content;
+		const src = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
 
 		const style = await withCache(compiledCache, [ componentHash, src, descStyle.lang ], async ({ preventCache }) => {
 

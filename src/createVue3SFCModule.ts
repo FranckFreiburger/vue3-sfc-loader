@@ -99,7 +99,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
-		source: descriptor.template.src ? (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).content.toString() : descriptor.template.content,
+		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
 		filename: descriptor.filename,
 		isProd,
 		scoped: hasScoped,
@@ -122,7 +122,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		// doc: <script setup> cannot be used with the src attribute.
 		// TBD: check if this is the right solution
 		if ( descriptor.script?.src )
-			descriptor.script.content = (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).content.toString();
+			descriptor.script.content = (await (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).getContentData(false)) as string;
 
 		// TBD: handle <script setup src="...
 
@@ -192,7 +192,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		if ( descStyle.lang )
 			await loadModuleInternal({ refPath: filename, relPath: descStyle.lang }, options);
 
-		const src = descStyle.src ? (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).content.toString() : descStyle.content;
+		const src = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
 
 		const style = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
 

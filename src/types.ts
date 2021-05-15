@@ -65,15 +65,18 @@ export type PathResolve = (pathCx : PathContext) => AbstractPath;
  *	...
  * ```
  */
-export type ModuleHandler = (type : string, source : string, path : AbstractPath, options : Options) => Promise<ModuleExport | null>;
+export type ModuleHandler = (type : string, getContentData : File['getContentData'], path : AbstractPath, options : Options) => Promise<ModuleExport | null>;
+
+
+export type ContentData = string | ArrayBuffer
 
 
 /**
  * Represents a file content and the extension name.
  */
 export type File = {
-	/** The content data */
-	content : string | ArrayBuffer,
+	/** The content data accessor (request data as text of binary)*/
+	getContentData : (asBinary : Boolean) => Promise<ContentData>,
 	/** The content type (file extension name, eg. '.svg' ) */
 	type : string,
 }
@@ -160,7 +163,7 @@ export type Options = {
 /**
  * Called by the library when it needs a file.
  * @param path  The path of the file
- * @returns a Promise of the file content (UTF-8)
+ * @returns a Promise of the file content or an accessor to the file content that handles text or binary data
  *
  * **example:**
  * ```javascript
@@ -168,14 +171,20 @@ export type Options = {
  *	async getFile(url) {
  *	
  *		const res = await fetch(url);
+ *		
  *		if ( !res.ok )
  *			throw Object.assign(new Error(url+' '+res.statusText), { res });
+ *
+ *		return {
+ *			getContentData: asBinary => asBinary ? res.arrayBuffer() : res.text(),
+ *		}
+ *		
  *		return await res.text();
  *	},
  *	...
  * ```
 */
-	getFile(path : AbstractPath) : Promise<File>,
+	getFile(path : AbstractPath) : Promise<File | ContentData>,
 
 
 /**

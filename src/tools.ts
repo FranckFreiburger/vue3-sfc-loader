@@ -39,6 +39,7 @@ import {
 	LoadingType,
 	PathContext,
 	AbstractPath,
+	File,
 } from './types'
 
 import { createSFCModule } from './createSFCModule'
@@ -278,19 +279,16 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
 				return moduleCache[id] = module;
 		}
 
-		const { content, type } = await getContent();
-
-		if ( typeof content !== 'string' )
-			throw new TypeError(`Invalid module content (${ path }): ${ content }`);
+		const { getContentData, type } = await getContent();
 
 		// note: null module is accepted
 		let module : ModuleExport | undefined | null = undefined;
 
 		if ( handleModule !== undefined )
-			module = await handleModule(type, content, path, options);
+			module = await handleModule(type, getContentData, path, options);
 
 		if ( module === undefined )
-			module = await defaultHandleModule(type, content, path, options);
+			module = await defaultHandleModule(type, getContentData, path, options);
 
 		if ( module === undefined )
 			throw new TypeError(`Unable to handle ${ type } files (${ path })`);
@@ -369,12 +367,12 @@ export async function loadDeps(refPath : AbstractPath, deps : AbstractPath[], op
 /**
  * Default implementation of handleModule
  */
- async function defaultHandleModule(type : string, source : string, path : AbstractPath, options : Options) : Promise<ModuleExport | null> {
+ async function defaultHandleModule(type : string, getContentData : File['getContentData'], path : AbstractPath, options : Options) : Promise<ModuleExport | null> {
 
 	switch (type) {
-		case '.vue': return createSFCModule(source.toString(), path, options);
-		case '.js': return createJSModule(source.toString(), false, path, options);
-		case '.mjs': return createJSModule(source.toString(), true, path, options);
+		case '.vue': return createSFCModule((await getContentData(false)) as string, path, options);
+		case '.js': return createJSModule((await getContentData(false)) as string, false, path, options);
+		case '.mjs': return createJSModule((await getContentData(false)) as string, true, path, options);
 	}
 
 	return undefined;

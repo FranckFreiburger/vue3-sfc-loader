@@ -74,15 +74,34 @@ const defaultPathResolve : PathResolve = ({ refPath, relPath } : PathContext) =>
  */
 function defaultGetResource(pathCx : PathContext, options : Options) : Resource {
 
-	const { pathResolve, getFile } = options;
+	const { pathResolve, getFile, log } = options;
 	const path = pathResolve(pathCx);
+	const pathStr = path.toString();
 	return {
-		id: path.toString(),
+		id: pathStr,
 		path: path,
 		getContent: async () => {
 
 			const res = await getFile(path);
-			return typeof res === 'object' ? res : { content: res, type: Path.extname(path.toString()) };
+
+			if ( typeof res === 'string' || res instanceof ArrayBuffer ) {
+
+				return {
+					type: Path.extname(pathStr),
+					getContentData: async (asBinary) => {
+
+						if ( res instanceof ArrayBuffer !== asBinary )
+							log?.('warn', `unexpected data type. ${ asBinary ? 'binary' : 'string' } is expected for "${ path }"`);
+						
+						return res;
+					},
+				}
+			}
+
+			return {
+				type: res.type ?? Path.extname(pathStr),
+				getContentData: res.getContentData,
+			}
 		}
 	};
 }
