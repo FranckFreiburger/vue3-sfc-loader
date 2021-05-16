@@ -140,11 +140,15 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 				'process.env.BABEL_ENV': JSON.stringify(mode),
 				'process.env.BABEL_TYPES_8_BREAKING': false,
 
+				'process.env.VUE_ENV': 'client',
+				'global.process.env.VUE_ENV': 'client',
+				
 				// further optimizations (ease dead code elimination)
 				'process.stdin': 'null',
 				'process.stdout': 'null',
 				'process.stderr': 'null',
 				'process.browser': 'true',
+				'process.env.TERM': 'undefined',
 
 				// config
 				'process.env.GEN_SOURCEMAP': JSON.stringify(genSourcemap),
