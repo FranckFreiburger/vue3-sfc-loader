@@ -25,7 +25,7 @@ import {
 	interopRequireDefault,
 	transformJSCode,
 	loadDeps,
-	createModule,
+	createCJSModule,
 	loadModuleInternal,
 } from './tools'
 
@@ -149,7 +149,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		});
 
 		await loadDeps(filename, depsList, options);
-		Object.assign(component, interopRequireDefault(createModule(filename, transformedScriptSource, options).exports).default);
+		Object.assign(component, interopRequireDefault(createCJSModule(filename, transformedScriptSource, options).exports).default);
 	}
 
 
@@ -183,7 +183,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		});
 
 		await loadDeps(filename, templateDepsList, options);
-		Object.assign(component, createModule(filename, templateTransformedSource, options).exports);
+		Object.assign(component, createCJSModule(filename, templateTransformedSource, options).exports);
 	}
 
 

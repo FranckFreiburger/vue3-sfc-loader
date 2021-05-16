@@ -309,7 +309,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
  * Create a cjs module
  * @internal
  */
-export function createModule(refPath : AbstractPath, source : string, options : Options) : Module {
+export function createCJSModule(refPath : AbstractPath, source : string, options : Options) : Module {
 
 	const { moduleCache, pathResolve, getResource } = options;
 
@@ -352,7 +352,7 @@ export async function createJSModule(source : string, moduleSourceType : boolean
 	});
 
 	await loadDeps(filename, depsList, options);
-	return createModule(filename, transformedSource, options).exports;
+	return createCJSModule(filename, transformedSource, options).exports;
 }
 
 
