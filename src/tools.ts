@@ -245,6 +245,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		babelrc: false,
 		configFile: false,
 		highlightCode: false,
+		compact: true, // doc: All optional newlines and whitespace will be omitted when generating code in compact mode.
 	});
 
 	return [ depsList, transformedScript.code ];
