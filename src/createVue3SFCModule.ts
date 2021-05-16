@@ -132,6 +132,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			const scriptBlock = sfc_compileScript(descriptor, {
 				isProd,
 				id: scopeId,
+				// @ts-ignore (unstable resolution: node_modules/@babel/parser/typings/babel-parser vs node_modules/@types/babel__core/node_modules/@babel/parser/typings/babel-parser)
 				babelParserPlugins: additionalBabelParserPlugins, //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
 				// doc: https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md#inline-template-mode
 				// vue-loader next : https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/resolveScript.ts#L59
