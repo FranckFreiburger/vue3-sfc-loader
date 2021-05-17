@@ -32,6 +32,7 @@ export const version : string = process.env.VERSION;
 export { vueVersion } from './createSFCModule'
 
 
+export { createCJSModule } from './tools'
 
 /**
  * @internal

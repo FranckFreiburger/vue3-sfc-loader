@@ -41,3 +41,26 @@ vue.use(myPlugin);
 If your plugin is hosted elsewhere (on a different origin), you have to define your own `option.pathResolve`.
 See https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/docs/examples.md#use-remote-components
 
+
+## How to speed-up loading when using large 3rd party libraries (like babylon.js, three.js, PixiJS, ...)
+
+When you need to use a large 3rd party library that has **no further dependencies** and has an **CJS or UMD version** available, you can load it directly using the `handleModule` option.
+
+example:
+```javascript
+
+    const { loadModule, createCJSModule } = window['vue3-sfc-loader'];
+
+    const options = {
+      ...
+      async handleModule(type, getContentData, path, options) {
+
+        if ( path.toString().endsWith('babylon.max.js') )
+          return createCJSModule(type, await getContentData(false), options)
+
+        return undefined;
+      },
+      ...
+```
+
+(see https://github.com/FranckFreiburger/vue3-sfc-loader/issues/70)
