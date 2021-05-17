@@ -25,8 +25,8 @@ const options = {
 then, subsequent `import Vue from 'vue'` will return the Vue module (`options.moduleCache.vue`).
 
 #### From the same origin
-If your plugin is reachable from the current URL (same origin, relative or absolute) just use `import from`, `import()` or `require()`.
-`vue3-sfc-loader` is able to load esm and cjs modules). Just take care to specify the plugin entry point.
+If your plugin is reachable from the current URL (same origin, relative or absolute) just use `import ... from`, `import()` or `require()`.  
+`vue3-sfc-loader` is able to load esm, cjs and umd modules). Just take care to specify the full entry point of the plugin.
 
 
 eg.

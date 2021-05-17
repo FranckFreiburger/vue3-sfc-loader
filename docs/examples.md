@@ -28,6 +28,27 @@ npm install express  # or yarn add express
 node -e "require('express')().use(require('express').static(__dirname, {index:'index.html'})).listen(8181)"
 ```
 
+**note:**  
+In the following examples, for convenience, we just returns static content as file. In real world, you would probably use something like this :
+```javascript
+  ...
+  async getFile(url) {
+
+    const res = await fetch(url);
+
+    if ( !res.ok ) {
+
+      throw Object.assign(new Error(res.statusText + ' ' + url), { res });
+    }
+
+    return {
+      getContentData: (asBinary) => asBinary ? res.arrayBuffer() : res.text(),
+    }
+
+  },
+  ...
+```
+
 
 ## Vue2 basic example
 
@@ -911,6 +932,8 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
         return String(new URL(relPath, refPath === undefined ? window.location : refPath));
       },
       getFile: async (url) => {
+
+        // note: here, for convinience, we just returns a content from a 
 
         if ( new URL(url).pathname === '/main.vue' ) {
 
