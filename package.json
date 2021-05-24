@@ -67,7 +67,7 @@
     "bn.js": "5",
     "buffer": "^6.0.3",
     "caniuse-api": "^3.0.0",
-    "compression-webpack-plugin": "^7.1.2",
+    "compression-webpack-plugin": "^8.0.0",
     "core-js": "^3.12.1",
     "cross-env": "^7.0.3",
     "dts-bundle": "^0.7.3",
@@ -96,7 +96,7 @@
     "vue": "3",
     "vue-template-compiler": "^2.6.12",
     "vue2": "npm:vue@^2.6.12",
-    "webpack": "^5.37.0",
+    "webpack": "^5.37.1",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.0"
   }
