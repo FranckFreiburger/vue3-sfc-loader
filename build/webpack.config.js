@@ -124,12 +124,15 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 
 		plugins: [
 			...!libraryTargetModule ? [
+/*				
 				new DtsBundlePlugin({
-				name: `vue${ vueTarget }-sfc-loader`,
-				main:`${distTypesPath}/src/index.d.ts`,
-				baseDir: `${distTypesPath}/src`,
-				out: `${distPath}/vue${ vueTarget }-sfc-loader.d.ts`
-			})] : [],
+					name: `vue${ vueTarget }-sfc-loader`,
+					main:`${distTypesPath}/src/index.d.ts`,
+					baseDir: `${distTypesPath}/src`,
+					out: `${distPath}/vue${ vueTarget }-sfc-loader.d.ts`
+				})
+*/
+			] : [],
 
 			new Webpack.DefinePlugin({
 
