@@ -241,6 +241,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
+				'util': require.resolve('util/'),
+
 				'./createSFCModule': `./createVue${ vueTarget }SFCModule`,
 
 				// dedupe (see DuplicatePackageCheckerPlugin result)
