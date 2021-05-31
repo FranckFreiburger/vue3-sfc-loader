@@ -26,6 +26,9 @@ export type Cache = {
 export type ModuleCacheId = string;
 
 
+/**
+ * An abstract way to specify a path. It could be a simple string or a object like an URL. An AbstractPath must always be convertible to a string.
+ */
 export type AbstractPath = {
 	toString() : string,
 }
@@ -48,9 +51,9 @@ export type PathResolve = (pathCx : PathContext) => AbstractPath;
 
 
 /**
- * Used by the library when it does not know how to handle a given file type (eg. `.json` files).
- * see [[moduleHandlers]]
- * @param source The content of the file
+ * Used by the library when it needs to handle a does not know how to handle a given file type (eg. `.json` files).
+ * @param type The type of the file. It can be anything, but must be '.vue', '.js' or '.mjs' for vue, js and esm files.
+ * @param getContentData The method to get the content data of a file (text or binary). see [[ File['getContentData'] ]]
  * @param path The path of the file
  * @param options The options
  *
@@ -59,9 +62,6 @@ export type PathResolve = (pathCx : PathContext) => AbstractPath;
  *
  * ```javascript
  *	...
- *	moduleHandlers: {
- *		'.json': (source, path, options) => JSON.parse(source),
- *	}
  *	...
  * ```
  */
@@ -93,7 +93,7 @@ export type Resource = {
 	id : ModuleCacheId,
 	/** file path of the resource */
 	path : AbstractPath,
-	/** asynchronously get the content of the resource */
+	/** asynchronously get the content of the resource. Once you got the content, you can asynchronously get the data through the getContentData(asBinary) method. */
 	getContent : () => Promise<File>,
 }
 
