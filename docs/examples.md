@@ -798,18 +798,18 @@ In the following example we use a trick to preserve reactivity through the `Vue.
   const config = {
     files: {
       '/main.vue': {
-        content: /* <!-- */`
+        getContentData: () => /* <!-- */`
           <template>
             <pre><b>'url!./circle.svg' -> </b>{{ require('url!./circle.svg') }}</pre>
             <img width="50" height="50" src="~url!./circle.svg" />
             <pre><b>'file!./circle.svg' -> </b>{{ require('file!./circle.svg') }}</pre>
-            <img width="50" height="50" src="~file!./circle.svg" />
+            <img width="50" height="50" src="~file!./circle.svg" /> <br><i>(image failed to load, this is expected since there is nothing behind this url)</i>
           </template>
         `/* --> */,
         type: '.vue',
       },
       '/circle.svg': {
-        content: /* <!-- */`
+        getContentData: () => /* <!-- */`
           <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <circle cx="50" cy="50" r="50" />
           </svg>
@@ -834,10 +834,10 @@ In the following example we use a trick to preserve reactivity through the `Vue.
         throw new Error(`${ type } not handled by url!`);
       },
     },
-    handleModule(type, source, path, options) {
+    handleModule(type, getContentData, path, options) {
 
       switch (type) {
-        case '.svg': return source;
+        case '.svg': return getContentData(false);
         default: return undefined; // let vue3-sfc-loader handle this
       }
     },
@@ -872,10 +872,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
         path,
         async getContent() {
 
-          const { content, type } = await getFile(path);
-
+          const { getContentData, type } = await getFile(path);
           return {
-            content: processContentThroughLoaders(content, path, type, options),
+            getContentData: async (asBinary) => processContentThroughLoaders(await getContentData(asBinary), path, type, options),
             type,
           };
         }
@@ -938,7 +937,7 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
         if ( new URL(url).pathname === '/main.vue' ) {
 
           return {
-            content: /*<!--*/`
+            getContentData: () => /*<!--*/`
               <template>
                 <div>
                   <calendar-range locale="EN" :selection="selection" :events="calendarEvents"/>
