@@ -1,4 +1,23 @@
 
+## [0.8.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.3...v0.8.0) (2021-05-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **core:** *getFile()* will continue to support a simple string as return value but the object form is now : `{ type, getContentData }` instead of `{ type, content }`
+
+### Features
+
+* **build:** generate TypeScript definition file as a bundle ([65fe3f4](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/65fe3f4e448d926afb388550e230d22fb3b06dfc))
+* **core:** add additionalBabelParserPlugins to options ([1f344da](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/1f344da95b21ff51571e7d6e3797ff42cb589813))
+* **core:** add binary data support ([fd59be4](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/fd59be499fc8c1e9ae86311294f1b6363679479e)), closes [#69](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/69)
+
+
+### Bug Fixes
+
+* **core:** "[Deprecation] SharedArrayBuffer will require cross-origin isolation as of M91" console message ([c8fdb6f](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/c8fdb6f26cc80dbdc7f9de2a3926df3c5af0cc01)), closes [#53](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/53)
+* **core:** types: moduleCache is mandatory ([53cfd5c](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/53cfd5c72aced3eb2ac0204b0e3b1fd4f933ee54))
+
 ### [0.7.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.2...v0.7.3) (2021-04-05)
 
 
