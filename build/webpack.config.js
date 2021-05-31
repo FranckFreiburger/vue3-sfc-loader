@@ -196,7 +196,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 				...!noCompress ? [
 					new CompressionPlugin({
 						filename: "[path][base].br",
-						exclude: /\.map$/,
+						exclude: [ /\.map$/, /\.ts$/ ],
 						algorithm: "brotliCompress",
 						compressionOptions: {
 							params: {
@@ -206,7 +206,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 					}),
 					new CompressionPlugin({
 						filename: "[path][base].gz",
-						exclude: /\.map$/,
+						exclude: [ /\.map$/, /\.ts$/ ],
 						algorithm: "gzip",
 						compressionOptions: {
 							level: 9,
