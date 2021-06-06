@@ -64,10 +64,22 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 	// eg. '> 0.5%, last 2 versions, Firefox ESR, not dead, not ie 11'
 	const {
 		targetsBrowsers = 'defaults',
+	} = env;
+
+	const {
 		noPresetEnv = !isProd,
 		noCompress = !isProd,
 		noSourceMap = !isProd,
-	} = Object.fromEntries(Object.entries(env).map(([k,v]) => [k, JSON.parse(v)]));
+	} = Object.fromEntries(Object.entries(env).map(([k,v]) => {
+
+		try {
+
+			return [k, JSON.parse(v)];
+		} catch {
+			
+			return [k, v];
+		}
+	}));
 
 	const genSourcemap = false;
 
