@@ -164,7 +164,14 @@ const { blockList, replaceBlock } = require('./evalHtmlCommentsTools.js');
 
 function fileSize(filename) {
 
-  return Fs.statSync(Path.join(__dirname, filename)).size;
+  try {
+
+    return Fs.statSync(Path.join(__dirname, filename)).size;
+  } catch {
+
+    return -1;
+  }
+
 }
 
 const version = process.argv[3];
