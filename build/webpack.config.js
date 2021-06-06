@@ -67,7 +67,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 		noPresetEnv = !isProd,
 		noCompress = !isProd,
 		noSourceMap = !isProd,
-	} = env;
+	} = Object.fromEntries(Object.entries(env).map(([k,v]) => [k, JSON.parse(v)]));
 
 	const genSourcemap = false;
 
