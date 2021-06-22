@@ -94,6 +94,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 
 		entry: [
 			'regenerator-runtime',
+			'core-js',
 			Path.resolve(__dirname, '../src/index.ts'),
 		],
 
@@ -337,6 +338,10 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 			rules: [
 				isProd ? {
 					test: /\.(mjs|js|ts)$/,
+					exclude: [
+						/core-js/, // Babel should not transpile core-js for correct work.
+						/regenerator-runtime/, // transpile not needed
+					],
 					use: {
 						loader: 'babel-loader',
 						options: {
