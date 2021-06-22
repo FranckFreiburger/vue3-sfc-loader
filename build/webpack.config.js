@@ -278,6 +278,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'@babel/helper-module-transforms': require.resolve('@babel/helper-module-transforms'),
 				'@babel/helper-replace-supers': require.resolve('@babel/helper-replace-supers'),
 				'@babel/helper-simple-access': require.resolve('@babel/helper-simple-access'),
+				'@babel/helper-validator-identifier': require.resolve('@babel/helper-validator-identifier'),
 
 				'@vue/shared': require.resolve('@vue/shared'),
 				'@vue/compiler-sfc': require.resolve('@vue/compiler-sfc'),
