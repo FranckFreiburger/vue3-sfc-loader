@@ -348,7 +348,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 					use: {
 						loader: 'babel-loader',
 						options: {
-							compact: true,
+							compact: !noCompress,
 							sourceMaps: !noSourceMap,
 
 							presets: [
