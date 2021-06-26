@@ -254,42 +254,44 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 			mainFields: ['browser', 'main', 'module'],
 			alias: {
 
-				'util': require.resolve('util/'),
+				'util$': require.resolve('util/'),
 
-				'./createSFCModule': `./createVue${ vueTarget }SFCModule`,
+				'./createSFCModule$': `./createVue${ vueTarget }SFCModule`,
 
 				// dedupe (see DuplicatePackageCheckerPlugin result)
-				'bn.js': require.resolve('bn.js'),
-				'safe-buffer': require.resolve('safe-buffer'),
+				'bn.js$': require.resolve('bn.js'),
+				'safe-buffer$': require.resolve('safe-buffer'),
 				//'es-abstract': require.resolve('es-abstract'),
 
-				'semver': require.resolve('semver'),
-				'lru-cache': require.resolve('lru-cache'),
+				'semver$': require.resolve('semver'),
+				'lru-cache$': require.resolve('lru-cache'),
 
-				'@babel/parser': require.resolve('@babel/parser'),
-				'@babel/template': require.resolve('@babel/template'),
-				'@babel/traverse': require.resolve('@babel/traverse'),
-				'@babel/types': require.resolve('@babel/types'),
-				'@babel/code-frame': require.resolve('@babel/code-frame'),
-				'@babel/core': require.resolve('@babel/core'),
-				'@babel/generator': require.resolve('@babel/generator'),
-				'@babel/helper-member-expression-to-functions': require.resolve('@babel/helper-member-expression-to-functions'),
-				'@babel/helper-module-imports': require.resolve('@babel/helper-module-imports'),
-				'@babel/helper-module-transforms': require.resolve('@babel/helper-module-transforms'),
-				'@babel/helper-replace-supers': require.resolve('@babel/helper-replace-supers'),
-				'@babel/helper-simple-access': require.resolve('@babel/helper-simple-access'),
-				'@babel/helper-validator-identifier': require.resolve('@babel/helper-validator-identifier'),
+				'@babel/parser$': require.resolve('@babel/parser'),
+				'@babel/template$': require.resolve('@babel/template'),
+				'@babel/traverse$': require.resolve('@babel/traverse'),
+				'@babel/types$': require.resolve('@babel/types'),
+				'@babel/code-frame$': require.resolve('@babel/code-frame'),
+				'@babel/core$': require.resolve('@babel/core'),
+				'@babel/generator$': require.resolve('@babel/generator'),
+				'@babel/helper-member-expression-to-functions$': require.resolve('@babel/helper-member-expression-to-functions'),
+				'@babel/helper-module-imports$': require.resolve('@babel/helper-module-imports'),
+				'@babel/helper-module-transforms$': require.resolve('@babel/helper-module-transforms'),
+				'@babel/helper-replace-supers$': require.resolve('@babel/helper-replace-supers'),
+				'@babel/helper-simple-access$': require.resolve('@babel/helper-simple-access'),
+				'@babel/helper-validator-identifier$': require.resolve('@babel/helper-validator-identifier'),
+				'@babel/helper-split-export-declaration$': require.resolve('@babel/helper-split-export-declaration'),
+				'@babel/helper-plugin-utils$': require.resolve('@babel/helper-plugin-utils'),
 
-				'@vue/shared': require.resolve('@vue/shared'),
-				'@vue/compiler-sfc': require.resolve('@vue/compiler-sfc'),
-				'@vue/compiler-dom': require.resolve('@vue/compiler-dom'),
+				'@vue/shared$': require.resolve('@vue/shared'),
+				'@vue/compiler-sfc$': require.resolve('@vue/compiler-sfc'),
+				'@vue/compiler-dom$': require.resolve('@vue/compiler-dom'),
 
 				// not needed
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
 
 				'chalk': false,
-				'@babel/highlight': Path.resolve(__dirname, 'noopBabelHighlight.mjs'),
+				'@babel/highlight$': Path.resolve(__dirname, 'noopBabelHighlight.mjs'),
 
 				'emojis-list': false,
 				'json5': false,
@@ -305,8 +307,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'stylus': false,
 				'less': false,
 				'prettier': false,
-				'./buble.js': Path.resolve(__dirname, 'fakeBuble.mjs'), // used by vue-template-es2015-compiler
-				'./styleProcessors': Path.resolve(__dirname, 'vue2StyleProcessors.ts'), // used by @vue/component-compiler-utils
+				'./buble.js$': Path.resolve(__dirname, 'fakeBuble.mjs'), // used by vue-template-es2015-compiler
+				'./styleProcessors$': Path.resolve(__dirname, 'vue2StyleProcessors.ts'), // used by @vue/component-compiler-utils
 
 				...!genSourcemap ? {
 					'source-map': false,
@@ -314,7 +316,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				} : {},
 
 				...isProd ? {
-					'debug': Path.resolve(__dirname, 'noopDebug.js'),
+					'debug$': Path.resolve(__dirname, 'noopDebug.js'),
 				} : {},
 			},
 
