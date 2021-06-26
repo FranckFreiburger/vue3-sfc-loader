@@ -18,6 +18,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
  * Easily [build your own version](#build-your-own-version) and customize browsers you need to support
  * **esm** and **umd** bundles available
+ * IE11 support (for vue2-sfc-loader only)
 
 
 ## Example
