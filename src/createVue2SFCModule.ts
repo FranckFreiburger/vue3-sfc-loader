@@ -146,7 +146,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 			// "@vue/component-compiler-utils" does NOT assume any module system, and expose render in global scope.
-			template.code += `\nmodule.exports = { render, staticRenderFns }`
+			template.code += `\nmodule.exports = { render: render, staticRenderFns: staticRenderFns }`
 
 			if ( template.errors.length ) {
 

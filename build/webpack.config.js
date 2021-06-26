@@ -93,8 +93,8 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 		},
 
 		entry: [
-			'regenerator-runtime',
 			'core-js',
+			'regenerator-runtime',
 			Path.resolve(__dirname, '../src/index.ts'),
 		],
 
@@ -362,6 +362,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 												version: 3,
 												proposals: true
 											},
+											forceAllTransforms: true,
 											targets: {
 												browsers: targetsBrowsers,
 											},
