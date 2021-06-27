@@ -822,7 +822,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 						'/main.vue': `
 							<template>
-								<foo v-slot="{ foo, ...rest }">{{ rest }}</foo>
+								<foo v-slot="{ foo, ...rest }">{{ JSON.stringify(rest) }}</foo>
 							</template>
 							<script>
 								export default {
@@ -843,7 +843,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 					}
 				});
 
-				await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch( JSON.stringify({ bar: 2, baz: 3 }, null, 2));
+				await expect(page.$eval('#app div', el => el.innerHTML)).resolves.toMatch( JSON.stringify({ bar: 2, baz: 3 }));
 			});
 		}
 
