@@ -1,4 +1,12 @@
 
+### [0.8.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.8.0...v0.8.1) (2021-06-28)
+
+
+### Bug Fixes
+
+* **build:** IE11 compatibility ([cce49ec](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/cce49ec23a848822a058ceb586d0a0a502204c28)), closes [#75](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/75)
+* core-js with preset-env usage ([2ba3f5d](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/2ba3f5dbf85900b9c6c4cceb37aa1c69ba2c44cf))
+
 ## [0.8.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.7.3...v0.8.0) (2021-05-31)
 
 
