@@ -93,6 +93,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 		},
 
 		entry: [
+			Path.resolve(__dirname, '../src/bootstrap.js'),
 			Path.resolve(__dirname, '../src/index.ts'),
 		],
 
