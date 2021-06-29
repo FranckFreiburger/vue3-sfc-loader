@@ -19,7 +19,7 @@
     "url": "https://github.com/FranckFreiburger/vue3-sfc-loader"
   },
   "license": "MIT",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead, not ie 11",
   "main": "dist/vue3-sfc-loader.js",
   "types": "dist/vue3-sfc-loader.d.ts",

@@ -1,4 +1,16 @@
 
+### [0.8.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v8.0.1...v0.8.2) (2021-06-29)
+
+
+### Features
+
+* **build:** uses non-polluting polyfills ([ca73b8f](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/ca73b8f40321770d3256e565fa5dbc998a5bee5c))
+
+
+### Bug Fixes
+
+* **core:** add bootstrap.js to handle special conditions (IE11) ([9111483](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/9111483e48a5a63a29cd40c05390939f913abf71))
+
 ### [0.8.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.8.0...v0.8.1) (2021-06-28)
 
 
