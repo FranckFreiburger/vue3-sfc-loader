@@ -93,8 +93,6 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 		},
 
 		entry: [
-			'core-js',
-			'regenerator-runtime',
 			Path.resolve(__dirname, '../src/index.ts'),
 		],
 
@@ -190,15 +188,17 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 								arrows: caniuse.isSupported('arrow-functions', targetsBrowsers),
 								ecma: caniuse.isSupported('es6', targetsBrowsers) ? '2015' : '5', // note ECMAScript 2015 is the sixth edition of the ECMAScript Language Specification standard
 							} : {},
-							unsafe: true,
-							unsafe_comps: true,
-							unsafe_Function: true,
-							unsafe_math: true,
-							unsafe_symbols: true,
-							unsafe_methods: caniuse.isSupported('es6', targetsBrowsers),
-							unsafe_proto: true,
-							unsafe_regexp: true,
-							unsafe_undefined: true,
+							
+							// beware, unsafe: true is not suitable for this project !
+							// unsafe: true,
+							// unsafe_comps: true,
+							// unsafe_Function: true,
+							// unsafe_math: true,
+							// unsafe_symbols: true,
+							// unsafe_methods: caniuse.isSupported('es6', targetsBrowsers),
+							// unsafe_proto: true,
+							// unsafe_regexp: true,
+							// unsafe_undefined: true,
 						},
 					},
 				}),
@@ -340,9 +340,9 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 		module: {
 			rules: [
 				isProd ? {
-					test: /\.(mjs|js|ts)$/,
+					test: /\.(mjs|js|cjs|ts)$/,
 					exclude: [
-						/core-js/, // Babel should not transpile core-js for correct work.
+						/core-js-pure/, // Babel should not transpile core-js for correct work.
 						/regenerator-runtime/, // transpile not needed
 					],
 					use: {
@@ -350,28 +350,35 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 						options: {
 							compact: !noCompress,
 							sourceMaps: !noSourceMap,
-
+							sourceType: 'unambiguous', // doc: https://babeljs.io/docs/en/options#sourcetype
+							targets: targetsBrowsers,
 							presets: [
 
 								...!noPresetEnv ? [
 									[
 										'@babel/preset-env',
 										{
-											useBuiltIns: 'entry', // https://babeljs.io/docs/en/babel-preset-env#usebuiltins
-											corejs: {
-												version: 3,
-												proposals: true
-											},
-											forceAllTransforms: true,
-											targets: {
-												browsers: targetsBrowsers,
-											},
 										}
 									]
 								] : [],
 							],
-
 							plugins: [
+
+								...!noPresetEnv ? [
+									[
+										"polyfill-corejs3",
+										{
+											"method": "usage-pure"
+										}
+									],
+									[
+										'babel-plugin-polyfill-regenerator',
+										{
+											"method": "usage-pure"
+										}
+									]
+								] : [],
+
 							],
 						}
 					}
