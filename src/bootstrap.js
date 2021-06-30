@@ -60,8 +60,9 @@ for ( let name of [
 	'BigUint64Array'
 ] ) {
 
-  if ( global[name] )
-    global[name].prototype[Symbol.toStringTag] = name;
+  if ( global[name] && !(Symbol.toStringTag in global[name].prototype) )
+    Object.defineProperty(global[name].prototype, Symbol.toStringTag, { value: name });
+
 }
 
 
