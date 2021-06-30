@@ -19,7 +19,7 @@
     "url": "https://github.com/FranckFreiburger/vue3-sfc-loader"
   },
   "license": "MIT",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead, not ie 11",
   "main": "dist/vue3-sfc-loader.js",
   "types": "dist/vue3-sfc-loader.d.ts",
@@ -31,7 +31,7 @@
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "rimraf ./dist/ && cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "docs": "cross-env-shell \"node build/evalHtmlComments.js README.md $npm_package_version && node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true\"",
-    "pushDocs": "yarn run docs && git add docs/ && cross-env-shell git commit -m \\\"chore(docs): v$npm_package_version API docs & examples \\\" docs",
+    "pushDocs": "yarn run docs && git add docs/ && git add README.md && cross-env-shell git commit -m \\\"chore(docs): v$npm_package_version API docs & examples \\\" docs",
     "release": "standard-version --header \"\""
   },
   "standard-version": {

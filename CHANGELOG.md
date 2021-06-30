@@ -1,4 +1,11 @@
 
+### [0.8.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.8.2...v0.8.3) (2021-06-30)
+
+
+### Bug Fixes
+
+* **core:** fix toStringTag symbol for typed array ([4e684f2](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/4e684f244f2322cce7477c22c4e7ad1a9b158c3b))
+
 ### [0.8.2](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v8.0.1...v0.8.2) (2021-06-29)
 
 
