@@ -83,7 +83,10 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 
 	const genSourcemap = false;
 
-	console.log('config', { targetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, libraryTargetModule, vueTarget });
+	// excludes cases that make no sense 
+	const actualTargetsBrowsers = targetsBrowsers + ( libraryTargetModule ? ' and supports es6-module' : '' ) + ( vueTarget == 3 ? ' and supports proxy' : '' );
+
+	console.log('config', { actualTargetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, libraryTargetModule, vueTarget });
 
 	return {
 		name,
@@ -113,10 +116,10 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 			environment: {
 				// doc: https://webpack.js.org/configuration/output/#outputenvironment
 				...!noPresetEnv ? {
-					arrowFunction: caniuse.isSupported('arrow-functions', targetsBrowsers),
-					const: caniuse.isSupported('const', targetsBrowsers),
-					destructuring: caniuse.isSupported('es6', targetsBrowsers), // see https://github.com/Fyrd/caniuse/issues/5676
-					forOf: caniuse.isSupported('es6', targetsBrowsers),
+					arrowFunction: caniuse.isSupported('arrow-functions', actualTargetsBrowsers),
+					const: caniuse.isSupported('const', actualTargetsBrowsers),
+					destructuring: caniuse.isSupported('es6', actualTargetsBrowsers), // see https://github.com/Fyrd/caniuse/issues/5676
+					forOf: caniuse.isSupported('es6', actualTargetsBrowsers),
 				} : {},
 			},
 		},
@@ -186,8 +189,8 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 							passes: 2,
 							drop_console: true,
 							...!noPresetEnv ? {
-								arrows: caniuse.isSupported('arrow-functions', targetsBrowsers),
-								ecma: caniuse.isSupported('es6', targetsBrowsers) ? '2015' : '5', // note ECMAScript 2015 is the sixth edition of the ECMAScript Language Specification standard
+								arrows: caniuse.isSupported('arrow-functions', actualTargetsBrowsers),
+								ecma: caniuse.isSupported('es6', actualTargetsBrowsers) ? '2015' : '5', // note ECMAScript 2015 is the sixth edition of the ECMAScript Language Specification standard
 							} : {},
 							
 							// beware, unsafe: true is not suitable for this project !
@@ -196,7 +199,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 							// unsafe_Function: true,
 							// unsafe_math: true,
 							// unsafe_symbols: true,
-							// unsafe_methods: caniuse.isSupported('es6', targetsBrowsers),
+							// unsafe_methods: caniuse.isSupported('es6', actualTargetsBrowsers),
 							// unsafe_proto: true,
 							// unsafe_regexp: true,
 							// unsafe_undefined: true,
@@ -352,7 +355,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 							compact: !noCompress,
 							sourceMaps: !noSourceMap,
 							sourceType: 'unambiguous', // doc: https://babeljs.io/docs/en/options#sourcetype
-							targets: targetsBrowsers,
+							targets: actualTargetsBrowsers,
 							presets: [
 
 								...!noPresetEnv ? [
