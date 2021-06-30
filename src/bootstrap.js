@@ -1,36 +1,45 @@
 // 1/
-
+//
 // add sticky flag support
-const original_RegExp = global.RegExp;
+//
+// src: https://github.com/paulmillr/es6-shim/issues/376#issue-118172552
 
-class PolyfilledRegExp extends global.RegExp {
-  constructor(regex, flags = '') {
-    if (flags.indexOf("y") === -1) {
-      return new original_RegExp(regex, flags);
-    }
-    super(regex, flags.replace("y", "g"));
-    Object.defineProperty(this, "sticky", { value: true, readonly: true });
-  }
+if ( !('sticky' in global.RegExp.prototype) ) {
+  
+  const OriginalRegExp = global.RegExp;
 
-  test(str) {
-    return !!this.exec(str);
-  }
+  const originalExec = OriginalRegExp.prototype.exec;
+  OriginalRegExp.prototype.exec = function (string) {
 
-  exec(str) {
     const lastIndex = this.lastIndex;
-    const result = super.exec(str);
-    if (!result || result.index !== lastIndex) {
+    const result = originalExec.call(this, string);
+
+    if ( this._sticky && result != null && this.lastIndex - result[0].length !== lastIndex ) {
+
       this.lastIndex = 0;
       return null;
     }
+
     return result;
+  };
+
+  OriginalRegExp.prototype.test = function(string) {
+    
+    return !!this.exec(string);
   }
-}
+  
+  function PolyfilledRegExp(pattern, flags) {
 
-//RegExp = PolyfilledRegExp;
-global.RegExp = function(regex, flags = '') {
+    const i = flags != undefined ? flags.indexOf('y') : -1;
+    const x = new OriginalRegExp(pattern, i === -1 ? flags : flags.slice(0, i) + flags.slice(i + 1) + (flags.indexOf('g') === -1 ? 'g' : ''));
+    x._sticky = i !== -1;
+    
+    return x;
+  };
 
-  return new PolyfilledRegExp(regex, flags);
+  PolyfilledRegExp.prototype = OriginalRegExp.prototype; // handle instanceof: new RegExp('.*') instanceof RegExp
+  
+  global.RegExp = PolyfilledRegExp;
 }
 
 
