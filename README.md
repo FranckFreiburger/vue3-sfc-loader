@@ -128,7 +128,8 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
   **preliminary steps:**  
   1. clone `vue3-sfc-loader`
-  1. run `yarn add`
+  1. (install yarn: `npm install --global yarn`)
+  1. run `yarn install`
 
 ## How It Works
 
