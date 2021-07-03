@@ -995,9 +995,6 @@ In the following example we use a trick to preserve reactivity through the `Vue.
           <span v-html="svg"/>
         </template>
         <script>
-
-          import { ref } from 'vue'
-
           export default {
             props: {
               name: String
@@ -1008,7 +1005,6 @@ In the following example we use a trick to preserve reactivity through the `Vue.
               }
             }
           }
-
         </script>        
       `
     }
