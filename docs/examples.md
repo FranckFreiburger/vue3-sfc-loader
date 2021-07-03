@@ -473,24 +473,23 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <body>
   <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.3/dist/vue3-sfc-loader.js"></script>
-
   <script>
 
     /* <!-- */
     const config = {
       files: {
         '/style.css': `
-            .styled { color: red }
+          .styled { color: red }
         `,
         '/main.vue': `
-            <template>
-              <span class="styled">hello</span> world
-            </template>
-            <script>
-              import './style.css'
-              export default {
-              }
-            </script>
+          <template>
+            <span class="styled">hello</span> world
+          </template>
+          <script>
+            import './style.css'
+            export default {
+            }
+          </script>
         `,
       }
     };
@@ -507,9 +506,9 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
       },
       handleModule: async function (type, getContentData, path, options) { 
         switch (type) { 
-            case '.css':
-              options.addStyle(await getContentData(false));
-              return null;
+          case '.css':
+            options.addStyle(await getContentData(false));
+            return null;
         } 
       },
     }
