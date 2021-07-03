@@ -7,6 +7,7 @@
   * [Using another template language (pug)](#using-another-template-language-pug)
   * [Using another style language (stylus)](#using-another-style-language-stylus)
   * [SFC style CSS variable injection (new edition)](#sfc-style-css-variable-injection-new-edition)
+  * [import style](#import-style)
   * [Minimalist Hello World example](#minimalist-hello-world-example)
   * [Use `options.loadModule` hook](#use-optionsloadmodule-hook)
   * [Dynamic component (using `:is` Special Attribute)](#dynamic-component-using-is-special-attribute)
@@ -459,6 +460,67 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!--example:target:rfc_231-->
 [open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cdiv+id%3D%22app%22%3E%3C%2Fdiv%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.2%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A++++%2F*+%3C!--+*%2F%0A++++const+sfcContent+%3D+%60%0A++++++%3Ctemplate%3E%0A++++++++Hello+%3Cspan+class%3D%22example%22%3E%7B%7B+msg+%7D%7D%3C%2Fspan%3E%0A++++++%3C%2Ftemplate%3E%0A++++++%3Cscript%3E%0A++++++++export+default+%7B%0A++++++++++data+()+%7B%0A++++++++++++return+%7B%0A++++++++++++++msg%3A+'world!'%2C%0A++++++++++++++color%3A+'blue'%2C%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%7D%0A++++++%3C%2Fscript%3E%0A++++++%3Cstyle+scoped%3E%0A++++++++.example+%7B%0A++++++++++color%3A+v-bind('color')%0A++++++++%7D%0A++++++%3C%2Fstyle%3E%0A++++%60%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B%0A++++++++vue%3A+Vue%2C%0A++++++%7D%2C%0A++++++getFile(url)+%7B%0A%0A++++++++if+(+url+%3D%3D%3D+'%2FmyComponent.vue'+)%0A++++++++++return+Promise.resolve(sfcContent)%3B%0A++++++%7D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++%7D%0A%0A++++const+%7B+loadModule+%7D+%3D+window%5B%22vue3-sfc-loader%22%5D%3B%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('%2FmyComponent.vue'%2C+options))).mount('%23app')%3B%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)
 <!--/example:target:rfc_231-->
+[:top:](#readme)
+
+
+## import style
+
+<!--example:source:import_style-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.2/dist/vue3-sfc-loader.js"></script>
+
+  <script>
+
+    /* <!-- */
+    const config = {
+      files: {
+        '/style.css': `
+            .styled { color: red }
+        `,
+        '/main.vue': `
+            <template>
+              <span class="styled">hello</span> world
+            </template>
+            <script>
+              import './style.css'
+              export default {
+              }
+            </script>
+        `,
+      }
+    };
+    /* --> */
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: url => config.files[url],
+      addStyle(textContent) {
+
+        const style = Object.assign(document.createElement('style'), { textContent });
+        const ref = document.head.getElementsByTagName('style')[0] || null;
+        document.head.insertBefore(style, ref);
+      },
+      handleModule: async function (type, getContentData, path, options) { 
+        switch (type) { 
+            case '.css':
+              options.addStyle(await getContentData(false));
+              return null;
+        } 
+      },
+    }
+
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+```
+<!--example:target:import_style-->
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.2%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+config+%3D+%7B%0A++++++files%3A+%7B%0A++++++++'%2Fstyle.css'%3A+%60%0A++++++++++++.styled+%7B+color%3A+red+%7D%0A++++++++%60%2C%0A++++++++'%2Fmain.vue'%3A+%60%0A++++++++++++%3Ctemplate%3E%0A++++++++++++++%3Cspan+class%3D%22styled%22%3Ehello%3C%2Fspan%3E+world%0A++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%3Cscript%3E%0A++++++++++++++import+'.%2Fstyle.css'%0A++++++++++++++export+default+%7B%0A++++++++++++++%7D%0A++++++++++++%3C%2Fscript%3E%0A++++++++%60%2C%0A++++++%7D%0A++++%7D%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++++switch+(type)+%7B+%0A++++++++++++case+'.css'%3A%0A++++++++++++++options.addStyle(await+getContentData(false))%3B%0A++++++++++++++return+null%3B%0A++++++++%7D+%0A++++++%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:import_style-->
 [:top:](#readme)
 
 
