@@ -14,6 +14,7 @@
   * [Nested components](#nested-components)
   * [Use SFC Custom Blocks for i18n](#use-sfc-custom-blocks-for-i18n)
   * [Use Options.getResource() and process the files (nearly) like webpack does](#use-optionsgetresource-and-process-the-files-nearly-like-webpack-does)
+  * [Load SVG dynamically (using `async setup()` and `<Suspense>`)](#load-svg-dynamically-using-async-setup-and-suspense)
   * [Use remote components](#use-remote-components)
 <!--/toc-->
 
@@ -956,6 +957,95 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 [open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%3Cscript%3E%0A%0A++const+config+%3D+%7B%0A++++files%3A+%7B%0A++++++'%2Fmain.vue'%3A+%7B%0A++++++++getContentData%3A+()+%3D%3E+%2F*+%3C!--+*%2F%60%0A++++++++++%3Ctemplate%3E%0A++++++++++++%3Cpre%3E%3Cb%3E'url!.%2Fcircle.svg'+-%3E+%3C%2Fb%3E%7B%7B+require('url!.%2Fcircle.svg')+%7D%7D%3C%2Fpre%3E%0A++++++++++++%3Cimg+width%3D%2250%22+height%3D%2250%22+src%3D%22~url!.%2Fcircle.svg%22+%2F%3E%0A++++++++++++%3Cpre%3E%3Cb%3E'file!.%2Fcircle.svg'+-%3E+%3C%2Fb%3E%7B%7B+require('file!.%2Fcircle.svg')+%7D%7D%3C%2Fpre%3E%0A++++++++++++%3Cimg+width%3D%2250%22+height%3D%2250%22+src%3D%22~file!.%2Fcircle.svg%22+%2F%3E+%3Cbr%3E%3Ci%3E(image+failed+to+load%2C+this+is+expected+since+there+is+nothing+behind+this+url)%3C%2Fi%3E%0A++++++++++%3C%2Ftemplate%3E%0A++++++++%60%2F*+--%3E+*%2F%2C%0A++++++++type%3A+'.vue'%2C%0A++++++%7D%2C%0A++++++'%2Fcircle.svg'%3A+%7B%0A++++++++getContentData%3A+()+%3D%3E+%2F*+%3C!--+*%2F%60%0A++++++++++%3Csvg+viewBox%3D%220+0+100+100%22+xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A++++++++++++%3Ccircle+cx%3D%2250%22+cy%3D%2250%22+r%3D%2250%22+%2F%3E%0A++++++++++%3C%2Fsvg%3E%0A++++++++%60%2F*+--%3E+*%2F%2C%0A++++++++type%3A+'.svg'%2C%0A++++++%7D%0A++++%7D%0A++%7D%3B%0A++%0A++const+options+%3D+%7B%0A++++moduleCache%3A+%7B%0A++++++'vue'%3A+Vue%2C%0A++++++'file!'(content%2C+path%2C+type%2C+options)+%7B%0A%0A++++++++return+String(new+URL(path%2C+window.location))%3B%0A++++++%7D%2C%0A++++++'url!'(content%2C+path%2C+type%2C+options)+%7B%0A%0A++++++++if+(+type+%3D%3D%3D+'.svg'+)%0A++++++++++return+%60data%3Aimage%2Fsvg%2Bxml%3Bbase64%2C%24%7B+btoa(content)+%7D%60%3B%0A%0A++++++++throw+new+Error(%60%24%7B+type+%7D+not+handled+by+url!%60)%3B%0A++++++%7D%2C%0A++++%7D%2C%0A++++handleModule(type%2C+getContentData%2C+path%2C+options)+%7B%0A%0A++++++switch+(type)+%7B%0A++++++++case+'.svg'%3A+return+getContentData(false)%3B%0A++++++++default%3A+return+undefined%3B+%2F%2F+let+vue3-sfc-loader+handle+this%0A++++++%7D%0A++++%7D%2C%0A++++getFile(url%2C+options)+%7B%0A%0A++++++return+config.files%5Burl%5D+%7C%7C+(()+%3D%3E+%7B+throw+new+Error('404+'+%2B+url)+%7D)()%3B%0A++++%7D%2C%0A++++getResource(%7B+refPath%2C+relPath+%7D%2C+options)+%7B%0A%0A++++++const+%7B+moduleCache%2C+pathResolve%2C+getFile+%7D+%3D+options%3B%0A%0A++++++%2F%2F+split+relPath+into+loaders%5B%5D+and+file+path+(eg.+'foo!bar!file.ext'+%3D%3E+%5B'file.ext'%2C+'bar!'%2C+'foo!'%5D)%0A++++++const+%5B+resourceRelPath%2C+...loaders+%5D+%3D+relPath.match(%2F(%5B%5E!%5D%2B!)%7C%5B%5E!%5D%2B%24%2Fg).reverse()%3B%0A%0A++++++%2F%2F+helper+function%3A+process+a+content+through+the+loaders%0A++++++const+processContentThroughLoaders+%3D+(content%2C+path%2C+type%2C+options)+%3D%3E+%7B%0A++++++++%0A++++++++return+loaders.reduce((content%2C+loader)+%3D%3E+%7B%0A%0A++++++++++return+moduleCache%5Bloader%5D(content%2C+path%2C+type%2C+options)%3B%0A++++++++%7D%2C+content)%3B%0A++++++%7D%0A%0A++++++%2F%2F+get+the+actual+path+of+the+file%0A++++++const+path+%3D+pathResolve(%7B+refPath%2C+relPath%3A+resourceRelPath+%7D)%3B%0A%0A++++++%2F%2F+the+resource+id+must+be+unique+in+its+path+context%0A++++++const+id+%3D+loaders.join('')+%2B+path%3B%0A%0A++++++return+%7B%0A++++++++id%2C%0A++++++++path%2C%0A++++++++async+getContent()+%7B%0A%0A++++++++++const+%7B+getContentData%2C+type+%7D+%3D+await+getFile(path)%3B%0A++++++++++return+%7B%0A++++++++++++getContentData%3A+async+(asBinary)+%3D%3E+processContentThroughLoaders(await+getContentData(asBinary)%2C+path%2C+type%2C+options)%2C%0A++++++++++++type%2C%0A++++++++++%7D%3B%0A++++++++%7D%0A++++++%7D%3B%0A++++%7D%2C%0A++++addStyle()+%7B+%2F*+unused+here+*%2F+%7D%2C%0A++%7D%0A%0A++const+%7B+loadModule+%7D+%3D+window%5B'vue3-sfc-loader'%5D%3B%0A++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:getResource_loaders-->
 
 [:top:](#readme)
+
+
+## Load SVG dynamically (using `async setup()` and `<Suspense>`)
+
+<!--example:source:load_svg_async_setup-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+<script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.3/dist/vue3-sfc-loader.js"></script>
+<script>
+
+  /* <!-- */
+  const config = {
+    files: {
+      '/circle.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" /></svg>`,
+      '/main.vue': `
+        <template>
+          <Suspense>
+            <mycomponent
+              :name="'circle'"
+            />
+          </Suspense>
+        </template>
+        <script>
+          import mycomponent from './myComponent.vue'
+          export default {
+            components: {
+              mycomponent
+            },
+          }
+        </script>
+      `,
+      '/myComponent.vue': `
+        <template>
+          <span v-html="svg"/>
+        </template>
+        <script>
+
+          import { ref } from 'vue'
+
+          export default {
+            props: {
+              name: String
+            },
+            async setup(props) {
+              return {
+                svg: await import('./' + props.name + '.svg'),
+              }
+            }
+          }
+
+        </script>        
+      `
+    }
+  };
+  /* --> */
+
+  const options = {
+    moduleCache: { vue: Vue },
+    getFile: url => config.files[url],
+    addStyle(textContent) {
+
+      const style = Object.assign(document.createElement('style'), { textContent });
+      const ref = document.head.getElementsByTagName('style')[0] || null;
+      document.head.insertBefore(style, ref);
+    },
+    handleModule: async function (type, getContentData, path, options) { 
+      switch (type) { 
+        case '.svg':
+          return getContentData(false);
+      } 
+    },
+  }
+
+  Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
+
+</script>
+
+</body>
+</html>
+```
+<!--example:target:load_svg_async_setup-->
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%3Cscript%3E%0A%0A++%2F*+%3C!--+*%2F%0A++const+config+%3D+%7B%0A++++files%3A+%7B%0A++++++'%2Fcircle.svg'%3A+%60%3Csvg+viewBox%3D%220+0+100+100%22+xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle+cx%3D%2250%22+cy%3D%2250%22+r%3D%2250%22+%2F%3E%3C%2Fsvg%3E%60%2C%0A++++++'%2Fmain.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3CSuspense%3E%0A++++++++++++%3Cmycomponent%0A++++++++++++++%3Aname%3D%22'circle'%22%0A++++++++++++%2F%3E%0A++++++++++%3C%2FSuspense%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A++++++++++import+mycomponent+from+'.%2FmyComponent.vue'%0A++++++++++export+default+%7B%0A++++++++++++components%3A+%7B%0A++++++++++++++mycomponent%0A++++++++++++%7D%2C%0A++++++++++%7D%0A++++++++%3C%2Fscript%3E%0A++++++%60%2C%0A++++++'%2FmyComponent.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3Cspan+v-html%3D%22svg%22%2F%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A%0A++++++++++import+%7B+ref+%7D+from+'vue'%0A%0A++++++++++export+default+%7B%0A++++++++++++props%3A+%7B%0A++++++++++++++name%3A+String%0A++++++++++++%7D%2C%0A++++++++++++async+setup(props)+%7B%0A++++++++++++++return+%7B%0A++++++++++++++++svg%3A+await+import('.%2F'+%2B+props.name+%2B+'.svg')%2C%0A++++++++++++++%7D%0A++++++++++++%7D%0A++++++++++%7D%0A%0A++++++++%3C%2Fscript%3E++++++++%0A++++++%60%0A++++%7D%0A++%7D%3B%0A++%2F*+--%3E+*%2F%0A%0A++const+options+%3D+%7B%0A++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++addStyle(textContent)+%7B%0A%0A++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++document.head.insertBefore(style%2C+ref)%3B%0A++++%7D%2C%0A++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++switch+(type)+%7B+%0A++++++++case+'.svg'%3A%0A++++++++++return+getContentData(false)%3B%0A++++++%7D+%0A++++%7D%2C%0A++%7D%0A%0A++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:load_svg_async_setup-->
+
+[:top:](#readme)
+
+
 
 
 ## Use remote components
