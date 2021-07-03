@@ -727,7 +727,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				files: {
 					...files,
 
-					'/image.png': Buffer.from(Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAAAAADlzNgyAAAAEklEQVQI12P8z8DAwMDEQJgEAConAQ0Jet0iAAAAAElFTkSuQmCC'), c => c.charCodeAt(0)).buffer),
+					'/image.png': Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAUAAAAHCAAAAADlzNgyAAAAEklEQVQI12P8z8DAwMDEQJgEAConAQ0Jet0iAAAAAElFTkSuQmCC', 'base64'),
 
 					'/main.vue': `
 						<template>
