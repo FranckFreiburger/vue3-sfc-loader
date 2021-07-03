@@ -14,6 +14,7 @@
   * [Nested components](#nested-components)
   * [Use SFC Custom Blocks for i18n](#use-sfc-custom-blocks-for-i18n)
   * [Use Options.getResource() and process the files (nearly) like webpack does](#use-optionsgetresource-and-process-the-files-nearly-like-webpack-does)
+  * [Load SVG dynamically (using `watch()`)](#load-svg-dynamically-using-watch)
   * [Load SVG dynamically (using `async setup()` and `<Suspense>`)](#load-svg-dynamically-using-async-setup-and-suspense)
   * [Use remote components](#use-remote-components)
 <!--/toc-->
@@ -520,7 +521,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 </html>
 ```
 <!--example:target:import_style-->
-[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+config+%3D+%7B%0A++++++files%3A+%7B%0A++++++++'%2Fstyle.css'%3A+%60%0A++++++++++++.styled+%7B+color%3A+red+%7D%0A++++++++%60%2C%0A++++++++'%2Fmain.vue'%3A+%60%0A++++++++++++%3Ctemplate%3E%0A++++++++++++++%3Cspan+class%3D%22styled%22%3Ehello%3C%2Fspan%3E+world%0A++++++++++++%3C%2Ftemplate%3E%0A++++++++++++%3Cscript%3E%0A++++++++++++++import+'.%2Fstyle.css'%0A++++++++++++++export+default+%7B%0A++++++++++++++%7D%0A++++++++++++%3C%2Fscript%3E%0A++++++++%60%2C%0A++++++%7D%0A++++%7D%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++++switch+(type)+%7B+%0A++++++++++++case+'.css'%3A%0A++++++++++++++options.addStyle(await+getContentData(false))%3B%0A++++++++++++++return+null%3B%0A++++++++%7D+%0A++++++%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:import_style-->
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A++%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A++%3Cscript%3E%0A%0A++++%2F*+%3C!--+*%2F%0A++++const+config+%3D+%7B%0A++++++files%3A+%7B%0A++++++++'%2Fstyle.css'%3A+%60%0A++++++++++.styled+%7B+color%3A+red+%7D%0A++++++++%60%2C%0A++++++++'%2Fmain.vue'%3A+%60%0A++++++++++%3Ctemplate%3E%0A++++++++++++%3Cspan+class%3D%22styled%22%3Ehello%3C%2Fspan%3E+world%0A++++++++++%3C%2Ftemplate%3E%0A++++++++++%3Cscript%3E%0A++++++++++++import+'.%2Fstyle.css'%0A++++++++++++export+default+%7B%0A++++++++++++%7D%0A++++++++++%3C%2Fscript%3E%0A++++++++%60%2C%0A++++++%7D%0A++++%7D%3B%0A++++%2F*+--%3E+*%2F%0A%0A++++const+options+%3D+%7B%0A++++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++++addStyle(textContent)+%7B%0A%0A++++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++++document.head.insertBefore(style%2C+ref)%3B%0A++++++%7D%2C%0A++++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++++switch+(type)+%7B+%0A++++++++++case+'.css'%3A%0A++++++++++++options.addStyle(await+getContentData(false))%3B%0A++++++++++++return+null%3B%0A++++++++%7D+%0A++++++%7D%2C%0A++++%7D%0A%0A++++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A++%3C%2Fscript%3E%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:import_style-->
 [:top:](#readme)
 
 
@@ -958,6 +959,110 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 [:top:](#readme)
 
 
+## Load SVG dynamically (using `watch()`)
+
+<!--example:source:load_svg_watch-->
+```html
+<!DOCTYPE html>
+<html>
+<body>
+<script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.3/dist/vue3-sfc-loader.js"></script>
+<script>
+
+  /* <!-- */
+  const config = {
+    files: {
+      '/circle0.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" /></svg>`,
+      '/circle1.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" /></svg>`,
+      '/main.vue': `
+        <template>
+          <mycomponent
+            :name="'circle' + index % 2"
+          />
+        </template>
+        <script>
+          import mycomponent from './myComponent.vue'
+          import { ref } from 'vue'
+
+          export default {
+            components: {
+              mycomponent
+            },
+            setup() {
+              
+              const index = ref(0);
+              setInterval(() => index.value++, 1000);
+              return {
+                index,
+              }
+            },
+          }
+        </script>
+      `,
+      '/myComponent.vue': `
+        <template>
+          <span v-html="svg" />
+        </template>
+        <script>
+
+          import { ref, watch } from 'vue'
+
+          function asyncToRef(callback) {
+
+            const val = ref();
+            watch(() => callback(), promise => promise.then(value => val.value = value), { immediate: true });  // TBD handle catch()...
+            return val;
+          }
+
+          export default {
+            props: {
+              name: String
+            },
+            setup(props) {
+              return {
+                svg: asyncToRef(() => import('./' + props.name + '.svg')),
+              }
+            }
+          }
+
+        </script>
+      `
+    }
+  };
+  /* --> */
+
+  const options = {
+    moduleCache: { vue: Vue },
+    getFile: url => config.files[url],
+    addStyle(textContent) {
+
+      const style = Object.assign(document.createElement('style'), { textContent });
+      const ref = document.head.getElementsByTagName('style')[0] || null;
+      document.head.insertBefore(style, ref);
+    },
+    handleModule: async function (type, getContentData, path, options) { 
+      switch (type) { 
+        case '.svg':
+          return getContentData(false);
+      } 
+    },
+  }
+
+  Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
+
+</script>
+
+</body>
+</html>
+```
+<!--example:target:load_svg_watch-->
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%3Cscript%3E%0A%0A++%2F*+%3C!--+*%2F%0A++const+config+%3D+%7B%0A++++files%3A+%7B%0A++++++'%2Fcircle0.svg'%3A+%60%3Csvg+viewBox%3D%220+0+100+100%22+xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle+cx%3D%2250%22+cy%3D%2250%22+r%3D%2250%22+%2F%3E%3C%2Fsvg%3E%60%2C%0A++++++'%2Fcircle1.svg'%3A+%60%3Csvg+viewBox%3D%220+0+100+100%22+xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle+cx%3D%2250%22+cy%3D%2250%22+r%3D%2240%22+%2F%3E%3C%2Fsvg%3E%60%2C%0A++++++'%2Fmain.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3Cmycomponent%0A++++++++++++%3Aname%3D%22'circle'+%2B+index+%25+2%22%0A++++++++++%2F%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A++++++++++import+mycomponent+from+'.%2FmyComponent.vue'%0A++++++++++import+%7B+ref+%7D+from+'vue'%0A%0A++++++++++export+default+%7B%0A++++++++++++components%3A+%7B%0A++++++++++++++mycomponent%0A++++++++++++%7D%2C%0A++++++++++++setup()+%7B%0A++++++++++++++%0A++++++++++++++const+index+%3D+ref(0)%3B%0A++++++++++++++setInterval(()+%3D%3E+index.value%2B%2B%2C+1000)%3B%0A++++++++++++++return+%7B%0A++++++++++++++++index%2C%0A++++++++++++++%7D%0A++++++++++++%7D%2C%0A++++++++++%7D%0A++++++++%3C%2Fscript%3E%0A++++++%60%2C%0A++++++'%2FmyComponent.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3Cspan+v-html%3D%22svg%22+%2F%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A%0A++++++++++import+%7B+ref%2C+watch+%7D+from+'vue'%0A%0A++++++++++function+asyncToRef(callback)+%7B%0A%0A++++++++++++const+val+%3D+ref()%3B%0A++++++++++++watch(()+%3D%3E+callback()%2C+promise+%3D%3E+promise.then(value+%3D%3E+val.value+%3D+value)%2C+%7B+immediate%3A+true+%7D)%3B++%2F%2F+TBD+handle+catch()...%0A++++++++++++return+val%3B%0A++++++++++%7D%0A%0A++++++++++export+default+%7B%0A++++++++++++props%3A+%7B%0A++++++++++++++name%3A+String%0A++++++++++++%7D%2C%0A++++++++++++setup(props)+%7B%0A++++++++++++++return+%7B%0A++++++++++++++++svg%3A+asyncToRef(()+%3D%3E+import('.%2F'+%2B+props.name+%2B+'.svg'))%2C%0A++++++++++++++%7D%0A++++++++++++%7D%0A++++++++++%7D%0A%0A++++++++%3C%2Fscript%3E%0A++++++%60%0A++++%7D%0A++%7D%3B%0A++%2F*+--%3E+*%2F%0A%0A++const+options+%3D+%7B%0A++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++addStyle(textContent)+%7B%0A%0A++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++document.head.insertBefore(style%2C+ref)%3B%0A++++%7D%2C%0A++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++switch+(type)+%7B+%0A++++++++case+'.svg'%3A%0A++++++++++return+getContentData(false)%3B%0A++++++%7D+%0A++++%7D%2C%0A++%7D%0A%0A++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:load_svg_watch-->
+
+[:top:](#readme)
+
+
+
 ## Load SVG dynamically (using `async setup()` and `<Suspense>`)
 
 <!--example:source:load_svg_async_setup-->
@@ -1036,7 +1141,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 </html>
 ```
 <!--example:target:load_svg_async_setup-->
-[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%3Cscript%3E%0A%0A++%2F*+%3C!--+*%2F%0A++const+config+%3D+%7B%0A++++files%3A+%7B%0A++++++'%2Fcircle.svg'%3A+%60%3Csvg+viewBox%3D%220+0+100+100%22+xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle+cx%3D%2250%22+cy%3D%2250%22+r%3D%2250%22+%2F%3E%3C%2Fsvg%3E%60%2C%0A++++++'%2Fmain.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3CSuspense%3E%0A++++++++++++%3Cmycomponent%0A++++++++++++++%3Aname%3D%22'circle'%22%0A++++++++++++%2F%3E%0A++++++++++%3C%2FSuspense%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A++++++++++import+mycomponent+from+'.%2FmyComponent.vue'%0A++++++++++export+default+%7B%0A++++++++++++components%3A+%7B%0A++++++++++++++mycomponent%0A++++++++++++%7D%2C%0A++++++++++%7D%0A++++++++%3C%2Fscript%3E%0A++++++%60%2C%0A++++++'%2FmyComponent.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3Cspan+v-html%3D%22svg%22%2F%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A%0A++++++++++import+%7B+ref+%7D+from+'vue'%0A%0A++++++++++export+default+%7B%0A++++++++++++props%3A+%7B%0A++++++++++++++name%3A+String%0A++++++++++++%7D%2C%0A++++++++++++async+setup(props)+%7B%0A++++++++++++++return+%7B%0A++++++++++++++++svg%3A+await+import('.%2F'+%2B+props.name+%2B+'.svg')%2C%0A++++++++++++++%7D%0A++++++++++++%7D%0A++++++++++%7D%0A%0A++++++++%3C%2Fscript%3E++++++++%0A++++++%60%0A++++%7D%0A++%7D%3B%0A++%2F*+--%3E+*%2F%0A%0A++const+options+%3D+%7B%0A++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++addStyle(textContent)+%7B%0A%0A++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++document.head.insertBefore(style%2C+ref)%3B%0A++++%7D%2C%0A++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++switch+(type)+%7B+%0A++++++++case+'.svg'%3A%0A++++++++++return+getContentData(false)%3B%0A++++++%7D+%0A++++%7D%2C%0A++%7D%0A%0A++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:load_svg_async_setup-->
+[open in JSBin ▶](http://jsbin.com/?html,output&html=%3C!DOCTYPE+html%3E%0A%3Chtml%3E%0A%3Cbody%3E%0A%3Cscript+src%3D%22https%3A%2F%2Funpkg.com%2Fvue%40next%2Fdist%2Fvue.runtime.global.prod.js%22%3E%3C%2Fscript%3E%0A%3Cscript+src%3D%22https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fvue3-sfc-loader%400.8.3%2Fdist%2Fvue3-sfc-loader.js%22%3E%3C%2Fscript%3E%0A%3Cscript%3E%0A%0A++%2F*+%3C!--+*%2F%0A++const+config+%3D+%7B%0A++++files%3A+%7B%0A++++++'%2Fcircle.svg'%3A+%60%3Csvg+viewBox%3D%220+0+100+100%22+xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Ccircle+cx%3D%2250%22+cy%3D%2250%22+r%3D%2250%22+%2F%3E%3C%2Fsvg%3E%60%2C%0A++++++'%2Fmain.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3CSuspense%3E%0A++++++++++++%3Cmycomponent%0A++++++++++++++%3Aname%3D%22'circle'%22%0A++++++++++++%2F%3E%0A++++++++++%3C%2FSuspense%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A++++++++++import+mycomponent+from+'.%2FmyComponent.vue'%0A++++++++++export+default+%7B%0A++++++++++++components%3A+%7B%0A++++++++++++++mycomponent%0A++++++++++++%7D%2C%0A++++++++++%7D%0A++++++++%3C%2Fscript%3E%0A++++++%60%2C%0A++++++'%2FmyComponent.vue'%3A+%60%0A++++++++%3Ctemplate%3E%0A++++++++++%3Cspan+v-html%3D%22svg%22%2F%3E%0A++++++++%3C%2Ftemplate%3E%0A++++++++%3Cscript%3E%0A++++++++++export+default+%7B%0A++++++++++++props%3A+%7B%0A++++++++++++++name%3A+String%0A++++++++++++%7D%2C%0A++++++++++++async+setup(props)+%7B%0A++++++++++++++return+%7B%0A++++++++++++++++svg%3A+await+import('.%2F'+%2B+props.name+%2B+'.svg')%2C%0A++++++++++++++%7D%0A++++++++++++%7D%0A++++++++++%7D%0A++++++++%3C%2Fscript%3E++++++++%0A++++++%60%0A++++%7D%0A++%7D%3B%0A++%2F*+--%3E+*%2F%0A%0A++const+options+%3D+%7B%0A++++moduleCache%3A+%7B+vue%3A+Vue+%7D%2C%0A++++getFile%3A+url+%3D%3E+config.files%5Burl%5D%2C%0A++++addStyle(textContent)+%7B%0A%0A++++++const+style+%3D+Object.assign(document.createElement('style')%2C+%7B+textContent+%7D)%3B%0A++++++const+ref+%3D+document.head.getElementsByTagName('style')%5B0%5D+%7C%7C+null%3B%0A++++++document.head.insertBefore(style%2C+ref)%3B%0A++++%7D%2C%0A++++handleModule%3A+async+function+(type%2C+getContentData%2C+path%2C+options)+%7B+%0A++++++switch+(type)+%7B+%0A++++++++case+'.svg'%3A%0A++++++++++return+getContentData(false)%3B%0A++++++%7D+%0A++++%7D%2C%0A++%7D%0A%0A++Vue.createApp(Vue.defineAsyncComponent(()+%3D%3E+window%5B'vue3-sfc-loader'%5D.loadModule('%2Fmain.vue'%2C+options))).mount(document.body)%3B%0A%0A%3C%2Fscript%3E%0A%0A%3C%2Fbody%3E%0A%3C%2Fhtml%3E%0A)<!--/example:target:load_svg_async_setup-->
 
 [:top:](#readme)
 
