@@ -1,5 +1,45 @@
 # FAQ
 
+## Can I load ES6 modules/components ?
+
+Yes, vue3-sfc-loader and vue2-sfc-loader embeds babel that will transform your ES6 into ES5.
+
+
+## Is vue2-sfc-loader working on IE 11/
+
+Yes, since 0.8.4+ `vue2-sfc-loader.js` supports IE 11.
+
+
+## Can I call `loadModule()` several times ?
+
+Usually, you call `loadModule()` only once, to load your application entry point (eg. `app.vue`).
+
+But sometimes (rarely) it is necessary to call `loadModule()` several times.
+In this case, the application must, at least, share the same `options.moduleCache` through all its `loadModule()` calls.
+eg.
+```
+const options = {
+  moduleCache: {
+    ...
+  },
+  ...
+}
+
+loadModule('./main.vue', options);
+loadModule('./another.vue', options);
+```
+
+or, ultimately:
+```
+const moduleCache = {
+  ...
+},
+
+loadModule('./main.vue', { moduleCache, ... });
+loadModule('./another.vue', { moduleCache, ... });
+```
+
+
 ## Can I use vue3-sfc-loader source code directly (./src/index.ts)
 
 Loading from sources "vue3-sfc-loader/src/index" will not work. Sources are intended to be processed by webpack before being usable.
