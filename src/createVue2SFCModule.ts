@@ -46,6 +46,9 @@ export { version as vueVersion } from 'vue-template-compiler/package.json'
  */
 const version : string = process.env.VERSION;
 
+// @ts-ignore
+const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));
+
 const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 
 /**
@@ -76,7 +79,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block ) => customBlockHandler(block, filename, options)) ) : [];
 
-	const componentHash = hash(strFilename, version);
+	const componentHash = hash(strFilename, version, targetBrowserBabelPluginsHash);
 	const scopeId = `data-v-${componentHash}`;
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below

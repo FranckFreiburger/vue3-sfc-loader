@@ -69,6 +69,7 @@
     "buffer": "^6.0.3",
     "caniuse-api": "^3.0.0",
     "compression-webpack-plugin": "^8.0.1",
+    "core-js": "^3.15.2",
     "core-js-pure": "^3.15.2",
     "cross-env": "^7.0.3",
     "dts-bundle": "^0.7.3",

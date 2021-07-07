@@ -1,3 +1,6 @@
+// polyfill only stable `core-js` features - ES and web standards:
+import "core-js/stable";
+
 // 1/
 //
 // add sticky flag support

@@ -2,11 +2,17 @@ const Path = require('path');
 const zlib = require('zlib')
 const fs = require('fs');
 
+const browserslist = require("browserslist");
+
 const Webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const basicIdentifierReplacerPlugin = require('./basicIdentifierReplacerPlugin.js');
+const requiredBabelPluginsNamesByBrowserTarget = require('./requiredBabelPluginsNamesByBrowserTarget.js');
+
+
 const dts = require('dts-bundle');
 
 class DtsBundlePlugin {
@@ -46,7 +52,8 @@ class DtsBundlePlugin {
 }
 
 // doc: https://github.com/Nyalab/caniuse-api#api
-const caniuse = require('caniuse-api')
+//const caniuse = require('caniuse-api')
+const caniuse = require('./caniuse-isSupported.js')
 
 const pkg = require('../package.json');
 
@@ -83,10 +90,22 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 
 	const genSourcemap = false;
 
+	let actualTargetsBrowsers = targetsBrowsers;
+
+	// "or" / ","" -> union
+	// "and" -> intersection
+	// "not" -> relative complement
+
 	// excludes cases that make no sense 
-	const actualTargetsBrowsers = targetsBrowsers + ( libraryTargetModule ? ' and supports es6-module' : '' ) + ( vueTarget == 3 ? ' and supports proxy' : '' );
+	actualTargetsBrowsers += ( libraryTargetModule ? ' and supports es6-module' : '' ) + ( vueTarget == 3 ? ' and supports proxy' : '' );
 
 	console.log('config', { actualTargetsBrowsers, noPresetEnv, noCompress, noSourceMap, genSourcemap, libraryTargetModule, vueTarget });
+
+	if ( browserslist(actualTargetsBrowsers).length === 0 )
+		throw new RangeError('browserslist(' + actualTargetsBrowsers + ') selects no browsers');
+
+	const pluginNameList = requiredBabelPluginsNamesByBrowserTarget(actualTargetsBrowsers);
+	const ___targetBrowserBabelPlugins = '{' + pluginNameList.map(e => `'${ e }': require('@babel/plugin-${ e }'),\n`).join('') + '}';
 
 	return {
 		name,
@@ -346,8 +365,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				isProd ? {
 					test: /\.(mjs|js|cjs|ts)$/,
 					exclude: [
-						/core-js-pure/, // Babel should not transpile core-js for correct work.
-						/regenerator-runtime/, // transpile not needed
+						/[\\/]regenerator-runtime[\\/]/, // transpile not needed
+						/[\\/]core-js(|-pure)[\\/]/, // Babel should not transpile core-js for correct work.
 					],
 					use: {
 						loader: 'babel-loader',
@@ -360,8 +379,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 
 								...!noPresetEnv ? [
 									[
-										'@babel/preset-env',
-										{
+										'@babel/preset-env', {
 										}
 									]
 								] : [],
@@ -370,15 +388,22 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 
 								...!noPresetEnv ? [
 									[
-										"polyfill-corejs3",
-										{
-											"method": "usage-pure"
+										basicIdentifierReplacerPlugin, {
+											___targetBrowserBabelPlugins
 										}
 									],
+
 									[
-										'babel-plugin-polyfill-regenerator',
-										{
-											"method": "usage-pure"
+										'polyfill-corejs3', {
+											// Allow global scope pollution with polyfills required by actualTargetsBrowsers.
+											// This is necessary because the code compiled by vue3-sfc-loader also require these polyfills.
+											'method': 'entry-global'
+										}
+									],
+
+									[
+										'polyfill-regenerator', {
+											'method': 'usage-pure'
 										}
 									]
 								] : [],
