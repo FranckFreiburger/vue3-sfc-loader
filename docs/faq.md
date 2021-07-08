@@ -10,9 +10,22 @@ See the [migration guide](./migrationGuide.md)
 Yes, vue3-sfc-loader and vue2-sfc-loader embeds babel that will transform your ES6 into ES5.
 
 
-## Is vue2-sfc-loader working on IE 11/
+## Is vue2-sfc-loader working on IE 11
 
 Yes, since 0.8.4+ `vue2-sfc-loader.js` supports IE 11.
+
+
+## Why vue3-sfc-loader is so big
+
+Because it embeds :
+- [Vue3 compiler](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc#readme)
+- [babel + many plugins](https://babeljs.io/)
+- [postcss](https://postcss.org/)
+- [core-js](https://github.com/zloirock/core-js)
+
+[see details](https://unpkg.com/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.report.html) (under the 'Stat' tab)
+
+(note that by design, Vue3 compiler requires babel and postcss)
 
 
 ## Can I call `loadModule()` several times ?
@@ -55,6 +68,7 @@ Note that you can [build vue3-sfc-loader yourself](https://github.com/FranckFrei
 
 ## How to use 3rd party plugins or components
 
+
 #### From a `<script>` tag
 If the plugin is loaded through a `<script>` tag, you have to store the plugin's module in `options.moduleCache`.
 Note that this is what is currently done with vue :
@@ -68,6 +82,7 @@ const options = {
   ...
 ```
 then, subsequent `import Vue from 'vue'` will return the Vue module (`options.moduleCache.vue`).
+
 
 #### From the same origin
 If your plugin is reachable from the current URL (same origin, relative or absolute) just use `import ... from`, `import()` or `require()`.  
