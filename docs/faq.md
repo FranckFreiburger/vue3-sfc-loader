@@ -1,5 +1,10 @@
 # FAQ
 
+## How to migrate from `http-vue-loader` to `vue3-sfc-loader`
+
+See the [migration guide](./migrationGuide.md)
+
+
 ## Can I load ES6 modules/components ?
 
 Yes, vue3-sfc-loader and vue2-sfc-loader embeds babel that will transform your ES6 into ES5.
