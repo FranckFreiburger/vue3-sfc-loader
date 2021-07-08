@@ -1,4 +1,6 @@
 
+### [0.8.4](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.8.3...v0.8.4) (2021-07-08)
+
 ### [0.8.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.8.2...v0.8.3) (2021-06-30)
 
 
