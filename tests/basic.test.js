@@ -800,7 +800,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 					'/main.vue': `
 						<template>
-							 <button @click="(...args) => { store.foo(...args) }">Go</button>
+							<div id="result">{{ JSON.stringify( ((...args) => args)(1,2,3) ) }}</div>
 						</template>
 					`,
 				}
@@ -808,7 +808,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 			// original Vue2 expected match: `_vm.store.foo.apply(_vm.store, args)`
 			// Vue3 expected match: `_ctx.store.foo(...args)`
-			await expect(page.$eval('#app', el => el.vueApp.$options.render.toString()) ).resolves.toMatch(`.store.foo(...args)`);
+			await expect(page.$eval('#result', el => el.textContent)).resolves.toMatch('[1,2,3]');
 		});
 
 
