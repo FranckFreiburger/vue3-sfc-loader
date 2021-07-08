@@ -3,12 +3,10 @@
 First of all, `http-vue-loader` and `vue3-sfc-loader` serves the same need: run `.vue` files client-side without requiring any bundler.
 
 
-## main differences between `http-vue-loader` and `vue3-sfc-loader` (for Vue2)
+## main differences between `http-vue-loader` and `vue3-sfc-loader` (for Vue2, ie. vue3-sfc-loader/dist/vue2-sfc-loader.js)
 
 | |  `http-vue-loader` | `vue3-sfc-loader` |
 |-:|:-:|:-:|
-| supports Vue2 | yes | yes |
-| supports Vue3 | no | yes |
 | supports ES6 | no | yes |
 | `fetch` resources asynchronously | no | yes |
 | uses native vue compiler | no | yes |
