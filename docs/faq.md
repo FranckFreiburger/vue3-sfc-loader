@@ -104,3 +104,12 @@ example:
 ```
 
 (see https://github.com/FranckFreiburger/vue3-sfc-loader/issues/70)
+
+
+## vue3-sfc-loader vs vue2-sfc-loader
+
+`vue3-sfc-loader` is the name of this project.
+
+Initially, the aim of this project was to support vue3 only (`vue3-sfc-loader.js`), but thanks to the efforts of [Toilal](https://github.com/Toilal), now it also supports vue2 !
+This vue2 version is hosted here under the name `vue2-sfc-loader.js`
+
