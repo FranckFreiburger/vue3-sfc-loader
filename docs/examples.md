@@ -1261,29 +1261,29 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue2-sfc-loader.js"></script>
   <script>
 
-    /* <!-- */
     const config = {
       files: {
-        '/app.vue':
-        '  <template>                                                           '+ 
-        '    <div>{{ index }}</div>                                             '+
-        '  </template>                                                          '+
-        '  <script>                                                             '+
-        '                                                                       '+
-        '    export default {                                                   '+
-        '      data() {                                                         '+
-        '        return {                                                       '+
-        '          index: 0,                                                    '+
-        '        }                                                              '+
-        '      },                                                               '+
-        '      async mounted() {                                                '+
-        '                                                                       '+
-        '        for ( ; this.index < 100; ++this.index )                       '+
-        '          await new Promise(resolve => setTimeout(resolve, 1000));     '+
-        '      }                                                                '+
-        '    }                                                                  '+
-        '  </script>                                                            '+
-        '',
+        /* <!-- */
+        '/app.vue': ''
+        + '  <template>                                                           ' 
+        + '    <div>{{ index }}</div>                                             '
+        + '  </template>                                                          '
+        + '  <script>                                                             '
+        + '                                                                       '
+        + '    export default {                                                   '
+        + '      data() {                                                         '
+        + '        return {                                                       '
+        + '          index: 0,                                                    '
+        + '        }                                                              '
+        + '      },                                                               '
+        + '      async mounted() {                                                '
+        + '                                                                       '
+        + '        for ( ; this.index < 100; ++this.index )                       '
+        + '          await new Promise(resolve => setTimeout(resolve, 1000));     '
+        + '      }                                                                '
+        + '    }                                                                  '
+        + '  </script>                                                            '
+        /* --> */
       }
     };
     
