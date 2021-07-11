@@ -9,16 +9,16 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 ## Key Features
 
  * Supports Vue 3 and Vue 2 (see [dist/](#dist))
+ * Supports IE11 (for Vue 2 only) [example](docs/examples.md#ie11-example)
  * Only requires Vue runtime-only build
- * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
+ * **esm** and **umd** bundles available
  * Embedded ES6 modules support ( including `import()` )
- * SFC Custom Blocks support
  * JSX support
  * Custom CSS, HTML and Script language Support, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
+ * SFC Custom Blocks support
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
+ * Focuses on component compilation. Network, styles injection and cache are up to you (see [example below](#example))
  * Easily [build your own version](#build-your-own-version) and customize browsers you need to support
- * **esm** and **umd** bundles available
- * IE11 support (for vue2-sfc-loader only)
 
 
 ## Example
