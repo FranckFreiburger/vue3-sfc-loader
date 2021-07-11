@@ -9,17 +9,16 @@ First of all, `http-vue-loader` and `vue3-sfc-loader` serves the same need: run 
 
 | |  `http-vue-loader` | `vue3-sfc-loader` |
 |-:|:-:|:-:|
-| supports ES6 | no | yes |
-| supports Vue runtime-only build | no | yes |
-| `fetch` resources asynchronously | no | yes |
-| uses native vue CSS compiler | no | yes |
-| has JSX support | no | yes |
-| properly reports template, style or script errors | no | yes |
-| scoped style support | basic | full |
-| handle http requests by default | yes | no |
-| handle CSS injection by default | yes | no |
-| supports nested import/require | no | yes |
-| recommended for production | no | yes |
+| has ES6 support | :x: | :heavy_check_mark: |
+| requires only Vue runtime build | :x: | :heavy_check_mark: |
+| `fetch` resources asynchronously | :x: | :heavy_check_mark: |
+| has full `scoped` style support | :x: | :heavy_check_mark: |
+| has JSX support | :x: | :heavy_check_mark: |
+| properly reports template, style or script errors | :x: | :heavy_check_mark: |
+| supports nested `import`/`require` | :x: | :heavy_check_mark: |
+| has a default http requests handler | :heavy_check_mark: | :x: |
+| has a default CSS injection handler | :heavy_check_mark: | :x: |
+| recommended for production | :x: | :heavy_check_mark: |
 | bundle size (min gz) | 2.7KB | 543KB |
 
 

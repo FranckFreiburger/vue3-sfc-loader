@@ -18,12 +18,14 @@ Yes, since 0.8.4+ `vue2-sfc-loader.js` supports IE 11.
 ## Why vue3-sfc-loader is so big
 
 Because it embeds :
-- [Vue3 compiler](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc#readme)
-- [babel + many plugins](https://babeljs.io/)
+- Vue2 compiler or [Vue3 compiler](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc#readme)
+- [babel + many plugins](https://babeljs.io/) :small_orange_diamond:
 - [postcss](https://postcss.org/)
-- [core-js](https://github.com/zloirock/core-js)
+- [core-js](https://github.com/zloirock/core-js) :small_orange_diamond:
 
-[see details](https://unpkg.com/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.report.html) (under the 'Stat' tab)
+:small_orange_diamond: : depends on `browsersList` query
+
+[see details](https://unpkg.com/vue3-sfc-loader/dist/vue3-sfc-loader.report.html) (under the 'Stat' tab)
 
 (note that by design, Vue3 compiler requires babel and postcss)
 
