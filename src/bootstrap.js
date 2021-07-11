@@ -1,6 +1,9 @@
 // polyfill only stable `core-js` features - ES and web standards:
 import "core-js/stable";
 
+
+/* no longer needed
+
 // 1/
 //
 // add sticky flag support
@@ -45,6 +48,10 @@ if ( !('sticky' in global.RegExp.prototype) ) {
   global.RegExp = PolyfilledRegExp;
 }
 
+*/
+
+
+/* no longer needed
 
 // 2/
 //
@@ -77,4 +84,5 @@ for ( let name of [
 
 }
 
+*/
 
