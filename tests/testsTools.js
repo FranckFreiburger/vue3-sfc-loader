@@ -107,6 +107,9 @@ async function createPage({ files, processors= {}}) {
 
 	pendingPages.push(page);
 
+	// in some situations, `page.on('console', async msg => {...` has not finished to run, so take a 100ms pause.
+	await new Promise(resolve => setTimeout(resolve, 100))
+
 	return { page, output };
 }
 
