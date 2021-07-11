@@ -21,7 +21,7 @@
 
 # Examples
 
-:warning: **beware**, the following examples are sticky to version *<!--version-->0.8.4<!--/version-->*. For your use, prefer the [latest version](../README.md#dist)
+:warning: **beware**, the following examples are sticky to version *<!--version-->0.8.4<!--/version-->*. For your use, you would prefer the [latest version](../README.md#dist)
 
 **Try the examples locally**  
 Since most browsers do not allow you to access local filesystem, you can start a small [express](https://expressjs.com/) server to run these examples.  
