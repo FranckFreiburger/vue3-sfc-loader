@@ -104,9 +104,10 @@ If your plugin is hosted elsewhere (on a different origin), you have to define y
 See https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/docs/examples.md#use-remote-components
 
 
-## How to speed-up loading when using large 3rd party libraries (like babylon.js, three.js, PixiJS, ...)
+## How to speed-up loading when using large 3rd party libraries
+_(like babylon.js, three.js, PixiJS, ...)_
 
-When you need to use a large 3rd party library that has **no further dependencies** and has an **CJS or UMD version** available, you can load it directly using the `handleModule` option.
+When you need to use a large 3rd party library that has **no further dependencies** and has a **CJS or UMD version** available, you can load it directly using the `handleModule` option.
 
 example:
 ```javascript
@@ -125,6 +126,8 @@ example:
       ...
 ```
 
+**note:** when returning `undefined`, `vue3-sfc-loader` will use its default `handleModule()`
+
 (see https://github.com/FranckFreiburger/vue3-sfc-loader/issues/70)
 
 
@@ -135,3 +138,16 @@ example:
 Initially, the aim of this project was to support vue3 only (`vue3-sfc-loader.js`), but thanks to the efforts of [Toilal](https://github.com/Toilal), now it also supports vue2 !
 This vue2 version is hosted here under the name `vue2-sfc-loader.js`
 
+
+## vue3-sfc-loader fails to load with `Uncaught SyntaxError: Unexpected token ... `
+
+This error is most likely due to an unsupported browser version.
+
+`vue3-sfc-loader` uses [browsersList](https://github.com/browserslist/browserslist) to determine the minimum browser support.  
+
+The default `browsersList` query (for vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js) is : `1%, last 2 versions, Firefox ESR, not dead, ie 11 and supports proxy`
+
+Note that you can test this query with : `npx browserslist "> 1%, last 2 versions, Firefox ESR, not dead, ie 11 and supports proxy`
+
+If this not fits your browser support requirements, you can try to build your own version of `vue3-sfc-loader` with the browsers you need to support.
+(see https://github.com/FranckFreiburger/vue3-sfc-loader#build-your-own-version)
