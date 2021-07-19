@@ -143,9 +143,9 @@ This vue2 version is hosted here under the name `vue2-sfc-loader.js`
 
 This error is most likely due to an unsupported browser version.
 
-`vue3-sfc-loader` uses [browsersList](https://github.com/browserslist/browserslist) to determine the minimum browser support.  
+`vue3-sfc-loader` uses [browsersList](https://github.com/browserslist/browserslist) to determine the minimum version of browsers to support.
 
-The default `browsersList` query (for vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js) is : `1%, last 2 versions, Firefox ESR, not dead, ie 11 and supports proxy`
+The default `browsersList` query (for vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js) is : `npx browserslist "> 1%, last 2 versions, Firefox ESR, not dead, ie 11` _` and supports proxy`_ (proxy support is automatically required when compiling `vue3-sfc-loader.js`)
 
 Note that you can test this query with : `npx browserslist "> 1%, last 2 versions, Firefox ESR, not dead, ie 11 and supports proxy`
 
