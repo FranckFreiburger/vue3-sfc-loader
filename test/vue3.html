@@ -2,64 +2,126 @@
 <html>
 <body>
   <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
-  <script src="https://unpkg.com/vue-i18n@next"></script>
   <script src="vue3-sfc-loader.js"></script>
   <script>
 
     /* <!-- */
     const config = {
       files: {
-        '/component.vue': `
+        '/circle0.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" /></svg>`,
+        '/circle1.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" /></svg>`,
+        '/main.vue': `
           <template>
-            <span class="vue3">{{ $t('hello') }}</span>
+            <mycomponent
+              :name="'circle' + index % 2"
+            />
           </template>
-          <style scoped>
-            .vue3 {
-              background: red;
+          <script>
+            import mycomponent from './myComponent.vue'
+            import { ref } from 'vue'
+
+            export default {
+              components: {
+                mycomponent
+              },
+              setup() {
+                
+                const index = ref(0);
+                setInterval(() => index.value++, 1000);
+
+                return {
+                  index,
+                }
+              },
             }
-          </style>
-          <i18n>
-          {
-            "en": {
-              "hello": "hello world!"
-            },
-            "ja": {
-              "hello": "こんにちは、世界！"
+          </script>
+        `,
+        '/myComponent.vue': `
+          <template>
+            <span v-html="svg" />
+          </template>
+          <script>
+
+            import { ref, watch } from 'vue'
+
+            class test {
+
             }
-          }
-          </i18n>
-       `
+
+            console.log(test)
+
+            function asyncToRef(callback) {
+
+              const val = ref();
+              watch(() => callback(), promise => promise.then(value => val.value = value), { immediate: true });
+              return val;
+            }
+
+            export default {
+              props: {
+                name: String
+              },
+              setup(props) {
+
+
+                return {
+                  svg: asyncToRef(() => import('./' + (props.name ?? '') + '.svg')),
+                }
+              }
+            }
+
+          </script>
+        `
       }
     };
     /* --> */
 
-    const i18n = VueI18n.createI18n();
-
     const options = {
       moduleCache: { vue: Vue },
       getFile: url => config.files[url],
-      addStyle: (textContent) => {
-          const style = Object.assign(document.createElement('style'), { textContent });
-          const ref = document.head.getElementsByTagName('style')[0] || null;
-          document.head.insertBefore(style, ref);
+      addStyle(textContent) {
+
+        const style = Object.assign(document.createElement('style'), { textContent });
+        const ref = document.head.getElementsByTagName('style')[0] || null;
+        document.head.insertBefore(style, ref);
       },
-      customBlockHandler(block, filename, options) {
-
-        if ( block.type !== 'i18n' )
-          return
-
-        const messages = JSON.parse(block.content);
-        for ( let locale in messages )
-          i18n.global.mergeLocaleMessage(locale, messages[locale]);
+      handleModule: async function (type, getContentData, path, options) { 
+        switch (type) { 
+          case '.svg':
+            return getContentData(false);
+        } 
+      },
+      log(type, ...args) {
+        console[type](...args);
       }
     }
 
-    const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/component.vue', options)));
-
-    app.use(i18n);
-
-    app.mount(document.body);
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/main.vue', options))).mount(document.body);
 
   </script>
 </body>
 </html>
+
+<!--
+  
+
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="vue3-sfc-loader.js"></script>
+  <script>
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: () => `<template>Hello World !</template>`,
+      addStyle: () => {},
+    }
+
+    Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options))).mount(document.body);
+
+  </script>
+</body>
+</html>
+
+-->
