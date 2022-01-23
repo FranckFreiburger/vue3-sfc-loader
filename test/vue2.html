@@ -2,51 +2,47 @@
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-  <script src="vue2-sfc-loader.js"></script>
+  <script src="https://unpkg.com/vue@2/dist/vue.runtime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue2-sfc-loader.js"></script>
   <script>
 
     /* <!-- */
     const config = {
       files: {
-        '/app.vue': `
-          <template>
-            <span class="vue2">
-            Hello World! {{ abc }}
-            </span>
-          </template>
-          <style scoped>
-            .vue2 {
-              background: red
-            }
-          </style>
-          <script>
-            export default {
-              data: {
-                  abc: "test"
-              }
-            }
-          <\/script>
-       `
+        '/app.vue':
+        '  <template>                                                           '+ 
+        '    <div>{{ index }}</div>                                             '+
+        '  </template>                                                          '+
+        '  <script>                                                             '+
+        '                                                                       '+
+        '    export default {                                                   '+
+        '      data() {                                                         '+
+        '        return {                                                       '+
+        '          index: 0,                                                    '+
+        '        }                                                              '+
+        '      },                                                               '+
+        '      async mounted() {                                                '+
+        '                                                                       '+
+        '        for ( ; this.index < 100; ++this.index )                       '+
+        '          await new Promise(resolve => setTimeout(resolve, 1000));     '+
+        '      }                                                                '+
+        '    }                                                                  '+
+        '  </script>                                                            '+
+        '',
       }
     };
-    /* --> */
-
+    
     const options = {
       moduleCache: { vue: Vue },
-      getFile: url => config.files[url],
-      addStyle: (textContent) => {
-          const style = Object.assign(document.createElement('style'), { textContent });
-          const ref = document.head.getElementsByTagName('style')[0] || null;
-          document.head.insertBefore(style, ref);
-      },
+      getFile: function(url) { return config.files[url] },
+      addStyle: function () {},
     }
 
-    const asyncComponentFactory = window['vue2-sfc-loader'].loadModule('/app.vue', options)
-    asyncComponentFactory.then((component) => {
-        new Vue(component).$mount('#app')
-    })
-
+    window['vue2-sfc-loader'].loadModule('/app.vue', options)
+    .then(function(app) {
+      new Vue(app).$mount('#app')
+    });
+    
   </script>
 </body>
 </html>
