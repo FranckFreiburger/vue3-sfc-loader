@@ -8,10 +8,6 @@ import {
 	SFCTemplateCompileOptions,
 } from '@vue/compiler-sfc'
 
-import {
-	babelParserDefaultPlugins as vue_babelParserDefaultPlugins
-} from '@vue/shared'
-
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
 // https://github.com/vuejs/jsx-next
@@ -148,7 +144,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			if ( compileTemplateOptions !== null )
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
-			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, ...vue_babelParserDefaultPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log);
+			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log);
 
 		});
 

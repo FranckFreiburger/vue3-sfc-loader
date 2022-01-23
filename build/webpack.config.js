@@ -341,6 +341,15 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				...isProd ? {
 					'debug$': Path.resolve(__dirname, 'noopDebug.js'),
 				} : {},
+
+				// Vue3
+				// exclude ./node_modules/@vue/compiler-sfc/dist/compiler-sfc.cjs.js template engines ('consolidate': false  this is no longer enough)
+				...Object.fromEntries(
+					'velocityjs,dustjs-linkedin,atpl,liquor,twig,eco,jazz,jqtpl,hamljs,hamlet,whiskers,haml-coffee,hogan.js,templayed,underscore,walrus,mustache,just,ect,mote,toffee,dot,bracket-template,ractive,htmling,babel-core,plates,react-dom/server,react,vash,slm,marko,teacup/lib/express,coffee-script,squirrelly,twing'.split(',')
+					.map(e => ([e, false]))
+				)
+
+
 			},
 
 			fallback: {
