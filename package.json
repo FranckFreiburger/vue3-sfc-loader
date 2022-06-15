@@ -21,8 +21,16 @@
   "license": "MIT",
   "version": "0.8.4",
   "browserslist": "> 1%, last 2 versions, Firefox ESR, not dead, ie 11",
-  "main": "dist/vue3-sfc-loader.js",
-  "types": "dist/vue3-sfc-loader.d.ts",
+  "main": "./dist/vue3-sfc-loader.js",
+  "module": "./dist/vue3-sfc-loader.esm.js",
+  "types": "./dist/types/vue3-esm/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/vue3-sfc-loader.esm.js",
+      "require": "./dist/./dist/vue3-sfc-loader.js"
+    }
+  },
   "scripts": {
     "coverage": "node test/coverageTest.mjs",
     "test": "cd test && yarn run start",
