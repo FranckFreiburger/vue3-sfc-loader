@@ -28,7 +28,7 @@
   "exports": {
     ".": {
       "import": "./dist/vue3-sfc-loader.esm.js",
-      "require": "./dist/./dist/vue3-sfc-loader.js"
+      "require": "./dist/vue3-sfc-loader.js"
     }
   },
   "scripts": {
