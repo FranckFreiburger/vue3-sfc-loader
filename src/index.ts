@@ -32,7 +32,7 @@ export const version : string = process.env.VERSION;
 export { vueVersion } from './createSFCModule'
 
 
-export { createCJSModule } from './tools'
+export { createCJSModule, transformJSCode, loadDeps } from './tools'
 
 /**
  * @internal
@@ -176,7 +176,7 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 /**
  * Convert a function to template processor interface (consolidate)
  */
- export function buildTemplateProcessor(processor: LangProcessor) {
+export function buildTemplateProcessor(processor: LangProcessor) {
 	return {
 		render: (source: string, preprocessOptions: string, cb: (_err : any, _res : any) => void) => {
 			try {

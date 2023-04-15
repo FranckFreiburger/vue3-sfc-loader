@@ -20,6 +20,10 @@ import {
 
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
+// @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-typescript')
+import babelPluginTransformTypescript from '@babel/plugin-transform-typescript';
+// @ts-ignore (Could not find a declaration file for module '@babel/preset-typescript')
+// import presetTypescript from '@babel/preset-typescript';
 
 
 import * as SparkMD5 from 'spark-md5'
@@ -235,7 +239,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 	const transformedScript = await babel_transformFromAstAsync(ast, source, {
 		sourceMaps: genSourcemap, // doc: https://babeljs.io/docs/en/options#sourcemaps
 		plugins: [ // https://babeljs.io/docs/en/options#plugins
-			...moduleSourceType ? [ babelPluginTransformModulesCommonjs ] : [], // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
+			...moduleSourceType ? [ babelPluginTransformModulesCommonjs, babelPluginTransformTypescript ] : [], // https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs#options
 			// @ts-ignore
 			...Object.values(targetBrowserBabelPlugins),
 			...additionalBabelPlugins !== undefined ? Object.values(additionalBabelPlugins) : [],
@@ -247,7 +251,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		comments: false,
 	});
 
-	return [ depsList, transformedScript.code ];
+	return [ depsList, transformedScript?.code as string ];
 }
 
 

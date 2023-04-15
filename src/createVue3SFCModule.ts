@@ -6,7 +6,11 @@ import {
 	compileTemplate as sfc_compileTemplate,
 	SFCAsyncStyleCompileOptions,
 	SFCTemplateCompileOptions,
-} from '@vue/compiler-sfc'
+} from 'vue/compiler-sfc'
+
+// import {
+// 	babelParserDefaultPlugins as vue_babelParserDefaultPlugins
+// } from '@vue/shared'
 
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
@@ -34,7 +38,7 @@ import {
 
 // @ts-ignore (Cannot find module '@vue/compiler-sfc/../../package.json' or its corresponding type declarations.)
 //export { version as vueVersion } from '@vue/compiler-sfc/../../package.json'
-export { version as vueVersion } from '@vue/compiler-sfc/package.json'
+export { version as vueVersion } from 'vue/package.json'
 
 /**
  * @ignore
@@ -44,7 +48,7 @@ type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
-const version : string = process.env.VERSION;
+const version : string|undefined = process.env.VERSION;
 
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));
@@ -77,7 +81,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	});
 
 
-	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
+	const customBlockCallbacks : (CustomBlockCallback|undefined)[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
 
 	const componentHash = hash(strFilename, version, targetBrowserBabelPluginsHash);
 	const scopeId = `data-v-${componentHash}`;
@@ -96,24 +100,26 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		await loadModuleInternal({ refPath: filename, relPath: descriptor.template.lang }, options);
 
 
-	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
+	const compileTemplateOptions : SFCTemplateCompileOptions = {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
-		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
+		source: descriptor.template?.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
 		filename: descriptor.filename,
 		isProd,
 		scoped: hasScoped,
 		id: scopeId,
 		slotted: descriptor.slotted,
+		ssrCssVars: descriptor.cssVars,
 		compilerOptions: {
 			delimiters,
 			scopeId: hasScoped ? scopeId : undefined,
 			mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
+			expressionPlugins: ["typescript"]
 		},
 		//	transformAssetUrls
-		preprocessLang: descriptor.template.lang,
+		preprocessLang: descriptor.template?.lang,
 		preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
-	} : null;
+	};
 
 	if ( descriptor.script || descriptor.scriptSetup ) {
 
@@ -130,10 +136,10 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const scriptBlock = sfc_compileScript(descriptor, {
-				isProd,
+				// isProd,
 				id: scopeId,
 				// @ts-ignore (unstable resolution: node_modules/@babel/parser/typings/babel-parser vs node_modules/@types/babel__core/node_modules/@babel/parser/typings/babel-parser)
-				babelParserPlugins: additionalBabelParserPlugins, //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
+				// babelParserPlugins: additionalBabelParserPlugins, //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
 				// doc: https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md#inline-template-mode
 				// vue-loader next : https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/resolveScript.ts#L59
 				inlineTemplate: false,
@@ -141,10 +147,11 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			});
 
 			// see https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/templateLoader.ts#L54
-			if ( compileTemplateOptions !== null )
+			if ( compileTemplateOptions !== null && compileTemplateOptions.compilerOptions)
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
-			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log);
+			// return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, ...vue_babelParserDefaultPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log);
+			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx', 'typescript', 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ], { ...additionalBabelPlugins,  jsx }, log);
 
 		});
 
@@ -201,10 +208,11 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			const compiledStyle = await sfc_compileStyleAsync({
 				filename: descriptor.filename,
 				source: src,
-				isProd,
+				// isProd,
 				id: scopeId,
 				scoped: descStyle.scoped,
 				trim: true,
+				modules: !!descStyle.module,
 				preprocessLang: descStyle.lang as PreprocessLang,
 				preprocessCustomRequire: id => moduleCache[id],
 			});

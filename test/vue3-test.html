@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="vue3-sfc-loader.js"></script>
+  <script>
+
+    /* <!-- */
+    const config = {
+      files: {
+        '/component.vue': `
+        <template>
+          <div>
+            Hello <span class="example">{{ msg }} {{ code }}</span>
+          </div>
+        </template>
+
+        <script lang="ts" setup>
+        import { ref, withDefaults } from "vue";
+        import { a } from "./base.js";
+
+        console.log(a);
+
+        const props = withDefaults(defineProps<{
+          code?: string;
+        }>(), {
+          code: "bb"
+        })
+
+        const msg = ref(a);
+        const color = ref("green");
+        </script>
+        <style scoped>
+          .example {
+            background: v-bind('color');
+            color: red;
+          }
+        </style>
+       `,
+       '/base.js': `import { bb } from "./info.js"; export const a = "a";`,
+       '/info.js': `export const bb = "bb";`
+      }
+    };
+    /* --> */
+
+    // const i18n = VueI18n.createI18n();
+
+    const options = {
+      moduleCache: { vue: Vue },
+      getFile: url => config.files[url],
+      addStyle: (textContent) => {
+          const style = Object.assign(document.createElement('style'), { textContent });
+          const ref = document.head.getElementsByTagName('style')[0] || null;
+          document.head.insertBefore(style, ref);
+      },
+      customBlockHandler(block, filename, options) {
+
+        if ( block.type !== 'i18n' )
+          return
+
+        const messages = JSON.parse(block.content);
+        for ( let locale in messages )
+          i18n.global.mergeLocaleMessage(locale, messages[locale]);
+      },
+      handleModule: async (type, getContentData, path, options) => {
+        if (type === '.json') {
+          const data = await getContentData(false);
+          return JSON.parse(data);
+        }
+        if (type === '.js') {
+          const data = await getContentData(false);
+          const [depsList, source] = await window['vue3-sfc-loader'].transformJSCode(data, 'script', path);
+          await window['vue3-sfc-loader'].loadDeps(path, depsList, options);
+          const text = window['vue3-sfc-loader'].createCJSModule(path, source, options).exports;
+          return text;
+          // return "";
+        }
+      },
+    }
+
+    const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('/component.vue', options)));
+
+    // app.use(i18n);
+
+    app.mount(document.body);
+
+  </script>
+</body>
+</html>

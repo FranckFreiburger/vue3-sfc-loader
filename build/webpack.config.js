@@ -304,9 +304,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'@babel/helper-validator-identifier$': require.resolve('@babel/helper-validator-identifier'),
 				'@babel/helper-split-export-declaration$': require.resolve('@babel/helper-split-export-declaration'),
 				'@babel/helper-plugin-utils$': require.resolve('@babel/helper-plugin-utils'),
+				'@babel/plugin-transform-typescript$': require.resolve('@babel/plugin-transform-typescript'),
 
-				'@vue/shared$': require.resolve('@vue/shared'),
-				'@vue/compiler-sfc$': require.resolve('@vue/compiler-sfc'),
 				'@vue/compiler-dom$': require.resolve('@vue/compiler-dom'),
 
 				// not needed
