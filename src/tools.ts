@@ -125,7 +125,7 @@ export async function withCache( cacheInstance : Cache, key : any[], valueFactor
 
 	if ( !cachePrevented ){
 		const setResult = await cacheInstance.set(hashedKey, JSON.stringify(value));
-	    if(setResult) return setResult
+		if(setResult) return setResult
 	}
 
 	return value;
