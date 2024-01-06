@@ -83,8 +83,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				}
 			});
 
-			await expect(output.some(e => e.type === 'error' && e.content[0] === 'parse script')).toBe(true);
-
+			await expect(output.filter(e => e.type === 'pageerror').at(0).content.message).toContain('Unexpected token');
 		});
 
 
@@ -948,7 +947,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				files: {
 					...files,
 					'/main.vue': `
-						<script>
+						<script lang="jsx">
 							export default {
 								render() {
 									return <div>123</div>;
