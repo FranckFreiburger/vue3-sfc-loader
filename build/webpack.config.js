@@ -345,7 +345,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				// Vue3
 				// exclude ./node_modules/@vue/compiler-sfc/dist/compiler-sfc.cjs.js template engines ('consolidate': false  this is no longer enough)
 				...Object.fromEntries(
-					'velocityjs,dustjs-linkedin,atpl,liquor,twig,eco,jazz,jqtpl,hamljs,hamlet,whiskers,haml-coffee,hogan.js,templayed,underscore,walrus,mustache,just,ect,mote,toffee,dot,bracket-template,ractive,htmling,babel-core,plates,react-dom/server,react,vash,slm,marko,teacup/lib/express,coffee-script,squirrelly,twing'.split(',')
+					'velocityjs,dustjs-linkedin,atpl,liquor,twig,eco,jazz,jqtpl,hamljs,hamlet,whiskers,haml-coffee,hogan.js,templayed,underscore,walrus,mustache,just,ect,mote,toffee,dot,bracket-template,ractive,htmling,babel-core,plates,react-dom/server,react,vash,slm,marko,teacup/lib/express,coffee-script,squirrelly,twing,tinyliquid,liquid-node,jade,then-jade,dust,dustjs-helpers,swig,swig-templates,razor-tmpl,pug,then-pug,qejs,nunjucks,arc-templates'.split(',')
 					.map(e => ([e, false]))
 				)
 
