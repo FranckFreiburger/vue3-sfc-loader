@@ -313,8 +313,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
 
-				'chalk': false,
-				'@babel/highlight$': Path.resolve(__dirname, 'noopBabelHighlight.mjs'),
+				'chalk': Path.resolve(__dirname, 'noopChalk.js'),
+				'@babel/highlight$': false,
 
 				'emojis-list': false,
 				'json5': false,
