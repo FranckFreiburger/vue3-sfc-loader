@@ -179,6 +179,10 @@ export function parseDeps(fileAst : t.File) : string[] {
 	const requireList : string[] = [];
 
 	traverse(fileAst, {
+		ExportAllDeclaration(path: NodePath<t.ExportAllDeclaration>) {
+
+			requireList.push(path.node.source.value);
+		},		
 		ImportDeclaration(path : NodePath<t.ImportDeclaration>) {
 
 			requireList.push(path.node.source.value);
