@@ -141,7 +141,7 @@ In the following examples, for convenience, we just returns static content as fi
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -257,7 +257,7 @@ In the following examples, for convenience, we just returns static content as fi
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -302,7 +302,7 @@ In the following examples, for convenience, we just returns static content as fi
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://pugjs.org/js/pug.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
@@ -355,7 +355,7 @@ ul
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script src="//stylus-lang.com/try/stylus.min.js"></script>
   <script>
@@ -410,7 +410,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
     /* <!-- */
@@ -472,7 +472,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -532,7 +532,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -561,7 +561,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -612,7 +612,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -688,7 +688,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -787,7 +787,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
   <script src="https://unpkg.com/vue-i18n@next"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
@@ -854,7 +854,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
@@ -966,7 +966,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
@@ -1070,7 +1070,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@next/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
@@ -1159,7 +1159,7 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue@2/dist/vue.runtime.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue2-sfc-loader.js"></script>
   <script>
     
