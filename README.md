@@ -9,7 +9,6 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 ## Key Features
 
  * Supports Vue 3 and Vue 2 (see [dist/](#dist))
- * Supports IE11 (for Vue 2 only) ([example](docs/examples.md#ie11-example))
  * Only requires Vue runtime-only build
  * **esm** and **umd** bundles available ([example](docs/examples.md#using-esm-version))
  * Embedded ES6 modules support ( including `import()` )
