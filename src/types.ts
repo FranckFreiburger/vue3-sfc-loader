@@ -36,7 +36,7 @@ export type AbstractPath = {
 
 /**
  * A PathContext represents a path (relPath) relative to an abolute path (refPath)
- * Note that relPath is not necessary relative, but it is, relPath is relative to refPath.
+ * Note that relPath is not necessary relative, but when it is, relPath is relative to refPath.
  */
 export type PathContext = {
 	/** reference path */
