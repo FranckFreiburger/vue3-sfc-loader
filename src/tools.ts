@@ -247,6 +247,13 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		comments: false,
 	});
 
+	if ( transformedScript === null || transformedScript.code == null ) { // == null or undefined
+
+		const msg = `unable to transform script "${filename.toString()}"`;
+		log?.('error', msg);
+		throw new Error(msg)
+	}
+
 	return [ depsList, transformedScript.code ];
 }
 
