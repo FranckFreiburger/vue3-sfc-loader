@@ -44,7 +44,7 @@ import { createSFCModule } from './createSFCModule'
  */
 const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
 
-const version : string = process.env.VERSION;
+const version : string = process.env.VERSION as string;
 
 
 // tools
