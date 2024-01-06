@@ -248,6 +248,13 @@ export type Options = {
 
 	delimiters?: [string, string],
 
+/**
+ * Whitespace handling strategy
+ * 	 see https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler#options
+ */
+
+	whitespace?: 'preserve' | 'condense',
+
 
 /**
  * Additional babel parser plugins. [TBD]

@@ -68,7 +68,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component = {};
 
-	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
+	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
 
 	const descriptor = sfc_parse({
 		source,
@@ -101,6 +101,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		compiler: vueTemplateCompiler as VueTemplateCompiler,
 		compilerOptions: {
 			delimiters,
+			whitespace,
 			outputSourceRange: true,
 			scopeId: hasScoped ? scopeId : null,
 			comments: true

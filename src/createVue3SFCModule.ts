@@ -68,7 +68,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component : { [key: string]: any } = {};
 
-	const { delimiters, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
+	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
@@ -106,6 +106,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		id: scopeId,
 		slotted: descriptor.slotted,
 		compilerOptions: {
+			whitespace,
 			delimiters,
 			scopeId: hasScoped ? scopeId : undefined,
 			mode: 'module', // see: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-core/src/options.ts#L160
