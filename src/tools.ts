@@ -105,7 +105,7 @@ export function formatErrorStartEnd(message : string, path : string, source : st
  * preventCache usage: non-fatal error
  * @internal
  */
-export async function withCache( cacheInstance : Cache, key : any[], valueFactory : ValueFactory ) : Promise<any> {
+export async function withCache( cacheInstance : Cache|undefined, key : any[], valueFactory : ValueFactory ) : Promise<any> {
 
 	let cachePrevented = false;
 

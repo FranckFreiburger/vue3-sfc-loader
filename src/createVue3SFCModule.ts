@@ -44,7 +44,7 @@ type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
-const version : string = process.env.VERSION;
+const version : string = process.env.VERSION as string;
 
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));
@@ -77,7 +77,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	});
 
 
-	const customBlockCallbacks : CustomBlockCallback[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
+	const customBlockCallbacks : (CustomBlockCallback|undefined)[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block) => customBlockHandler(block, filename, options)) ) : [];
 
 	const componentHash = hash(strFilename, version, targetBrowserBabelPluginsHash);
 	const scopeId = `data-v-${componentHash}`;
@@ -96,7 +96,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		await loadModuleInternal({ refPath: filename, relPath: descriptor.template.lang }, options);
 
 
-	const compileTemplateOptions : SFCTemplateCompileOptions = descriptor.template ? {
+	const compileTemplateOptions : SFCTemplateCompileOptions|null = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
 		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,

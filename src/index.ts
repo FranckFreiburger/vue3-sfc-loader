@@ -23,7 +23,7 @@ export * from './types'
 /**
  * the version of the library (process.env.VERSION is set by webpack, at compile-time)
  */
-export const version : string = process.env.VERSION;
+export const version : string = process.env.VERSION as string;
 
 
 /**
