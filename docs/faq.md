@@ -119,7 +119,7 @@ example:
       async handleModule(type, getContentData, path, options) {
 
         if ( path.toString().endsWith('babylon.max.js') )
-          return createCJSModule(type, await getContentData(false), options)
+          return createCJSModule(path.toString(), await getContentData(false), options)
 
         return undefined;
       },
