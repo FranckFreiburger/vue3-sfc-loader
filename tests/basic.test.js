@@ -579,7 +579,7 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 
 		if ( vueTarget === 3 ) {
 
-			test.only('async setup script', async () => {
+			test('async setup script', async () => {
 
 				const { page, output } = await createPage({
 					files: {
