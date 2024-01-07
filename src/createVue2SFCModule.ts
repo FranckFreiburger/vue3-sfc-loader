@@ -68,7 +68,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component = {};
 
-	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
+	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler, devMode = false } = options;
 
 	const descriptor = sfc_parse({
 		source,
@@ -107,7 +107,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			comments: true
 		} as any,
 		isProduction: isProd,
-		prettify: false
+		prettify: devMode,
 	} : null;
 
 	// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
@@ -136,7 +136,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
-			return await transformJSCode(src, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins, jsx, babelSugarInjectH }, log);
+			return await transformJSCode(src, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins, jsx, babelSugarInjectH }, log, devMode);
 		});
 
 		await loadDeps(filename, depsList, options);
@@ -180,7 +180,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				log?.('info', 'SFC template', formatErrorStartEnd(err.msg, strFilename, source, err.start, err.end ));
 			}
 
-			return await transformJSCode(template.code, true, filename, additionalBabelParserPlugins, additionalBabelPlugins, log);
+			return await transformJSCode(template.code, true, filename, additionalBabelParserPlugins, additionalBabelPlugins, log, devMode);
 		});
 
 		await loadDeps(filename, templateDepsList, options);

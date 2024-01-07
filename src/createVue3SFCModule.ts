@@ -68,7 +68,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component : { [key: string]: any } = {};
 
-	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler } = options;
+	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler, devMode = false } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
@@ -145,7 +145,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			if ( compileTemplateOptions !== null )
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
-			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log);
+			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log, devMode);
 
 		});
 
@@ -180,7 +180,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			for ( const err of template.tips )
 				log?.('info', 'SFC template', err);
 
-			return await transformJSCode(template.code, true, descriptor.filename, additionalBabelParserPlugins, additionalBabelPlugins, log);
+			return await transformJSCode(template.code, true, descriptor.filename, additionalBabelParserPlugins, additionalBabelPlugins, log, devMode);
 		});
 
 		await loadDeps(filename, templateDepsList, options);

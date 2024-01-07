@@ -212,7 +212,7 @@ const targetBrowserBabelPlugins = { ...(typeof ___targetBrowserBabelPlugins !== 
 /**
  * @internal
  */
-export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, additionalBabelParserPlugins : Options['additionalBabelParserPlugins'], additionalBabelPlugins : Options['additionalBabelPlugins'], log : Options['log']) : Promise<[string[], string]> {
+export async function transformJSCode(source : string, moduleSourceType : boolean, filename : AbstractPath, additionalBabelParserPlugins : Options['additionalBabelParserPlugins'], additionalBabelPlugins : Options['additionalBabelPlugins'], log : Options['log'], devMode : boolean = false) : Promise<[string[], string]> {
 
 	let ast: t.File;
 	try {
@@ -247,8 +247,13 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		babelrc: false,
 		configFile: false,
 		highlightCode: false,
-		compact: true, // doc: All optional newlines and whitespace will be omitted when generating code in compact mode.
-		comments: false,
+		compact: !devMode, // doc: All optional newlines and whitespace will be omitted when generating code in compact mode.
+		comments: devMode,
+		retainLines: devMode,
+		//envName: devMode ? 'development' : 'production', see 'process.env.BABEL_ENV': JSON.stringify(mode),
+
+		//minified,
+		sourceType: moduleSourceType ? 'module' : 'script',
 	});
 
 	if ( transformedScript === null || transformedScript.code == null ) { // == null or undefined
@@ -357,7 +362,7 @@ export async function createJSModule(source : string, moduleSourceType : boolean
 
 	const [ depsList, transformedSource ] = await withCache(compiledCache, [ version, source, filename ], async () => {
 
-		return await transformJSCode(source, moduleSourceType, filename, additionalBabelParserPlugins, additionalBabelPlugins, log);
+		return await transformJSCode(source, moduleSourceType, filename, additionalBabelParserPlugins, additionalBabelPlugins, log, options.devMode);
 	});
 
 	await loadDeps(filename, depsList, options);
