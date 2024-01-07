@@ -577,6 +577,47 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 		}
 
 
+		if ( vueTarget === 3 ) {
+
+			test.only('async setup script', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+						'/mycomponent.vue': `
+							<script setup>
+								import { ref } from 'vue'
+								await new Promise(resolve => setTimeout(resolve, 10));
+								const a = ref(123);
+							</script>
+							<template>
+								<div class="test">{{ a }}</div>
+							</template>
+						`,
+						'/main.vue': `
+							<script>
+								import mycomponent from '/mycomponent.vue'
+								export default {
+									components: {
+										mycomponent,
+									}
+								}
+							</script>
+							<template>
+								<Suspense>
+									<mycomponent/>
+								</Suspense>
+							</template>
+						`,
+					}
+				});
+
+				await expect(page.$eval('.test', el => el.textContent.trim())).resolves.toBe('123');
+				await page.close();
+			});
+		}
+
+
 		test('custom style language', async () => {
 			const { page, output } = await createPage({
 				files: {
