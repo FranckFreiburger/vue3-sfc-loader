@@ -27,6 +27,8 @@ Because it embeds :
 
 [see details](https://unpkg.com/vue3-sfc-loader/dist/vue3-sfc-loader.report.html) (under the 'Stat' tab)
 
+Be sure that reducing bundle size is my main concern.
+
 (note that by design, Vue3 compiler requires babel and postcss)
 
 
