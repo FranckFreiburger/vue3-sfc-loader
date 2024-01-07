@@ -104,7 +104,15 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 	if ( browserslist(actualTargetsBrowsers).length === 0 )
 		throw new RangeError('browserslist(' + actualTargetsBrowsers + ') selects no browsers');
 
-	const pluginNameList = requiredBabelPluginsNamesByBrowserTarget(actualTargetsBrowsers);
+	let pluginNameList = requiredBabelPluginsNamesByBrowserTarget(actualTargetsBrowsers);
+	// now, exclude some plugins
+	const excludeBabelPlugins = [
+		'transform-unicode-sets-regex', // exclude because it indirectly imports regenerate-unicode-properties (about 500KB)
+	]
+	
+	pluginNameList = pluginNameList.filter(e => !excludeBabelPlugins.includes(e) );
+	console.log('requiredBabelPluginsNamesByBrowserTarget', pluginNameList);
+
 	const ___targetBrowserBabelPlugins = '{' + pluginNameList.map(e => `'${ e }': require('@babel/plugin-${ e }'),\n`).join('') + '}';
 
 	return {
@@ -190,6 +198,9 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 				// config
 				'process.env.GEN_SOURCEMAP': JSON.stringify(genSourcemap),
 				'process.env.VERSION': JSON.stringify(pkg.version),
+
+				'process.env.LANG': 'undefined',
+
 			}),
 
 			new Webpack.ProvidePlugin({
@@ -345,7 +356,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				// Vue3
 				// exclude ./node_modules/@vue/compiler-sfc/dist/compiler-sfc.cjs.js template engines ('consolidate': false  this is no longer enough)
 				...Object.fromEntries(
-					'velocityjs,dustjs-linkedin,atpl,liquor,twig,eco,jazz,jqtpl,hamljs,hamlet,whiskers,haml-coffee,hogan.js,templayed,underscore,walrus,mustache,just,ect,mote,toffee,dot,bracket-template,ractive,htmling,babel-core,plates,react-dom/server,react,vash,slm,marko,teacup/lib/express,coffee-script,squirrelly,twing,tinyliquid,liquid-node,jade,then-jade,dust,dustjs-helpers,swig,swig-templates,razor-tmpl,pug,then-pug,qejs,nunjucks,arc-templates'.split(',')
+					'velocityjs,tinyliquid,liquid-node,jade,then-jade,dust,dustjs-helpers,dustjs-linkedin,swig,swig-templates,razor-tmpl,atpl,liquor,twig,ejs,eco,jazz,jqtpl,hamljs,hamlet,whiskers,haml-coffee,hogan.js,templayed,handlebars,underscore,lodash,pug,then-pug,qejs,walrus,mustache,just,ect,mote,toffee,dot,bracket-template,ractive,nunjucks,htmling,babel-core,plates,react-dom,react,arc-templates,vash,slm,marko,teacup,coffee-script,vm,squirrelly,twing'.split(',')
 					.map(e => ([e, false]))
 				)
 

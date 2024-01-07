@@ -1,5 +1,5 @@
 // polyfill only stable `core-js` features - ES and web standards:
-import "core-js/stable";
+//import "core-js/stable";
 
 
 /* no longer needed
