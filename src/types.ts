@@ -257,6 +257,16 @@ export type Options = {
 
 
 /**
+ * Specifies a check method to recognize native custom elements.
+ * 
+ * see. https://vuejs.org/api/application.html#app-config-compileroptions-iscustomelement
+ * note: this option has no effect on vue2
+ */
+
+	isCustomElement : ((tag: string) => boolean) | undefined,
+
+
+/**
  * Additional babel parser plugins. [TBD]
  *
  *	```javascript
