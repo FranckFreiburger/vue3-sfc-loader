@@ -16,7 +16,7 @@ see https://www.conventionalcommits.org/
 `<type>(<scope>): <subject>`
 
 type: `feat|fix|build|perf|size|docs|refactor|test|chore|wip|...`
-scope: `core|build|docs|deps|workflow|...`
+scope: `core|build|docs|deps|workflow|tests|...`
 subject: Use the imperative, present tense: "change" not "changed" nor "changes". Don't capitalize the first letter. Do dot (.) at the end
 
 fix: a commit of the type fix patches a bug in your codebase (this correlates with PATCH in semantic versioning).
