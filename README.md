@@ -160,7 +160,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 Many thanks to people that support this project !
 
-![](https://opencollective.com/vue3-sfc-loader/tiers/backer.svg?avatarHeight=64)
+![https://opencollective.com/vue3-sfc-loader](https://opencollective.com/vue3-sfc-loader/tiers/backer.svg?avatarHeight=64)
 
 
 
