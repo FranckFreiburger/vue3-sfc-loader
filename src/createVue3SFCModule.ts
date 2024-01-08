@@ -11,7 +11,8 @@ import {
 import * as vue_CompilerDOM from '@vue/compiler-dom'
 
 // https://github.com/vuejs/jsx-next
-import jsx from '@vue/babel-plugin-jsx'
+import babelPlugin_jsx from '@vue/babel-plugin-jsx'
+import babelPlugin_typescript from '@babel/plugin-transform-typescript'
 
 import {
 	formatErrorLineColumn,
@@ -146,7 +147,17 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			if ( compileTemplateOptions !== null )
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
-			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins,  jsx }, log, devMode);
+			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
+			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx: babelPlugin_jsx };
+			
+			if (descriptor.script?.lang === 'ts' || descriptor.scriptSetup?.lang === 'ts') {
+				
+				contextBabelParserPlugins = [ ...contextBabelParserPlugins, 'typescript' ];
+				contextBabelPlugins = { ...contextBabelPlugins, typescript: babelPlugin_typescript };
+			}
+
+			
+			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], { ...contextBabelPlugins, ...additionalBabelPlugins }, log, devMode);
 
 		});
 

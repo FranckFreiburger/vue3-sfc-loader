@@ -320,6 +320,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				'@vue/compiler-sfc$': require.resolve('@vue/compiler-sfc'),
 				'@vue/compiler-dom$': require.resolve('@vue/compiler-dom'),
 
+				'@babel/plugin-transform-typescript$': require.resolve('@babel/plugin-transform-typescript'),
+
 				// not needed
 				'consolidate': false,
 				'@vue/compiler-ssr': false,
