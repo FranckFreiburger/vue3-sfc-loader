@@ -472,7 +472,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -537,7 +537,7 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
 
@@ -797,7 +797,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
   <script src="https://unpkg.com/vue-i18n@next"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
   <script>
@@ -867,7 +867,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
@@ -982,7 +982,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
@@ -1089,7 +1089,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
@@ -1097,7 +1097,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
   const config = {
 
     // note: Here, for convenience, we simply retrieve content from a string.
-    
+
     files: {
       '/circle.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" /></svg>`,
       '/main.vue': `
@@ -1278,7 +1278,7 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
 <!DOCTYPE html>
 <html>
 <body>
-<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js/dist/vue.runtime.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.8.4/dist/vue3-sfc-loader.js"></script>
 <script>
 
