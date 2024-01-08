@@ -478,10 +478,15 @@ _see at [vuejs/rfcs](https://github.com/vuejs/rfcs/pull/231)_
 
     /* <!-- */
     const config = {
+      
+      // note: Here, for convenience, we simply retrieve content from a string.
+      
       files: {
+
         '/style.css': `
           .styled { color: red }
         `,
+
         '/main.vue': `
           <template>
             <span class="styled">hello</span> world
@@ -623,7 +628,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
       },
 
       getFile(url) {
-
+        
+        // note: Here, for convenience, we simply retrieve content from a string.
+        
         return ({
           '/a.vue': `
             <template>
@@ -694,6 +701,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
     /* <!-- */
     const config = {
+      
+      // note: Here, for convenience, we simply retrieve content from a string.
+      
       files: {
         '/main.vue': `
             <template>
@@ -794,6 +804,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
     /* <!-- */
     const config = {
+      
+      // note: Here, for convenience, we simply retrieve content from a string.
+      
       files: {
         '/component.vue': `
           <template>
@@ -860,6 +873,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
   const config = {
     files: {
+      
+      // note: Here, for convenience, we simply retrieve content from a string.
+
       '/main.vue': {
         getContentData: () => /* <!-- */`
           <template>
@@ -972,6 +988,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
   /* <!-- */
   const config = {
+    
+    // note: Here, for convenience, we simply retrieve content from a string.
+
     files: {
       '/circle0.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" /></svg>`,
       '/circle1.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" /></svg>`,
@@ -1076,6 +1095,9 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 
   /* <!-- */
   const config = {
+
+    // note: Here, for convenience, we simply retrieve content from a string.
+    
     files: {
       '/circle.svg': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="50" /></svg>`,
       '/main.vue': `
@@ -1184,7 +1206,7 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
       },
       getFile: async (url) => {
 
-        // note: here, for convinience, we just returns a content from a 
+        // note: here, for convinience, we just returns a content from a string
 
         if ( new URL(url).pathname === '/main.vue' ) {
 
@@ -1263,7 +1285,9 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
   /* <!-- */
   const config = {
     files: {
-      // for convenience, example files a loaded from the following strings
+      
+      // note: Here, for convenience, we simply retrieve content from a string.
+
       '/theComponent.vue': `
         <script setup>
 
@@ -1370,6 +1394,9 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
   <script>
 
     const config = {
+      
+      // note: Here, for convenience, we simply retrieve content from a string.
+
       files: {
         /* <!-- */
         '/app.vue': ''
