@@ -385,7 +385,7 @@ export async function loadDeps(refPath : AbstractPath, deps : AbstractPath[], op
 /**
  * Default implementation of handleModule
  */
- async function defaultHandleModule(type : string, getContentData : File['getContentData'], path : AbstractPath, options : Options) : Promise<ModuleExport | null | undefined> {
+ async function defaultHandleModule(type : string, getContentData : File['getContentData'], path : AbstractPath, options : Options) : Promise<ModuleExport | undefined> {
 
 	switch (type) {
 		case '.vue': return createSFCModule((await getContentData(false)) as string, path, options);

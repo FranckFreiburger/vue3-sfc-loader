@@ -120,8 +120,7 @@ export type CustomBlock = {
 /**
  * This just represents a loaded js module exports
  */
-export type ModuleExport = {
-}
+export type ModuleExport = {} | null
 
 /**
  * This just represents a loaded js module
