@@ -21,6 +21,8 @@ import {
 // @ts-ignore (Could not find a declaration file for module '@babel/plugin-transform-modules-commonjs')
 import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules-commonjs'
 
+// @ts-ignore (TS7016: Could not find a declaration file for module '@babel/plugin-transform-typescript'.)
+import babelPlugin_typescript from '@babel/plugin-transform-typescript'
 
 import * as SparkMD5 from 'spark-md5'
 
@@ -389,6 +391,11 @@ export async function loadDeps(refPath : AbstractPath, deps : AbstractPath[], op
 		case '.vue': return createSFCModule((await getContentData(false)) as string, path, options);
 		case '.js': return createJSModule((await getContentData(false)) as string, false, path, options);
 		case '.mjs': return createJSModule((await getContentData(false)) as string, true, path, options);
+		case '.ts': return createJSModule((await getContentData(false)) as string, true, path, {
+			...options,
+			additionalBabelParserPlugins: [ 'typescript', ...(options.additionalBabelParserPlugins ?? []) ],
+			additionalBabelPlugins: { typescript: babelPlugin_typescript, ...(options.additionalBabelPlugins ?? {}) }
+		});
 	}
 
 	return undefined;
