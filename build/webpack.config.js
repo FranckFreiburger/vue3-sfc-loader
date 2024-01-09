@@ -349,6 +349,7 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 				...!genSourcemap ? {
 					'source-map': false,
 					'merge-source-map': false,
+					'source-map-js': false,
 				} : {},
 
 				...isProd ? {
