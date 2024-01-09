@@ -145,6 +145,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const scriptBlock = sfc_compileScript(descriptor, {
 				isProd,
+				sourceMap: genSourcemap,
 				id: scopeId,
 				// @ts-ignore (unstable resolution: node_modules/@babel/parser/typings/babel-parser vs node_modules/@types/babel__core/node_modules/@babel/parser/typings/babel-parser)
 				babelParserPlugins: [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
