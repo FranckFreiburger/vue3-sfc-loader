@@ -14,6 +14,9 @@ import jsx from '@vue/babel-plugin-transform-vue-jsx'
 // @ts-ignore
 import babelSugarInjectH from '@vue/babel-sugar-inject-h'
 
+// @ts-ignore (TS7016: Could not find a declaration file for module '@babel/plugin-transform-typescript'.)
+import babelPlugin_typescript from '@babel/plugin-transform-typescript'
+
 import {
 	formatError,
 	formatErrorStartEnd,
@@ -134,9 +137,18 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descriptor.script.src ? (await (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).getContentData(false)) as string : descriptor.script.content;
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, descriptor.script.lang, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
-			return await transformJSCode(src, true, strFilename, [ ...additionalBabelParserPlugins, 'jsx' ], { ...additionalBabelPlugins, jsx, babelSugarInjectH }, log, devMode);
+			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
+			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx, babelSugarInjectH };
+			
+			if (descriptor.script?.lang === 'ts' ) {
+				
+				contextBabelParserPlugins = [ ...contextBabelParserPlugins, 'typescript' ];
+				contextBabelPlugins = { ...contextBabelPlugins, typescript: babelPlugin_typescript };
+			}
+
+			return await transformJSCode(src, true, strFilename, [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], { ...contextBabelPlugins, ...additionalBabelPlugins }, log, devMode);
 		});
 
 		await loadDeps(filename, depsList, options);
