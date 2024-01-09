@@ -116,7 +116,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
 /**
  * This is the main function.
  * This function is intended to be used only to load the entry point of your application.
- * If for some reason you need to use it in your components, be sure to share at least the options.`compiledCache` object between all calls.
+ * If for some reason you need to use it in your components, be sure to share at least the options.`moduleCache` object between all calls.
  *
  * @param path  The path of the `.vue` file. If path is not a path (eg. an string ID), your [[getFile]] function must return a [[File]] object.
  * @param options  The options
