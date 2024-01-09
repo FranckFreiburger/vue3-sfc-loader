@@ -99,7 +99,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		await loadModuleInternal({ refPath: filename, relPath: descriptor.template.lang }, options);
 
 
-	const compileTemplateOptions : SFCTemplateCompileOptions|null = descriptor.template ? {
+	const compileTemplateOptions : SFCTemplateCompileOptions|undefined = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
 		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
 		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
@@ -118,7 +118,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		//	transformAssetUrls
 		preprocessLang: descriptor.template.lang,
 		preprocessCustomRequire: id => moduleCache[id], // makes consolidate optional, see https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L111-L113
-	} : null;
+	} : undefined;
 
 	if ( descriptor.script || descriptor.scriptSetup ) {
 
@@ -156,7 +156,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			});
 
 			// see https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/templateLoader.ts#L54
-			if ( compileTemplateOptions !== null )
+			if ( compileTemplateOptions?.compilerOptions !== undefined )
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
 
