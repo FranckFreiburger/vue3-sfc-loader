@@ -1002,6 +1002,65 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(page.$eval('#app', el => el.innerHTML)).resolves.toMatch('123');
 		});
 
+		test('should handle SFC script lang ts', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/main.vue': `
+						<script lang="ts">
+
+							const year : number = 2024;
+
+							export default {
+								data() {
+									return {
+										year
+									}
+								}
+							}
+						</script>
+						<template>
+							<span>{{ year }}</span>
+						</template>
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.innerText)).resolves.toMatch('2024');
+		});
+
+
+		test('should handle .ts script', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/test.ts': `
+						const year : number = 2024;
+						export default year;
+					`,
+					'/main.vue': `
+						<script>
+							import year from './test.ts'
+							export default {
+								data() {
+									return {
+										year
+									}
+								}
+							}
+						</script>
+						<template>
+							<span>{{ year }}</span>
+						</template>
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.innerText)).resolves.toMatch('2024');
+		});
+
 
 		if ( vueTarget === 3 ) { // Vue 2 does not handle cssVars
 
