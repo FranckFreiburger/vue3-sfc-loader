@@ -131,12 +131,21 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
+			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
+			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx: babelPlugin_jsx };
+			
+			if (descriptor.script?.lang === 'ts' || descriptor.scriptSetup?.lang === 'ts') {
+				
+				contextBabelParserPlugins = [ ...contextBabelParserPlugins, 'typescript' ];
+				contextBabelPlugins = { ...contextBabelPlugins, typescript: babelPlugin_typescript };
+			}
+
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const scriptBlock = sfc_compileScript(descriptor, {
 				isProd,
 				id: scopeId,
 				// @ts-ignore (unstable resolution: node_modules/@babel/parser/typings/babel-parser vs node_modules/@types/babel__core/node_modules/@babel/parser/typings/babel-parser)
-				babelParserPlugins: additionalBabelParserPlugins, //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
+				babelParserPlugins: [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
 				// doc: https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md#inline-template-mode
 				// vue-loader next : https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/resolveScript.ts#L59
 				inlineTemplate: false,
@@ -147,16 +156,10 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			if ( compileTemplateOptions !== null )
 				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
 
-			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
-			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx: babelPlugin_jsx };
-			
-			if (descriptor.script?.lang === 'ts' || descriptor.scriptSetup?.lang === 'ts') {
-				
-				contextBabelParserPlugins = [ ...contextBabelParserPlugins, 'typescript' ];
-				contextBabelPlugins = { ...contextBabelPlugins, typescript: babelPlugin_typescript };
-			}
 
-			
+			// note:
+			//   scriptBlock.content is the script code after vue transformations
+			//   scriptBlock.scriptAst is the script AST before vue transformations
 			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], { ...contextBabelPlugins, ...additionalBabelPlugins }, log, devMode);
 
 		});
