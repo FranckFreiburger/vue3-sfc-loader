@@ -131,7 +131,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		// TBD: handle <script setup src="...
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.scriptSetup?.content, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.script?.lang, descriptor.scriptSetup?.content, descriptor.scriptSetup?.lang, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
 
 			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
 			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx: babelPlugin_jsx };
