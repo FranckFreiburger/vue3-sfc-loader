@@ -13,6 +13,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * **esm** and **umd** bundles available ([example](docs/examples.md#using-esm-version))
  * Embedded ES6 modules support ( including `import()` )
  * JSX support
+ * TypeScript support
  * Custom CSS, HTML and Script language Support, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * SFC Custom Blocks support
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
@@ -85,9 +86,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 ## dist/
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=latest%20version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
-  [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-286kB-blue)<!--/update-min-br-size-->](#dist)
-  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-362kB-blue)<!--/update-min-gz-size-->](#dist)
-  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1387kB-blue)<!--/update-min-size-->](#dist)
+  [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-381kB-blue)<!--/update-min-br-size-->](#dist)
+  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-480kB-blue)<!--/update-min-gz-size-->](#dist)
+  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1751kB-blue)<!--/update-min-size-->](#dist)
   
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
 <!--  
