@@ -136,10 +136,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				compiledCache,
 				[
 					componentHash,
-					descriptor.script?.content,
-					descriptor.script?.lang,
-					descriptor.scriptSetup?.content,
-					descriptor.scriptSetup?.lang,
+					descriptor.script?.content ?? descriptor.scriptSetup?.content,
+					descriptor.script?.lang ?? descriptor.scriptSetup?.lang,
 					additionalBabelParserPlugins,
 					Object.keys(additionalBabelPlugins),
 				],
@@ -193,6 +191,9 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				[
 					componentHash,
 					compileTemplateOptions.source,
+					compileTemplateOptions.compilerOptions.delimiters,
+					compileTemplateOptions.compilerOptions.whitespace,
+					compileTemplateOptions.compilerOptions.scopeId,
 				],
 				async ({ preventCache }) => {
 
