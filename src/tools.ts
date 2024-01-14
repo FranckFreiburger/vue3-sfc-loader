@@ -97,7 +97,7 @@ export function formatErrorStartEnd(message : string, path : string, source : st
  */
  export function hash(...valueList : any[]) : string {
 
-	return valueList.reduce((hashInstance, val) => hashInstance.append(String(val)), new SparkMD5()).end().slice(0, 8);
+	return valueList.reduce((hashInstance, val) => hashInstance.append(String(val)), new SparkMD5()).end();
 }
 
 
