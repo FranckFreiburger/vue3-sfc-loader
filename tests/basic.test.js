@@ -1115,9 +1115,9 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(versions[0]).toBe(versions[1]);
 		});
 
-		if ( vueTarget === 3 ) { // Vue 3 does not have <script setup>
+		if ( vueTarget === 3 ) { // Vue 2 does not have <script setup>
 		
-			test('should properly handle components in <script setup>', async () => {
+			test('should properly handle components import in <script setup>', async () => {
 
 				const { page, output } = await createPage({
 					files: {
