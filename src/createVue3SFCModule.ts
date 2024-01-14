@@ -131,7 +131,19 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		// TBD: handle <script setup src="...
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, descriptor.script?.content, descriptor.script?.lang, descriptor.scriptSetup?.content, descriptor.scriptSetup?.lang, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [depsList, transformedScriptSource] =
+			await withCache(
+				compiledCache,
+				[
+					componentHash,
+					descriptor.script?.content,
+					descriptor.script?.lang,
+					descriptor.scriptSetup?.content,
+					descriptor.scriptSetup?.lang,
+					additionalBabelParserPlugins,
+					Object.keys(additionalBabelPlugins),
+				],
+				async ({ preventCache }) => {
 
 			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
 			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx: babelPlugin_jsx };
@@ -175,7 +187,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	if ( descriptor.template !== null ) {
 		// compiler-sfc src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileTemplate.ts#L39
 		// compileTemplate eg: https://github.com/vuejs/vue-loader/blob/next/src/templateLoader.ts#L33
-		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source ], async ({ preventCache }) => {
+		const [templateDepsList, templateTransformedSource] =
+			await withCache(
+				compiledCache,
+				[
+					componentHash,
+					compileTemplateOptions.source,
+				],
+				async ({ preventCache }) => {
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 
@@ -214,7 +233,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
 
-		const style = await withCache(compiledCache, [ componentHash, src ], async ({ preventCache }) => {
+		const style =
+			await withCache(
+				compiledCache,
+				[
+					componentHash,
+					src
+				],
+				async ({ preventCache }) => {
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 			const compiledStyle = await sfc_compileStyleAsync({

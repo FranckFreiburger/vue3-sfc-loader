@@ -116,7 +116,15 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually
 	if (descriptor.template?.lang) {
 		const preprocess = moduleCache[descriptor.template.lang] as any;
-		compileTemplateOptions.source = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source, descriptor.template.lang ], async ({ preventCache }) => {
+		compileTemplateOptions.source =
+			await withCache(
+				compiledCache,
+				[
+					componentHash,
+					compileTemplateOptions.source,
+					descriptor.template.lang,
+				],
+				async ({ preventCache }) => {
 
 			return await new Promise((resolve, reject) => {
 				preprocess.render(compileTemplateOptions.source, compileTemplateOptions.preprocessOptions, (_err : any, _res : any) => {
@@ -137,7 +145,17 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descriptor.script.src ? (await (await getResource({ refPath: filename, relPath: descriptor.script.src }, options).getContent()).getContentData(false)) as string : descriptor.script.content;
 
-		const [ depsList, transformedScriptSource ] = await withCache(compiledCache, [ componentHash, src, descriptor.script.lang, additionalBabelParserPlugins, Object.keys(additionalBabelPlugins) ], async ({ preventCache }) => {
+		const [depsList, transformedScriptSource] =
+			await withCache(
+				compiledCache,
+				[
+					componentHash,
+					src,
+					descriptor.script.lang,
+					additionalBabelParserPlugins,
+					Object.keys(additionalBabelPlugins),
+				],
+				async ({ preventCache }) => {
 
 			let contextBabelParserPlugins : Options['additionalBabelParserPlugins'] = ['jsx'];
 			let contextBabelPlugins: Options['additionalBabelPlugins'] = { jsx, babelSugarInjectH };
@@ -158,7 +176,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	if ( descriptor.template !== null ) {
 
-		const [ templateDepsList, templateTransformedSource ] = await withCache(compiledCache, [ componentHash, compileTemplateOptions.source ], async ({ preventCache }) => {
+		const [templateDepsList, templateTransformedSource] =
+			await withCache(
+				compiledCache,
+				[
+					componentHash,
+					compileTemplateOptions.source
+				],
+				async ({ preventCache }) => {
 
 			const template = sfc_compileTemplate(compileTemplateOptions);
 			// "@vue/component-compiler-utils" does NOT assume any module system, and expose render in global scope.
@@ -204,7 +229,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		const src = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
 
-		const style = await withCache(compiledCache, [ componentHash, src, descStyle.lang ], async ({ preventCache }) => {
+		const style = await withCache(
+			compiledCache,
+			[
+				componentHash,
+				src,
+				descStyle.lang
+			],
+			async ({ preventCache }) => {
 
 			const compileStyleOptions: StyleCompileOptions = {
 				source: src,
