@@ -290,26 +290,25 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
 
 	moduleCache[id] = new Loading((async () => {
 
-		if ( loadModule ) {
-
-			const module = await loadModule(id, options);
-			if ( module !== undefined )
-				return moduleCache[id] = module;
-		}
-
-		const { getContentData, type } = await getContent();
-
 		// note: null module is accepted
 		let module : ModuleExport | undefined | null = undefined;
 
-		if ( handleModule !== undefined )
-			module = await handleModule(type, getContentData, path, options);
+		if ( loadModule )
+			module = await loadModule(id, options);
 
-		if ( module === undefined )
-			module = await defaultHandleModule(type, getContentData, path, options);
+		if ( module === undefined ) {
 
-		if ( module === undefined )
-			throw new TypeError(`Unable to handle ${ type } files (${ path })`);
+			const { getContentData, type } = await getContent();
+
+			if ( handleModule !== undefined )
+				module = await handleModule(type, getContentData, path, options);
+
+			if ( module === undefined )
+				module = await defaultHandleModule(type, getContentData, path, options);
+
+			if ( module === undefined )
+				throw new TypeError(`Unable to handle ${ type } files (${ path })`);
+		}
 
 		return moduleCache[id] = module;
 
