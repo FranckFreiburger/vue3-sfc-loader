@@ -40,7 +40,7 @@ export type AbstractPath = {
  */
 export type PathContext = {
 	/** reference path */
-	refPath : AbstractPath,
+	refPath : AbstractPath | undefined,
 	/** relative to @refPath */
 	relPath : AbstractPath,
 }
