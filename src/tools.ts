@@ -167,7 +167,7 @@ export function renameDynamicImport(fileAst : t.File) : void {
 		CallExpression(path : NodePath<t.CallExpression>) {
 
 			if ( t.isImport(path.node.callee) )
-				path.replaceWith(t.callExpression(t.identifier('import__'), path.node.arguments))
+				path.replaceWith(t.callExpression(t.identifier('__vsfcl_import__'), path.node.arguments))
 		}
 	});
 }
@@ -349,7 +349,7 @@ export function createCJSModule(refPath : AbstractPath, source : string, options
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	const moduleFunction = Function('exports', 'require', 'module', '__filename', '__dirname', 'import__', source);
+	const moduleFunction = Function('exports', 'require', 'module', '__filename', '__dirname', '__vsfcl_import__', source);
 	moduleFunction.call(module.exports, module.exports, require, module, refPath, pathResolve({ refPath, relPath: '.' }), importFunction);
 
 	return module;
