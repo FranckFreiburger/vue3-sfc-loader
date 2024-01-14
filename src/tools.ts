@@ -120,7 +120,7 @@ export async function withCache( cacheInstance : Cache|undefined, key : any[], v
 
 	const hashedKey = hash(...key);
 	const valueStr = await cacheInstance.get(hashedKey);
-	if ( valueStr )
+	if ( valueStr !== undefined )
 		return JSON.parse(valueStr);
 
 	const value = await valueFactory(api);

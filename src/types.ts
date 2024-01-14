@@ -18,7 +18,7 @@ export type ValueFactory = (api : ValueFactoryApi) => Promise<any>;
 
 
 export type Cache = {
-	get(key : string) : Promise<string>,
+	get(key : string) : Promise<string|undefined>,
 	set(key : string, value : string) : Promise<void>,
 }
 
