@@ -169,8 +169,11 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 		Object.setPrototypeOf(moduleCache, null);
 
 	const normalizedOptions = {
+		//@ts-expect-error: is specified more than once, so this usage will be overwritten.ts(2783)
 		moduleCache,
+		//@ts-expect-error: is specified more than once, so this usage will be overwritten.ts(2783)
 		pathResolve,
+		//@ts-expect-error: is specified more than once, so this usage will be overwritten.ts(2783)
 		getResource,
 		...options,
 	};
