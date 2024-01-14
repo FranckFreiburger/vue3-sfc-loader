@@ -349,7 +349,8 @@ export function createCJSModule(refPath : AbstractPath, source : string, options
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	Function('exports', 'require', 'module', '__filename', '__dirname', 'import__', source).call(module.exports, module.exports, require, module, refPath, pathResolve({ refPath, relPath: '.' }), importFunction);
+	const moduleFunction = Function('exports', 'require', 'module', '__filename', '__dirname', 'import__', source);
+	moduleFunction.call(module.exports, module.exports, require, module, refPath, pathResolve({ refPath, relPath: '.' }), importFunction);
 
 	return module;
 }
@@ -362,7 +363,18 @@ export async function createJSModule(source : string, moduleSourceType : boolean
 
 	const { compiledCache, additionalBabelParserPlugins, additionalBabelPlugins, log } = options;
 
-	const [ depsList, transformedSource ] = await withCache(compiledCache, [ version, source, filename ], async () => {
+	const [depsList, transformedSource] =
+		await withCache(
+			compiledCache,
+			[
+				version,
+				source,
+				filename,
+				options.devMode,
+				additionalBabelParserPlugins ? additionalBabelParserPlugins : '',
+				additionalBabelPlugins ? Object.keys(additionalBabelPlugins) : '',
+			],
+			async () => {
 
 		return await transformJSCode(source, moduleSourceType, filename, additionalBabelParserPlugins, additionalBabelPlugins, log, options.devMode);
 	});
