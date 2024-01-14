@@ -285,7 +285,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 		],
 		resolve: {
 			extensions: [".ts", ".js"],
-			mainFields: ['browser', 'main', 'module'],
+			//mainFields: ['browser', 'main', 'module'],
+			conditionNames: ['require', 'node'], // doc: https://webpack.js.org/configuration/resolve/#resolveconditionnames
 			alias: {
 
 				'util$': require.resolve('util/'),
