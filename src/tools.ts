@@ -115,7 +115,7 @@ export async function withCache( cacheInstance : Cache|undefined, key : any[], v
 		preventCache: () => cachePrevented = true,
 	}
 
-	if ( !cacheInstance )
+	if ( cacheInstance === undefined )
 		return await valueFactory(api);
 
 	const hashedKey = hash(...key);
@@ -125,7 +125,7 @@ export async function withCache( cacheInstance : Cache|undefined, key : any[], v
 
 	const value = await valueFactory(api);
 
-	if ( !cachePrevented )
+	if ( cachePrevented === false )
 		await cacheInstance.set(hashedKey, JSON.stringify(value));
 
 	return value;
