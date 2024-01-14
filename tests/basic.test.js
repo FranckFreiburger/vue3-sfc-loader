@@ -1142,6 +1142,31 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 		}
 
 
+		if ( vueTarget === 3 ) { // Vue 2 does not have <script setup>
+		
+			test('should properly handle <script> + <script setup>', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+						'/main.vue': `
+							<script setup>
+				                const a = 123;
+							</script>
+              				<script>
+                				const b = 456;
+							</script>
+              				<template>{{a}} {{b}}</template>
+						`,
+					}
+				});
+
+				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('123 456');
+			});
+		}
+
+
+
 		test('should resolve path consistently', async () => {
 
 			// pathHandlers.resolve({ refPath: '', relPath: './main.vue' }) -> 'component.vue'
