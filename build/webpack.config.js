@@ -333,13 +333,14 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 
 				'emojis-list': false,
 				'json5': false,
-				'convert-source-map': false,
 
 				'loader-utils': false,
 				// '@babel/helpers': false, // required !
 				'postcss-modules-values': false,
 				'postcss-modules-scope': false,
 
+				'semver': false,
+				
 				// vue2
 				'sass': false,
 				'stylus': false,
@@ -352,6 +353,9 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 					'source-map': false,
 					'merge-source-map': false,
 					'source-map-js': false,
+					'@jridgewell': false,
+					'source-map-consumer.js': false,
+					'convert-source-map': false,
 				} : {},
 
 				...isProd ? {
