@@ -91,6 +91,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
   [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1751kB-blue)<!--/update-min-size-->](#dist)
   
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
+
+  [![](https://data.jsdelivr.com/v1/package/npm/vue3-sfc-loader/badge)](https://www.jsdelivr.com/package/npm/vue3-sfc-loader)
+
 <!--  
   [![Vue3 compiler-sfc dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/@vue/compiler-sfc?label=embeds%20Vue3%20%40vue%2Fcompiler-sfc)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
   [![Vue2 vue-template-compiler dependency version](https://img.shields.io/github/package-json/dependency-version/FranckFreiburger/vue3-sfc-loader/dev/vue-template-compiler?label=embeds%20Vue2%20vue-template-compiler)](https://github.com/vuejs/vue-next/tree/master/packages/compiler-sfc)
