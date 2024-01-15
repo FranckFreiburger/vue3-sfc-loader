@@ -186,8 +186,8 @@ const configure = ({name, vueTarget, libraryTargetModule}) => async (env = {}, {
 				'process.env.BABEL_ENV': JSON.stringify(mode),
 				'process.env.BABEL_TYPES_8_BREAKING': false,
 
-				'process.env.VUE_ENV': 'client',
-				'global.process.env.VUE_ENV': 'client',
+				'process.env.VUE_ENV': JSON.stringify('client'),
+				'global.process.env.VUE_ENV': JSON.stringify('client'),
 				
 				// further optimizations (ease dead code elimination)
 				'process.stdin': 'null',
