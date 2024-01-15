@@ -57,7 +57,7 @@ const caniuse = require('./caniuse-isSupported.js')
 
 const pkg = require('../package.json');
 
-const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode = 'production', configName }) => {
+const configure = ({name, vueTarget, libraryTargetModule}) => async (env = {}, { mode = 'production', configName }) => {
 	if (configName && !configName.includes(name)) {
 		return {name}
 	}
@@ -104,16 +104,17 @@ const configure = ({name, vueTarget, libraryTargetModule}) => (env = {}, { mode 
 	if ( browserslist(actualTargetsBrowsers).length === 0 )
 		throw new RangeError('browserslist(' + actualTargetsBrowsers + ') selects no browsers');
 
-	let pluginNameList = requiredBabelPluginsNamesByBrowserTarget(actualTargetsBrowsers);
+	let pluginNameList = await requiredBabelPluginsNamesByBrowserTarget(actualTargetsBrowsers);
 	// now, exclude some plugins
 	const excludeBabelPlugins = [
-		'transform-unicode-sets-regex', // exclude because it indirectly imports regenerate-unicode-properties (about 500KB)
+		'@babel/plugin-transform-unicode-sets-regex', // exclude because it indirectly imports regenerate-unicode-properties (about 500KB)
 	]
 	
 	pluginNameList = pluginNameList.filter(e => !excludeBabelPlugins.includes(e) );
 	console.log('requiredBabelPluginsNamesByBrowserTarget', pluginNameList);
 
-	const ___targetBrowserBabelPlugins = '{' + pluginNameList.map(e => `'${ e }': require('@babel/plugin-${ e }'),\n`).join('') + '}';
+
+	const ___targetBrowserBabelPlugins = '{' + pluginNameList.map(e => `'${ e }': require('${ e }'),\n`).join('') + '}';
 
 	return {
 		name,
