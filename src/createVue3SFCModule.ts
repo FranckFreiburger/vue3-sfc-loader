@@ -131,7 +131,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 		// TBD: handle <script setup src="...
 
-		const [depsList, transformedScriptSource] =
+		const [bindingMetadata, depsList, transformedScriptSource] =
 			await withCache(
 				compiledCache,
 				[
@@ -167,17 +167,16 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				templateOptions: compileTemplateOptions,
 			});
 
-			// see https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/templateLoader.ts#L54
-			if ( compileTemplateOptions?.compilerOptions !== undefined )
-				compileTemplateOptions.compilerOptions.bindingMetadata = scriptBlock.bindings;
-
-
 			// note:
 			//   scriptBlock.content is the script code after vue transformations
 			//   scriptBlock.scriptAst is the script AST before vue transformations
-			return await transformJSCode(scriptBlock.content, true, strFilename, [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], { ...contextBabelPlugins, ...additionalBabelPlugins }, log, devMode);
+			return [scriptBlock.bindings, ...await transformJSCode(scriptBlock.content, true, strFilename, [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], { ...contextBabelPlugins, ...additionalBabelPlugins }, log, devMode)];
 
 		});
+
+		// see https://github.com/vuejs/vue-loader/blob/12aaf2ea77add8654c50c8751bad135f1881e53f/src/templateLoader.ts#L54
+		if ( compileTemplateOptions?.compilerOptions !== undefined )
+			compileTemplateOptions.compilerOptions.bindingMetadata = bindingMetadata;
 
 		await loadDeps(filename, depsList, options);
 		Object.assign(component, interopRequireDefault(createCJSModule(filename, transformedScriptSource, options).exports).default);
@@ -196,6 +195,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 					compileTemplateOptions.compilerOptions.delimiters,
 					compileTemplateOptions.compilerOptions.whitespace,
 					compileTemplateOptions.compilerOptions.scopeId,
+					compileTemplateOptions.compilerOptions.bindingMetadata ? Object.entries(compileTemplateOptions.compilerOptions.bindingMetadata) : '',
 				],
 				async ({ preventCache }) => {
 

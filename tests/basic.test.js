@@ -1198,7 +1198,77 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('hello');
 		});
 
+
+		if ( vueTarget === 3 ) { // 
+
+			test('fix bindingMetadata missing in cache data', async () => {
+
+				const { page, output } = await createPage({
+					files: {
+						...files,
+						'/index.html': `
+<!DOCTYPE html>
+<html><body>
+	<script src="vue"></script>
+	<script src="vue${ vueTarget }-sfc-loader.js"></script>
+	<div id="app"></div>
+	<script>
+
+	;(async () => {
+
+		const { loadModule } = window['vue3-sfc-loader'];
+
+		/* <!-- */
+		const config = {
+			files: {
+				'/comp.vue': '<template>comp_1</template>',
+				'/main.vue': '<script setup> import comp from "./comp.vue" </script><template>main_comp <comp/></template>',
+			}
+		};
+		/* --> */
+
+		const options = {
+			getFile: async url => config.files[url],
+			addStyle() {},
+		}
+
+		const cache = {}
+		const compiledCache = {
+			get: key => cache[key],
+			set: (key, value) => cache[key] = value,
+		}
+
+		let moduleCache = {
+			vue: Vue,
+		}
+
+		// first run
+		await loadModule('/main.vue', { moduleCache, compiledCache, ...options });
+
+		// second run, reset moduleCache
+		moduleCache = {
+			vue: Vue,
+		}
+
+		// get the cache item of the main.vue script (find "main_comp" string)
+		const mainKey = Object.entries(cache).find(([k,v]) => v.includes('main_comp')).at(0);
+		
+		// delete only main.vue script cache item
+		delete cache[mainKey];
+		
+		const app = Vue.createApp(await loadModule('/main.vue', { moduleCache, compiledCache, ...options }));
+
+		app.mount('#app');
+
+	})().catch(ex => console.error(ex));
+
+	</script>
+</body></html>
+					`}
+				});
+
+				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('main_comp comp_1');
+			});
+		}
 	});
-
-
 })
