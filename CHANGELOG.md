@@ -10,7 +10,7 @@
 
 * **core:** add devMode option ([c2e8d74](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/c2e8d7435d7221d751e51679bfbe0c2dafed607f)), closes [#123](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/123)
 * **core:** add isCustomElement option ([7a88a1c](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/7a88a1c484b7ee9b16af7ae0531631fc0876ff95)), closes [#158](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/158)
-* **core:** add typescript syntax support in SFS script and script setup ([9722616](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/9722616af301819a80eeb8b4e454023d143078c9)), closes [#156](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/156) [#151](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/151) [#131](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/131)
+* **core:** add typescript syntax support in SFC script and script setup ([9722616](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/9722616af301819a80eeb8b4e454023d143078c9)), closes [#156](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/156) [#151](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/151) [#131](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/131)
 * **core:** also handle lang="ts" for vue2 ([9264f7f](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/9264f7f4c63457b7ef17cf7bd32f3d1654aaf4dc))
 * **core:** handle .ts files ([04628b1](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/04628b11e0eba80287f16a4a4cabe434932ee565))
 * **core:** remove IE11 support ([3644f8c](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/3644f8c3c005a1537f62cc592ccfa1846647b959))
