@@ -1,4 +1,16 @@
 
+### [0.9.1](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.9.0...v0.9.1) (2024-01-17)
+
+
+### Bug Fixes
+
+* **build:** 'bugfix/transform-v8-static-class-fields-redefine-readonly' is not a babel plugin module name ([673bbe3](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/673bbe3d6193ba419c71475a536de7db852193cf))
+* **build:** add missing memory-fs package ([e956bb3](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/e956bb33386bb08a2121a26387f84c8788851402))
+* **build:** VUE_ENV alias ([5ba912d](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/5ba912d9f3a2a6b16073ccaa308ff9006b765e26))
+* **core:** missing bindingMetadata in scriptSetup cache ([a6d93fb](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/a6d93fb60883ef21cd8fcea5161a4d63ccec2e4e))
+* **core:** withCache key in createSFCModule() ([20857ca](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/20857ca425d36005307cfc5e7e51275ed93c42f7))
+* **docs:** typo ([95c1d0a](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/95c1d0aeda9f1e1e482018ea1d030193edaed302))
+
 ## [0.9.0](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.8.4...v0.9.0) (2024-01-11)
 
 
