@@ -424,15 +424,17 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 
 									[
 										'polyfill-corejs3', {
+											// doc: https://github.com/babel/babel-polyfills/blob/main/docs/usage.md#method
+
 											// Allow global scope pollution with polyfills required by actualTargetsBrowsers.
 											// This is necessary because the code compiled by vue3-sfc-loader also require these polyfills.
-											'method': 'entry-global'
+											'method': 'usage-global',
 										}
 									],
 
 									[
 										'polyfill-regenerator', {
-											'method': 'usage-pure'
+											'method': 'usage-global'
 										}
 									]
 								] : [],
