@@ -122,7 +122,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Build your own version
 
-  Example: enable IE11 support
+  Example: enable IE11 support  
   `npx webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 8 versions, Firefox ESR, not dead, IE 11"` [check](https://browsersl.ist/#q=%3E+1%25%2C+last+8+versions%2C+Firefox+ESR%2C+not+dead%2C+IE+11)
 
   _see [`package.json`](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/package.json) "build" script_  
