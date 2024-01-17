@@ -86,9 +86,9 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 ## dist/
 
   [![latest bundle version](https://img.shields.io/npm/v/vue3-sfc-loader?label=latest%20version)](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/CHANGELOG.md)
-  [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-381kB-blue)<!--/update-min-br-size-->](#dist)
-  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-480kB-blue)<!--/update-min-gz-size-->](#dist)
-  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1751kB-blue)<!--/update-min-size-->](#dist)
+  [<!--update-min-br-size-->![bundle minified+brotli size](https://img.shields.io/badge/min%2Bbr-385kB-blue)<!--/update-min-br-size-->](#dist)
+  [<!--update-min-gz-size-->![bundle minified+gzip size](https://img.shields.io/badge/min%2Bgz-487kB-blue)<!--/update-min-gz-size-->](#dist)
+  [<!--update-min-size-->![bundle minified size](https://img.shields.io/badge/min-1793kB-blue)<!--/update-min-size-->](#dist)
   
   [![browser support](https://img.shields.io/github/package-json/browserslist/FranckFreiburger/vue3-sfc-loader)](https://github.com/browserslist/browserslist#query-composition)
 
