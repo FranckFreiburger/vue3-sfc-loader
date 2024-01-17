@@ -12,8 +12,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
  * Only requires Vue runtime-only build
  * **esm** and **umd** bundles available ([example](docs/examples.md#using-esm-version))
  * Embedded ES6 modules support ( including `import()` )
- * JSX support
- * TypeScript support
+  * TypeScript support, JSX support
  * Custom CSS, HTML and Script language Support, see [pug](docs/examples.md#using-another-template-language-pug) and [stylus](docs/examples.md#using-another-style-language-stylus) examples
  * SFC Custom Blocks support
  * Properly reports template, style or script errors through the [log callback](docs/api/interfaces/options.md#log)
@@ -123,7 +122,8 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 
 ## Build your own version
 
-  `webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 2 versions, Firefox ESR, not dead, not ie 11"`
+  Example: enable IE11 support
+  `npx webpack --config ./build/webpack.config.js --mode=production --env targetsBrowsers="> 1%, last 8 versions, Firefox ESR, not dead, IE 11"` (check)[https://browsersl.ist/#q=%3E+1%25%2C+last+8+versions%2C+Firefox+ESR%2C+not+dead%2C+IE+11]
 
   _see [`package.json`](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/main/package.json) "build" script_  
   _see [browserslist queries](https://github.com/browserslist/browserslist#queries)_  
