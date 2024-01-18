@@ -29,7 +29,7 @@ export const version : string = process.env.VERSION as string;
 /**
  * the version of Vue that is expected by the library
  */
-export { vueVersion } from './createSFCModule'
+export const vueVersion : string = process.env.VUE_VERSION as string;
 
 
 export { createCJSModule } from './tools'

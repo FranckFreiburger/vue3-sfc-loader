@@ -41,13 +41,12 @@ import {
 	StylePreprocessor,
 } from '../build/vue2StyleProcessors'
 
-export { version as vueVersion } from 'vue-template-compiler/package.json'
 
 
 /**
- * the version of the library (process.env.VERSION is set by webpack, at compile-time)
+ * the version of the library
  */
-const version : string = process.env.VERSION as string;
+import { version } from './index'
 
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));

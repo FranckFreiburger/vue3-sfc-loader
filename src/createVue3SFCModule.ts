@@ -35,9 +35,6 @@ import {
 	AbstractPath
 } from './types'
 
-// @ts-ignore (Cannot find module '@vue/compiler-sfc/../../package.json' or its corresponding type declarations.)
-//export { version as vueVersion } from '@vue/compiler-sfc/../../package.json'
-export { version as vueVersion } from '@vue/compiler-sfc/package.json'
 
 /**
  * @ignore
@@ -45,9 +42,9 @@ export { version as vueVersion } from '@vue/compiler-sfc/package.json'
 type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
 
 /**
- * the version of the library (process.env.VERSION is set by webpack, at compile-time)
+ * the version of the library
  */
-const version : string = process.env.VERSION as string;
+import { version } from './index'
 
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));

@@ -92,6 +92,18 @@ const configure = ({name, vueTarget, libraryTargetModule}) => async (env = {}, {
 
 	let actualTargetsBrowsers = targetsBrowsers;
 
+	let vueVersion; // expected vue version
+	switch ( vueTarget ) {
+		case '2':
+			vueVersion = require('vue-template-compiler/package.json').version;
+			break;
+		case '3':
+			vueVersion = require('@vue/compiler-sfc/package.json').version;
+			break;
+		default:
+			throw new Error(`invalid vueTarget: ${ vueTarget }`)
+	}
+
 	// "or" / ","" -> union
 	// "and" -> intersection
 	// "not" -> relative complement
@@ -199,6 +211,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => async (env = {}, {
 				// config
 				'process.env.GEN_SOURCEMAP': JSON.stringify(genSourcemap),
 				'process.env.VERSION': JSON.stringify(pkg.version),
+				'process.env.VUE_VERSION': JSON.stringify(vueVersion),
 
 				'process.env.LANG': 'undefined',
 
