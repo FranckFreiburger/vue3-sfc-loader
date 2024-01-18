@@ -24,7 +24,7 @@ import babelPluginTransformModulesCommonjs from '@babel/plugin-transform-modules
 // @ts-ignore (TS7016: Could not find a declaration file for module '@babel/plugin-transform-typescript'.)
 import babelPlugin_typescript from '@babel/plugin-transform-typescript'
 
-import * as SparkMD5 from 'spark-md5'
+import SparkMD5 from 'spark-md5'
 
 import {
 	Cache,
