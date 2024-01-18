@@ -37,6 +37,7 @@
     "tests": "jest --runInBand \"tests/.*\\.test.js\"",
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build": "rimraf ./dist/ && cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
+    "build-node": "rollup --config ./build/rollup.config-node.mjs"    ,
     "docs": "cross-env-shell \"node build/evalHtmlComments.js README.md $npm_package_version && node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --plugin typedoc-plugin-markdown --mode file --tsconfig ./build/tsconfig.json --inputFiles ./src/index.ts --out ./docs/api --readme none --stripInternal --namedAnchors true\"",
     "pushDocs": "yarn run docs && git add docs/ && git add README.md && cross-env-shell git commit -m \\\"chore(docs): v$npm_package_version API docs & examples \\\" docs",
     "release": "standard-version --header \"\""
@@ -85,6 +86,7 @@
     "jest": "29",
     "lodash-es": "^4.17.21",
     "lru-cache": "^6.0.0",
+    "memory-fs": "^0.5.0",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "puppeteer": "^13.1.1",
@@ -109,6 +111,16 @@
     "webpack": "^5.89.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^5.1.4",
-    "memory-fs": "^0.5.0"
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-virtual": "^3.0.2",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.9.5",
+    "tslib": "^2.6.2"
   }
 }
