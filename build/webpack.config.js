@@ -466,6 +466,8 @@ ${ pkg.name } v${ pkg.version } for vue${ vueTarget }
 							configFile: Path.resolve(__dirname, 'tsconfig.json'),
 							onlyCompileBundledFiles: true,
 							compilerOptions: {
+								target: 'ES2017',
+								allowSyntheticDefaultImports: true,
 								sourceMap: !noSourceMap,
 								outDir: distPath,
 								declaration: true,
