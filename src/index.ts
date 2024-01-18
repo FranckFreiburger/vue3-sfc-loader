@@ -3,7 +3,8 @@ import {
 } from 'path'
 
 import {
-	loadModuleInternal
+	loadModuleInternal,
+	defaultCreateCJSModule,
 } from './tools'
 
 import {
@@ -30,8 +31,6 @@ export const version : string = process.env.VERSION as string;
  */
 export const vueVersion : string = process.env.VUE_VERSION as string;
 
-
-export { createCJSModule } from './tools'
 
 /**
  * @internal
@@ -161,6 +160,7 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 		addStyle = throwNotDefined('options.addStyle()'),
 		pathResolve = defaultPathResolve,
 		getResource = defaultGetResource,
+		createCJSModule = defaultCreateCJSModule,
 	} = options;
 
 	// moduleCache should be defined with Object.create(null). require('constructor') etc... should not be a default module
@@ -174,6 +174,8 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 		pathResolve,
 		//@ts-ignore: is specified more than once, so this usage will be overwritten.ts(2783)
 		getResource,
+		//@ts-ignore: is specified more than once, so this usage will be overwritten.ts(2783)
+		createCJSModule,
 		...options,
 	};
 

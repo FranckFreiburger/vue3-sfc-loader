@@ -324,7 +324,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
  * Create a cjs module
  * @internal
  */
-export function createCJSModule(refPath : AbstractPath, source : string, options : Options) : Module {
+export function defaultCreateCJSModule(refPath : AbstractPath, source : string, options : Options) : Module {
 
 	const { moduleCache, pathResolve, getResource } = options;
 
@@ -360,7 +360,7 @@ export function createCJSModule(refPath : AbstractPath, source : string, options
  */
 export async function createJSModule(source : string, moduleSourceType : boolean, filename : AbstractPath, options : Options) : Promise<ModuleExport> {
 
-	const { compiledCache, additionalBabelParserPlugins, additionalBabelPlugins, log } = options;
+	const { compiledCache, additionalBabelParserPlugins, additionalBabelPlugins, createCJSModule, log } = options;
 
 	const [depsList, transformedSource] =
 		await withCache(

@@ -374,6 +374,13 @@ export type Options = {
 
 
 /**
+ * 
+ */
+	createCJSModule(refPath : AbstractPath, source : string, options : Options) : Module,
+
+
+
+/**
  * Abstact path handling
  *
  */

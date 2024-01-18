@@ -24,7 +24,6 @@ import {
 	interopRequireDefault,
 	transformJSCode,
 	loadDeps,
-	createCJSModule,
 	loadModuleInternal,
 } from './tools'
 
@@ -68,7 +67,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component : { [key: string]: any } = {};
 
-	const { delimiters, whitespace, isCustomElement, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler, devMode = false } = options;
+	const { delimiters, whitespace, isCustomElement, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler, devMode = false, createCJSModule } = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {

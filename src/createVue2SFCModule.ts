@@ -25,7 +25,6 @@ import {
 	interopRequireDefault,
 	transformJSCode,
 	loadDeps,
-	createCJSModule,
 	loadModuleInternal,
 } from './tools'
 
@@ -70,7 +69,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const component = {};
 
-	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler, devMode = false } = options;
+	const { delimiters, whitespace, moduleCache, compiledCache, getResource, addStyle, log, additionalBabelParserPlugins = [], additionalBabelPlugins = {}, customBlockHandler, devMode = false, createCJSModule } = options;
 
 	const descriptor = sfc_parse({
 		source,
