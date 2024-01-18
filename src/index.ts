@@ -10,7 +10,6 @@ import {
 	ModuleExport,
 	PathResolve,
 	Options,
-	File,
 	Resource,
 	PathContext,
 	LangProcessor,
