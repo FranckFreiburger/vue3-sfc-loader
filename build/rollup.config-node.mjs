@@ -1,19 +1,18 @@
 import { fileURLToPath } from 'url'
-import path from 'path';
 
 import typescript from '@rollup/plugin-typescript';
 import alias from '@rollup/plugin-alias';
-import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
-
 import pkg from '../package.json' assert { type: 'json' };
 
-const genSourcemap = false;
 const vueTarget = '3';
+const outputFormat = 'module';
+const genSourcemap = false;
+
 
 let vueVersion; // expected vue version
 switch ( vueTarget ) {
@@ -34,11 +33,10 @@ switch ( vueTarget ) {
 const config = {
 	input: './src/index.ts',
 	output: {
-		file: `dist/vue${ vueTarget }-sfc-loader-node.mjs`,
-		format: 'module',
+		file: `dist/vue${ vueTarget }-sfc-loader-node.${ outputFormat === 'module' ? 'mjs' : 'js' }`,
+		format: outputFormat,
 	},
     plugins: [
-        json(),
         replace({
             preventAssignment: true,
             values: {
