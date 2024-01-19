@@ -179,6 +179,12 @@ export async function loadModule(path : AbstractPath, options : Options = throwN
 		...options,
 	};
 
+	if ( options.devMode ) {
+
+		if ( options.compiledCache === undefined )
+			options.log?.('info', 'options.compiledCache is not defined, performance will be affected');
+	}
+
 	return await loadModuleInternal( { refPath: undefined, relPath: path }, normalizedOptions);
 }
 
