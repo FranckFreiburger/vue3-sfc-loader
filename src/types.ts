@@ -143,7 +143,7 @@ export type Options = {
  * `vue` must initially be contained in this object.
  * [[moduleCache]] is mandatory and should be shared between options objects used for you application (note that you can also pass the same options object through multiple loadModule calls)
  * It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
-​ *
+​ * The library take the ownership of [[moduleCache]] when [[loadModule]] is called.
  * See also [[options.loadModule]].
  *
  * **example:**
