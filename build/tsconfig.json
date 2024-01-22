@@ -3,7 +3,8 @@
 		"noImplicitAny": true,
 		"allowJs": true,
 		"module": "ESNext",
-		"target": "ESNext",
+		"target": "ES2017",
+		"allowSyntheticDefaultImports": true,
 		"lib": [
 			"ESNext",
 			"DOM"
