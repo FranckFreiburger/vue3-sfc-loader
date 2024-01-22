@@ -103,7 +103,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
 			}			
 
 			return {
-				type: res.type ?? Path.extname(pathStr),
+				type: res.type !== undefined ? res.type : Path.extname(pathStr),
 				getContentData: res.getContentData,
 			}
 		}
