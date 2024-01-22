@@ -104,9 +104,14 @@ typings/
 .tern-port
 
 
-**/node_modules/
+node_modules/
+src/
+build/
+docs/
 misc/
+test/
+
+.git
 .github
 .yarn
-docs/
-test/
+
