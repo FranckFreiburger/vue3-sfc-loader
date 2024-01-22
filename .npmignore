@@ -110,6 +110,9 @@ build/
 docs/
 misc/
 test/
+CONTRIBUTING.md
+README.md
+CHANGELOG.md
 
 .git
 .github
