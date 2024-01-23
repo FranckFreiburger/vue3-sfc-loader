@@ -80,7 +80,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		additionalBabelPlugins = {},
 		customBlockHandler,
 		devMode = false,
-		createCJSModule
+		createCJSModule,
+		processStyles,
 	} = options;
 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
@@ -240,20 +241,26 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	for ( const descStyle of descriptor.styles ) {
 
-		// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
-		if ( descStyle.lang )
-			await loadModuleInternal({ refPath: filename, relPath: descStyle.lang }, options);
-
-		const src = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
-
+		const srcRaw = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
+		
 		const style =
 			await withCache(
 				compiledCache,
 				[
 					componentHash,
-					src
+					srcRaw,
+					descStyle.lang
 				],
 				async ({ preventCache }) => {
+
+			const src = processStyles !== undefined ? await processStyles(srcRaw, descStyle.lang, filename, options) : srcRaw;
+
+			if ( src === undefined )
+				preventCache();
+
+			// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
+			if ( processStyles === undefined && descStyle.lang !== undefined )
+				await loadModuleInternal({ refPath: filename, relPath: descStyle.lang }, options);
 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileStyle.ts#L70
 			const compiledStyle = await sfc_compileStyleAsync({
@@ -263,8 +270,10 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				id: scopeId,
 				scoped: descStyle.scoped,
 				trim: true,
-				preprocessLang: descStyle.lang as PreprocessLang,
-				preprocessCustomRequire: id => moduleCache[id],
+				...processStyles === undefined ? {
+					preprocessLang: descStyle.lang as PreprocessLang,
+					preprocessCustomRequire: id => moduleCache[id],
+				} : {},
 			});
 
 			if ( compiledStyle.errors.length ) {

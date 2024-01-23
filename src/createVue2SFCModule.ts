@@ -81,7 +81,8 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		additionalBabelPlugins = {},
 		customBlockHandler,
 		devMode = false,
-		createCJSModule
+		createCJSModule,
+		processStyles,
 	} = options;
 
 	const descriptor = sfc_parse({
@@ -238,29 +239,36 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	for ( const descStyle of descriptor.styles ) {
 
-		const src = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
+		const srcRaw = descStyle.src ? (await (await getResource({ refPath: filename, relPath: descStyle.src }, options).getContent()).getContentData(false)) as string : descStyle.content;
 
 		const style = await withCache(
 			compiledCache,
 			[
 				componentHash,
-				src,
+				srcRaw,
 				descStyle.lang
 			],
 			async ({ preventCache }) => {
 
+			const src = processStyles !== undefined ? await processStyles(srcRaw, descStyle.lang, filename, options) : srcRaw;
+
+			if ( src === undefined )
+				preventCache();
+	
 			const compileStyleOptions: StyleCompileOptions = {
 				source: src,
 				filename: strFilename,
 				id: scopeId,
 				scoped: descStyle.scoped !== undefined ? descStyle.scoped : false,
 				trim: false,
-				preprocessLang: descStyle.lang,
-				preprocessOptions: {
+				...processStyles === undefined ? {
+					preprocessLang: descStyle.lang,
 					preprocessOptions: {
-						customRequire: (id: string) => moduleCache[id]
+						preprocessOptions: {
+							customRequire: (id: string) => moduleCache[id]
+						}
 					}
-				}
+				} : {},
 			}
 
 			// Vue2 doesn't support preprocessCustomRequire, so we have to preprocess manually

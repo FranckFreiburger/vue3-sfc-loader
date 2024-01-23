@@ -374,9 +374,9 @@ export type Options = {
 
 
 /**
- * 
+ * creates a CommonJS module from JS source string.
  */
-	createCJSModule(refPath : AbstractPath, source : string, options : Options) : Module,
+	createCJSModule?(refPath : AbstractPath, source : string, options : Options) : Module,
 
 
 
@@ -422,6 +422,14 @@ export type Options = {
  * prevent minification, allow debugger statement, 
  */
 	devMode?: boolean,
+
+/**
+ * 
+ * @param srcRaw 
+ * @param lang 
+ * @param filename 
+ */
+	processStyles(srcRaw : string, lang : string | undefined, filename : AbstractPath, options : Options) : Promise<string>,
 	  
 }
 
