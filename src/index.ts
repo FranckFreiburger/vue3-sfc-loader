@@ -99,7 +99,7 @@ function defaultGetResource(pathCx : PathContext, options : Options) : Resource 
 			
 			if ( !res ) {
 				
-				log?.('error', `There is no module avaialable such as "${ path }"`);
+				log?.('error', `There is no file avaialable such as "${ path }"`);
 			}			
 
 			return {
