@@ -805,7 +805,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
 <html>
 <body>
   <script src="https://unpkg.com/vue@3/dist/vue.runtime.global.prod.js"></script>
-  <script src="https://unpkg.com/vue-i18n@next"></script>
+  <script src="https://unpkg.com/vue-i18n@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader@0.9.3/dist/vue3-sfc-loader.js"></script>
   <script>
 

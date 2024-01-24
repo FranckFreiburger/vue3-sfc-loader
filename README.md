@@ -26,7 +26,7 @@ Load .vue files dynamically at runtime from your html/js. No node.js environment
 <html>
 <body>
   <div id="app"></div>
-  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/vue@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue3-sfc-loader/dist/vue3-sfc-loader.js"></script>
   <script>
 
