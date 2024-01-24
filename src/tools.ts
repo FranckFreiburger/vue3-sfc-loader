@@ -304,7 +304,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
 				module = await handleModule(type, getContentData, path, options);
 
 			if ( module === undefined )
-				module = await defaultHandleModule(type, getContentData, path, options);
+				module = await handleModuleInternal(type, getContentData, path, options);
 
 			if ( module === undefined )
 				throw new TypeError(`Unable to handle ${ type } files (${ path })`);
@@ -396,7 +396,7 @@ export async function loadDeps(refPath : AbstractPath, deps : AbstractPath[], op
 /**
  * Default implementation of handleModule
  */
- async function defaultHandleModule(type : string, getContentData : File['getContentData'], path : AbstractPath, options : Options) : Promise<ModuleExport | undefined> {
+ async function handleModuleInternal(type : string, getContentData : File['getContentData'], path : AbstractPath, options : Options) : Promise<ModuleExport | undefined> {
 
 	switch (type) {
 		case '.vue': return createSFCModule((await getContentData(false)) as string, path, options);
