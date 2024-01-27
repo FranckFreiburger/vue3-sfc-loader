@@ -22,14 +22,28 @@
   "version": "0.9.3",
   "browserslist": "> 1%, last 8 versions, Firefox ESR and not dead",
   "browser": "./dist/vue3-sfc-loader.js",
-  "main": "./dist/vue3-sfc-loader-node.js",
-  "module": "./dist/vue3-sfc-loader-node.mjs",
+  "main": "./dist/vue3-sfc-loader.js",
+  "module": "./dist/vue3-sfc-loader.esm.js",
   "types": "./dist/types/vue3-esm/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/vue3-sfc-loader-node.mjs",
-      "require": "./dist/vue3-sfc-loader-node.js"
-    }
+      "node": {
+        "import": "./dist/vue3-sfc-loader-node.mjs",
+        "require": "./dist/vue3-sfc-loader-node.js"
+      },
+      "import": "./dist/vue3-sfc-loader.esm.js",
+      "require": "./dist/vue3-sfc-loader.js"
+    },
+    "./vue2": {
+      "node": {
+        "import": "./dist/vue2-sfc-loader-node.mjs",
+        "require": "./dist/vue2-sfc-loader-node.js"
+      },
+      "import": "./dist/vue2-sfc-loader.esm.js",
+      "require": "./dist/vue2-sfc-loader.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "coverage": "node test/coverageTest.mjs",
