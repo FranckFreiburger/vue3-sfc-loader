@@ -375,20 +375,22 @@ export type Options = {
 
 /**
  * creates a CommonJS module from JS source string.
+ * *(optional)* 
  */
-	createCJSModule?(refPath : AbstractPath, source : string, options : Options) : Module,
+	createCJSModule(refPath : AbstractPath, source : string, options : Options) : Module,
 
 
 
 /**
  * Abstact path handling
- *
+ * *(optional)*
  */
  	pathResolve : PathResolve,
 
 
 /**
  * Abstact resource handling
+ * *(optional)*
  *
  */
 	getResource(pathCx : PathContext, options : Options) : Resource,
