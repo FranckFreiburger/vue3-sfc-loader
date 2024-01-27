@@ -110,6 +110,7 @@ build/
 docs/
 misc/
 test/
+tests/
 CONTRIBUTING.md
 README.md
 CHANGELOG.md
