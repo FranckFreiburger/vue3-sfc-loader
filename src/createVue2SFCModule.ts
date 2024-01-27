@@ -45,7 +45,7 @@ import {
 /**
  * the version of the library
  */
-import { version } from './index'
+import { version, vueVersion } from './index'
 
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));
@@ -94,8 +94,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const customBlockCallbacks : (CustomBlockCallback|undefined)[] = customBlockHandler !== undefined ? await Promise.all( descriptor.customBlocks.map((block ) => customBlockHandler(block, filename, options)) ) : [];
 
-	const componentHash = hash(strFilename, version, targetBrowserBabelPluginsHash);
-	const scopeId = `data-v-${componentHash}`;
+	const scopeId = `data-v-${hash(strFilename)}`;
 
 	// hack: asynchronously preloads the language processor before it is required by the synchronous preprocessCustomRequire() callback, see below
 	if ( descriptor.template && descriptor.template.lang )
@@ -132,7 +131,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			await withCache(
 				compiledCache,
 				[
-					componentHash,
+					vueVersion,
 					compileTemplateOptions.source,
 					descriptor.template.lang,
 				],
@@ -161,11 +160,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			await withCache(
 				compiledCache,
 				[
-					componentHash,
+					vueVersion,
+					isProd,
+					devMode,
 					src,
 					descriptor.script.lang,
 					additionalBabelParserPlugins,
 					Object.keys(additionalBabelPlugins),
+					targetBrowserBabelPluginsHash,
 				],
 				async ({ preventCache }) => {
 
@@ -192,8 +194,15 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			await withCache(
 				compiledCache,
 				[
-					componentHash,
-					compileTemplateOptions.source
+					vueVersion,
+					devMode,
+					compileTemplateOptions.source,
+					delimiters,
+					whitespace,
+					scopeId,
+					additionalBabelParserPlugins,
+					Object.keys(additionalBabelPlugins),
+					targetBrowserBabelPluginsHash,
 				],
 				async ({ preventCache }) => {
 
@@ -244,10 +253,12 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 		const style = await withCache(
 			compiledCache,
 			[
-				componentHash,
+				vueVersion,
 				srcRaw,
-				descStyle.lang
-			],
+				descStyle.lang,
+				scopeId,
+				descStyle.scoped,
+		],
 			async ({ preventCache }) => {
 
 			const src = processStyles !== undefined ? await processStyles(srcRaw, descStyle.lang, filename, options) : srcRaw;
