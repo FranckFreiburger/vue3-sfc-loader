@@ -948,7 +948,7 @@ In the following example we use a trick to preserve reactivity through the `Vue.
       }
 
       // get the actual path of the file
-      const path = pathResolve({ refPath, relPath: resourceRelPath });
+      const path = pathResolve({ refPath, relPath: resourceRelPath }, options);
 
       // the resource id must be unique in its path context
       const id = loaders.join('') + path;
@@ -1197,7 +1197,7 @@ This example use Vue2 because **vue-calendar-picker** is written for Vue2.
         vue: Vue,
         'date-fns/locale/en/index.js': {}, // handle require('date-fns/locale/' + this.locale.toLowerCase() + '/index.js');
       },
-      pathResolve({ refPath, relPath }) {
+      pathResolve({ refPath, relPath }, options) {
 
         if ( relPath === 'date-fns' )
           return 'https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.30.1/date_fns.min.js';

@@ -1270,5 +1270,35 @@ const { defaultFilesFactory, createPage } = require('./testsTools.js');
 				await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('main_comp comp_1');
 			});
 		}
+
+
+		test('should properly handle search string in path', async () => {
+
+			const { page, output } = await createPage({
+				files: {
+					...files,
+					'/components/comp1.vue': `
+						<template>1</template>
+					`,
+					'/components/comp2.vue': `
+						<template>2</template>
+					`,
+					'/main.vue': `
+						<script setup>
+						import comp1 from './components/comp1.vue?a=1.txt'
+						import comp2 from './components/comp2.vue?a=/2'
+						</script>
+						<template><comp1/><comp2/></template>
+					`,
+				}
+			});
+
+			await expect(page.$eval('#app', el => el.textContent.trim())).resolves.toBe('12');
+		});
+
+
+
+
+
 	});
 })

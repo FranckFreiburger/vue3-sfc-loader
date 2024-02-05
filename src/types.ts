@@ -47,7 +47,7 @@ export type PathContext = {
 
 
 /** relative to absolute module path resolution */
-export type PathResolve = (pathCx : PathContext) => AbstractPath;
+export type PathResolve = (pathCx : PathContext, options : Options) => AbstractPath;
 
 
 /**
@@ -387,6 +387,13 @@ export type Options = {
  */
  	pathResolve : PathResolve,
 
+/**
+ * by default, remove the search string
+ * in situation where you need to keep the path intact, use `getPathname: path => path`
+ * @param path  a path that may contains extra components like search params or hash (eg. ./mydir/mycomponent.vue?v=123)
+ * @returns the pathname component of the path withouy any orher component (eg. ./mydir/mycomponent.vue)
+ */	
+	getPathname : (path : string) => string,
 
 /**
  * Abstact resource handling
