@@ -1,4 +1,11 @@
 
+### [0.9.5](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.9.4...v0.9.5) (2024-02-06)
+
+
+### Bug Fixes
+
+* **core:** support resource path with search string (ex. comp.vue?v=a87e5cc1) ([2534495](https://github.com/FranckFreiburger/vue3-sfc-loader/commit/2534495d4a7b06ce75d3b3966d8565b6ec89f1b9)), closes [#182](https://github.com/FranckFreiburger/vue3-sfc-loader/issues/182)
+
 ### [0.9.4](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.9.3...v0.9.4) (2024-01-29)
 
 ### [0.9.3](https://github.com/FranckFreiburger/vue3-sfc-loader/compare/v0.9.2...v0.9.3) (2024-01-22)
