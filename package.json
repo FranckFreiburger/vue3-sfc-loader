@@ -53,7 +53,7 @@
     "dev": "webpack --mode=development --config ./build/webpack.config.js --progress --watch",
     "build-web": "rimraf ./dist/ && cross-env-shell webpack --mode=production --config ./build/webpack.config.js --progress --env targetsBrowsers=\\\"$npm_package_browserslist\\\"",
     "build-node": "rollup --config ./build/rollup.config-node.mjs",
-    "docs": "cross-env-shell \"node build/evalHtmlComments.js README.md $npm_package_version && node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --logLevel 1 --plugin typedoc-plugin-markdown --tsconfig ./build/tsconfig.json --out ./docs/api --readme none --excludeInternal --namedAnchors true ./src/index.ts\"",
+    "docs": "cross-env-shell \"node build/evalHtmlComments.js README.md $npm_package_version && node build/evalHtmlComments.js docs/examples.md $npm_package_version && typedoc --logLevel 1 --plugin typedoc-plugin-markdown --objectLiteralTypeDeclarationStyle list --tsconfig ./build/tsconfig.json --out ./docs/api --readme none --excludeInternal --namedAnchors true ./src/index.ts\"",
     "pushDocs": "yarn run docs && git add docs/ README.md && cross-env-shell git commit -m \\\"chore(docs): v$npm_package_version API docs & examples \\\" docs",
     "release": "standard-version --header \"\""
   },
