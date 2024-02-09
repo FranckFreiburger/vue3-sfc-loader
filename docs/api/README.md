@@ -46,9 +46,15 @@ An abstract way to specify a path. It could be a simple string or a object like 
 | :------ | :------ |
 | `toString` | () => `string` |
 
+**toString**: () => `string`
+
+\-
+
+-----
+
 #### Defined in
 
-[types.ts:32](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L32)
+[types.ts:32](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L32)
 
 ___
 
@@ -63,9 +69,21 @@ ___
 | `get` | (`key`: `string`) => `Promise`\<`string`\> |
 | `set` | (`key`: `string`, `value`: `string`) => `Promise`\<`void`\> |
 
+**get**: (`key`: `string`) => `Promise`\<`string`\>
+
+\-
+
+-----
+
+**set**: (`key`: `string`, `value`: `string`) => `Promise`\<`void`\>
+
+\-
+
+-----
+
 #### Defined in
 
-[types.ts:20](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L20)
+[types.ts:20](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L20)
 
 ___
 
@@ -75,7 +93,7 @@ ___
 
 #### Defined in
 
-[types.ts:71](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L71)
+[types.ts:71](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L71)
 
 ___
 
@@ -93,9 +111,27 @@ A custom block
 | `content` | `string` |
 | `type` | `string` |
 
+**attrs**: `Record`\<`string`, `string` \| ``true``\>
+
+\-
+
+-----
+
+**content**: `string`
+
+\-
+
+-----
+
+**type**: `string`
+
+\-
+
+-----
+
 #### Defined in
 
-[types.ts:109](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L109)
+[types.ts:109](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L109)
 
 ___
 
@@ -121,7 +157,7 @@ CustomBlockCallback function type
 
 #### Defined in
 
-[types.ts:103](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L103)
+[types.ts:103](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L103)
 
 ___
 
@@ -133,14 +169,26 @@ Represents a file content and the extension name.
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `getContentData` | (`asBinary`: `Boolean`) => `Promise`\<[`ContentData`](README.md#contentdata)\> | The content data accessor (request data as text of binary) |
-| `type` | `string` | The content type (file extension name, eg. '.svg' ) |
+| Name | Type |
+| :------ | :------ |
+| `getContentData` | (`asBinary`: `Boolean`) => `Promise`\<[`ContentData`](README.md#contentdata)\> |
+| `type` | `string` |
+
+**getContentData**: (`asBinary`: `Boolean`) => `Promise`\<[`ContentData`](README.md#contentdata)\>
+
+The content data accessor (request data as text of binary)
+
+-----
+
+**type**: `string`
+
+The content type (file extension name, eg. '.svg' )
+
+-----
 
 #### Defined in
 
-[types.ts:77](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L77)
+[types.ts:77](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L77)
 
 ___
 
@@ -165,7 +213,7 @@ ___
 
 #### Defined in
 
-[types.ts:446](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L446)
+[types.ts:446](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L446)
 
 ___
 
@@ -181,9 +229,15 @@ This just represents a loaded js module
 | :------ | :------ |
 | `exports` | [`ModuleExport`](README.md#moduleexport) |
 
+**exports**: [`ModuleExport`](README.md#moduleexport)
+
+\-
+
+-----
+
 #### Defined in
 
-[types.ts:128](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L128)
+[types.ts:128](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L128)
 
 ___
 
@@ -193,7 +247,7 @@ ___
 
 #### Defined in
 
-[types.ts:26](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L26)
+[types.ts:26](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L26)
 
 ___
 
@@ -205,7 +259,7 @@ This just represents a loaded js module exports
 
 #### Defined in
 
-[types.ts:123](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L123)
+[types.ts:123](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L123)
 
 ___
 
@@ -234,7 +288,7 @@ Used by the library when it needs to handle a does not know how to handle a give
 
 #### Defined in
 
-[types.ts:68](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L68)
+[types.ts:68](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L68)
 
 ___
 
@@ -244,31 +298,244 @@ ___
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `additionalBabelParserPlugins?` | `babel_ParserPlugin`[] | Additional babel parser plugins. [TBD] ```javascript ... ... ``` |
-| `additionalBabelPlugins?` | `Record`\<`string`, `any`\> | Additional babel plugins. [TBD] ```javascript ... ... ``` |
-| `compiledCache?` | [`Cache`](README.md#cache) | [[get]]() and [[set]]() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`). Since compilation consume a lot of CPU, is is always a good idea to provide this object. **example:** In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place (usually 5MB). Here we handle space limitation in a very basic way. Maybe (not tested), the following libraries may help you to gain more space [pako](https://github.com/nodeca/pako), [lz-string](https://github.com/pieroxy/lz-string/) ```javascript ... compiledCache: { set(key, str) { // naive storage space management for (;;) { try { // doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage window.localStorage.setItem(key, str); break; } catch(ex) { // here we handle DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota window.localStorage.removeItem(window.localStorage.key(0)); } } }, get(key) { return window.localStorage.getItem(key); }, }, ... ``` |
-| `delimiters?` | [`string`, `string`] | Sets the delimiters used for text interpolation within the template. Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax. ```javascript ... <script> // <!-- const vueContent = ` <template> Hello [[[[ who ]]]] !</template> <script> export default { data() { return { who: 'world' } } } </script> `; // --> const options = { moduleCache: { vue: Vue }, getFile: () => vueContent, addStyle: () => {}, delimiters: ['[[[[', ']]]]'], } const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options))); app.mount(document.body); </script> ... ``` |
-| `devMode?` | `boolean` | Set development mode prevent minification, allow debugger statement, |
-| `getPathname` | (`path`: `string`) => `string` | by default, remove the search string in situation where you need to keep the path intact, use `getPathname: path => path` |
-| `handleModule?` | [`ModuleHandler`](README.md#modulehandler) | Handle additional module types (eg. '.svg', '.json' ). see [[ModuleHandler]] |
-| `isCustomElement` | (`tag`: `string`) => `boolean` \| `undefined` | Specifies a check method to recognize native custom elements. see. https://vuejs.org/api/application.html#app-config-compileroptions-iscustomelement note: this option has no effect on vue2 |
-| `moduleCache` | `Record`\<[`ModuleCacheId`](README.md#modulecacheid), `LoadingType`\<[`ModuleExport`](README.md#moduleexport)\> \| [`ModuleExport`](README.md#moduleexport)\> | Initial cache that will contain resolved dependencies. All new modules go here. `vue` must initially be contained in this object. [[moduleCache]] is mandatory and should be shared between options objects used for you application (note that you can also pass the same options object through multiple loadModule calls) It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...). ​ * The library take the ownership of [[moduleCache]] when [[loadModule]] is called. See also [[options.loadModule]]. **example:** ```javascript ... moduleCache: Object.assign(Object.create(null), { vue: Vue, }), ... ``` |
-| `pathResolve` | [`PathResolve`](README.md#pathresolve) | Abstact path handling *(optional)* |
-| `whitespace?` | ``"preserve"`` \| ``"condense"`` | Whitespace handling strategy see https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler#options |
-| `addStyle` | (`style`: `string`, `scopeId`: `string`) => `void` | Called by the library when CSS style must be added in the HTML document. |
-| `createCJSModule` | (`refPath`: [`AbstractPath`](README.md#abstractpath), `source`: `string`, `options`: [`Options`](README.md#options)) => [`Module`](README.md#module) | creates a CommonJS module from JS source string. *(optional)* |
-| `customBlockHandler?` | (`block`: [`CustomBlock`](README.md#customblock), `filename`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<[`CustomBlockCallback`](README.md#customblockcallback)\> | Called for each custom block. |
-| `getFile` | (`path`: [`AbstractPath`](README.md#abstractpath)) => `Promise`\<[`File`](README.md#file) \| [`ContentData`](README.md#contentdata)\> | Called by the library when it needs a file. |
-| `getResource` | (`pathCx`: [`PathContext`](README.md#pathcontext), `options`: [`Options`](README.md#options)) => [`Resource`](README.md#resource) | Abstact resource handling *(optional)* |
-| `loadModule?` | (`path`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<{}\> | Called when the lib requires a module. Do return `undefined` to let the library handle this. |
-| `log?` | (`type`: `string`, ...`data`: `any`[]) => `void` | Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation tips, style compilation errors, ...) |
-| `processStyles` | (`srcRaw`: `string`, `lang`: `string`, `filename`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<`string`\> |  |
+| Name | Type |
+| :------ | :------ |
+| `additionalBabelParserPlugins?` | `babel_ParserPlugin`[] |
+| `additionalBabelPlugins?` | `Record`\<`string`, `any`\> |
+| `compiledCache?` | [`Cache`](README.md#cache) |
+| `delimiters?` | [`string`, `string`] |
+| `devMode?` | `boolean` |
+| `getPathname` | (`path`: `string`) => `string` |
+| `handleModule?` | [`ModuleHandler`](README.md#modulehandler) |
+| `isCustomElement` | (`tag`: `string`) => `boolean` \| `undefined` |
+| `moduleCache` | `Record`\<[`ModuleCacheId`](README.md#modulecacheid), `LoadingType`\<[`ModuleExport`](README.md#moduleexport)\> \| [`ModuleExport`](README.md#moduleexport)\> |
+| `pathResolve` | [`PathResolve`](README.md#pathresolve) |
+| `whitespace?` | ``"preserve"`` \| ``"condense"`` |
+| `addStyle` | (`style`: `string`, `scopeId`: `string`) => `void` |
+| `createCJSModule` | (`refPath`: [`AbstractPath`](README.md#abstractpath), `source`: `string`, `options`: [`Options`](README.md#options)) => [`Module`](README.md#module) |
+| `customBlockHandler?` | (`block`: [`CustomBlock`](README.md#customblock), `filename`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<[`CustomBlockCallback`](README.md#customblockcallback)\> |
+| `getFile` | (`path`: [`AbstractPath`](README.md#abstractpath)) => `Promise`\<[`File`](README.md#file) \| [`ContentData`](README.md#contentdata)\> |
+| `getResource` | (`pathCx`: [`PathContext`](README.md#pathcontext), `options`: [`Options`](README.md#options)) => [`Resource`](README.md#resource) |
+| `loadModule?` | (`path`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<{}\> |
+| `log?` | (`type`: `string`, ...`data`: `any`[]) => `void` |
+| `processStyles` | (`srcRaw`: `string`, `lang`: `string`, `filename`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<`string`\> |
+
+**additionalBabelParserPlugins?**: `babel_ParserPlugin`[]
+
+Additional babel parser plugins. [TBD]
+
+	```javascript
+		...
+		...
+	```
+
+-----
+
+**additionalBabelPlugins?**: `Record`\<`string`, `any`\>
+
+Additional babel plugins. [TBD]
+
+	```javascript
+		...
+		...
+	```
+
+-----
+
+**compiledCache?**: [`Cache`](README.md#cache)
+
+[[get]]() and [[set]]() functions of this object are called when the lib needs to save or load already compiled code. get and set functions must return a `Promise` (or can be `async`).
+Since compilation consume a lot of CPU, is is always a good idea to provide this object.
+
+**example:**
+
+In the following example, we cache the compiled code in the browser's local storage. Note that local storage is a limited place (usually 5MB).
+Here we handle space limitation in a very basic way.
+Maybe (not tested), the following libraries may help you to gain more space [pako](https://github.com/nodeca/pako), [lz-string](https://github.com/pieroxy/lz-string/)
+```javascript
+	...
+	compiledCache: {
+		set(key, str) {
+	
+			// naive storage space management
+			for (;;) {
+	
+				try {
+	
+					// doc: https://developer.mozilla.org/en-US/docs/Web/API/Storage
+					window.localStorage.setItem(key, str);
+					break;
+				} catch(ex) {
+					// here we handle DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'XXX' exceeded the quota
+	
+					window.localStorage.removeItem(window.localStorage.key(0));
+				}
+			}
+		},
+		get(key) {
+	
+			return window.localStorage.getItem(key);
+		},
+	},
+	...
+```
+
+-----
+
+**delimiters?**: [`string`, `string`]
+
+Sets the delimiters used for text interpolation within the template.  
+Typically this is used to avoid conflicting with server-side frameworks that also use mustache syntax.
+
+	```javascript
+		...
+		<script>
+	
+			// <!--
+			const vueContent = `
+				<template> Hello [[[[ who ]]]] !</template>
+				<script>
+				export default {
+					data() {
+						return {
+							who: 'world'
+						}
+					}
+				}
+				</script>
+			`;
+			// -->
+	
+			const options = {
+				moduleCache: { vue: Vue },
+				getFile: () => vueContent,
+				addStyle: () => {},
+				delimiters: ['[[[[', ']]]]'],
+			}
+	
+			const app = Vue.createApp(Vue.defineAsyncComponent(() => window['vue3-sfc-loader'].loadModule('file.vue', options)));
+			app.mount(document.body);
+	
+		</script>
+		...
+	```
+
+-----
+
+**devMode?**: `boolean`
+
+Set development mode
+prevent minification, allow debugger statement,
+
+-----
+
+**getPathname**: (`path`: `string`) => `string`
+
+by default, remove the search string
+in situation where you need to keep the path intact, use `getPathname: path => path`
+
+-----
+
+**handleModule?**: [`ModuleHandler`](README.md#modulehandler)
+
+Handle additional module types (eg. '.svg', '.json' ). see [[ModuleHandler]]
+
+-----
+
+**isCustomElement**: (`tag`: `string`) => `boolean` \| `undefined`
+
+Specifies a check method to recognize native custom elements.
+
+see. https://vuejs.org/api/application.html#app-config-compileroptions-iscustomelement
+note: this option has no effect on vue2
+
+-----
+
+**moduleCache**: `Record`\<[`ModuleCacheId`](README.md#modulecacheid), `LoadingType`\<[`ModuleExport`](README.md#moduleexport)\> \| [`ModuleExport`](README.md#moduleexport)\>
+
+Initial cache that will contain resolved dependencies. All new modules go here.
+`vue` must initially be contained in this object.
+[[moduleCache]] is mandatory and should be shared between options objects used for you application (note that you can also pass the same options object through multiple loadModule calls)
+It is recommended to provide a prototype-less object (`Object.create(null)`) to avoid potential conflict with `Object` properties (constructor, __proto__, hasOwnProperty, ...).
+​ * The library take the ownership of [[moduleCache]] when [[loadModule]] is called.
+See also [[options.loadModule]].
+
+**example:**
+```javascript
+	...
+	moduleCache: Object.assign(Object.create(null), {
+		vue: Vue,
+	}),
+	...
+```
+
+-----
+
+**pathResolve**: [`PathResolve`](README.md#pathresolve)
+
+Abstact path handling
+*(optional)*
+
+-----
+
+**whitespace?**: ``"preserve"`` \| ``"condense"``
+
+Whitespace handling strategy
+	 see https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler#options
+
+-----
+
+**addStyle**: (`style`: `string`, `scopeId`: `string`) => `void`
+
+Called by the library when CSS style must be added in the HTML document.
+
+-----
+
+**createCJSModule**: (`refPath`: [`AbstractPath`](README.md#abstractpath), `source`: `string`, `options`: [`Options`](README.md#options)) => [`Module`](README.md#module)
+
+creates a CommonJS module from JS source string.
+*(optional)*
+
+-----
+
+**customBlockHandler?**: (`block`: [`CustomBlock`](README.md#customblock), `filename`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<[`CustomBlockCallback`](README.md#customblockcallback)\>
+
+Called for each custom block.
+
+-----
+
+**getFile**: (`path`: [`AbstractPath`](README.md#abstractpath)) => `Promise`\<[`File`](README.md#file) \| [`ContentData`](README.md#contentdata)\>
+
+Called by the library when it needs a file.
+
+-----
+
+**getResource**: (`pathCx`: [`PathContext`](README.md#pathcontext), `options`: [`Options`](README.md#options)) => [`Resource`](README.md#resource)
+
+Abstact resource handling
+*(optional)*
+
+-----
+
+**loadModule?**: (`path`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<{}\>
+
+Called when the lib requires a module. Do return `undefined` to let the library handle this.
+
+-----
+
+**log?**: (`type`: `string`, ...`data`: `any`[]) => `void`
+
+Called by the library when there is somthing to log (eg. scripts compilation errors, template compilation errors, template compilation  tips, style compilation errors, ...)
+
+-----
+
+**processStyles**: (`srcRaw`: `string`, `lang`: `string`, `filename`: [`AbstractPath`](README.md#abstractpath), `options`: [`Options`](README.md#options)) => `Promise`\<`string`\>
+
+-----
 
 #### Defined in
 
-[types.ts:139](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L139)
+[types.ts:139](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L139)
 
 ___
 
@@ -281,14 +548,28 @@ Note that relPath is not necessary relative, but when it is, relPath is relative
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `refPath` | [`AbstractPath`](README.md#abstractpath) \| `undefined` | reference path |
-| `relPath` | [`AbstractPath`](README.md#abstractpath) | relative to **`Ref Path`** |
+| Name | Type |
+| :------ | :------ |
+| `refPath` | [`AbstractPath`](README.md#abstractpath) \| `undefined` |
+| `relPath` | [`AbstractPath`](README.md#abstractpath) |
+
+**refPath**: [`AbstractPath`](README.md#abstractpath) \| `undefined`
+
+reference path
+
+-----
+
+**relPath**: [`AbstractPath`](README.md#abstractpath)
+
+relative to
+
+**`Ref Path`**
+
+-----
 
 #### Defined in
 
-[types.ts:41](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L41)
+[types.ts:41](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L41)
 
 ___
 
@@ -315,7 +596,7 @@ relative to absolute module path resolution
 
 #### Defined in
 
-[types.ts:50](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L50)
+[types.ts:50](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L50)
 
 ___
 
@@ -327,15 +608,34 @@ Represents a resource.
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `getContent` | () => `Promise`\<[`File`](README.md#file)\> | asynchronously get the content of the resource. Once you got the content, you can asynchronously get the data through the getContentData(asBinary) method. |
-| `id` | [`ModuleCacheId`](README.md#modulecacheid) | 'abstract' unique id of the resource. This id is used as the key of the [[Options.moduleCache]] |
-| `path` | [`AbstractPath`](README.md#abstractpath) | file path of the resource |
+| Name | Type |
+| :------ | :------ |
+| `getContent` | () => `Promise`\<[`File`](README.md#file)\> |
+| `id` | [`ModuleCacheId`](README.md#modulecacheid) |
+| `path` | [`AbstractPath`](README.md#abstractpath) |
+
+**getContent**: () => `Promise`\<[`File`](README.md#file)\>
+
+asynchronously get the content of the resource. Once you got the content, you can asynchronously get the data through the getContentData(asBinary) method.
+
+-----
+
+**id**: [`ModuleCacheId`](README.md#modulecacheid)
+
+'abstract' unique id of the resource.
+This id is used as the key of the [[Options.moduleCache]]
+
+-----
+
+**path**: [`AbstractPath`](README.md#abstractpath)
+
+file path of the resource
+
+-----
 
 #### Defined in
 
-[types.ts:88](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/types.ts#L88)
+[types.ts:88](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/types.ts#L88)
 
 ## Variables
 
@@ -347,7 +647,7 @@ the version of the library (process.env.VERSION is set by webpack, at compile-ti
 
 #### Defined in
 
-[index.ts:26](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/index.ts#L26)
+[index.ts:26](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/index.ts#L26)
 
 ___
 
@@ -359,7 +659,7 @@ the version of Vue that is expected by the library
 
 #### Defined in
 
-[index.ts:32](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/index.ts#L32)
+[index.ts:32](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/index.ts#L32)
 
 ## Functions
 
@@ -383,9 +683,15 @@ Convert a function to template processor interface (consolidate)
 | :------ | :------ |
 | `render` | (`source`: `string`, `preprocessOptions`: `string`, `cb`: (`_err`: `any`, `_res`: `any`) => `void`) => `void` |
 
+**render**: (`source`: `string`, `preprocessOptions`: `string`, `cb`: (`_err`: `any`, `_res`: `any`) => `void`) => `void`
+
+\-
+
+-----
+
 #### Defined in
 
-[index.ts:213](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/index.ts#L213)
+[index.ts:213](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/index.ts#L213)
 
 ___
 
@@ -443,4 +749,4 @@ A Promise of the component
 
 #### Defined in
 
-[index.ts:171](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/d633c5e/src/index.ts#L171)
+[index.ts:171](https://github.com/FranckFreiburger/vue3-sfc-loader/blob/212cf65/src/index.ts#L171)
