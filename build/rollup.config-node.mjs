@@ -10,7 +10,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url))
 import pkg from '../package.json' assert { type: 'json' };
 
 
-const genSourcemap = false;
+const genSourcemap = "inline";
 
 async function configFactory({ name, vueTarget, libraryTargetModule }) {
 

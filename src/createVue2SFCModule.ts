@@ -50,7 +50,7 @@ import { version, vueVersion } from './index'
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));
 
-const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
+const genSourcemap : boolean | "inline" = process.env.GEN_SOURCEMAP;
 
 /**
  * @internal
@@ -88,7 +88,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	const descriptor = sfc_parse({
 		source,
 		filename: strFilename,
-		needMap: genSourcemap,
+		needMap: !!genSourcemap,
 		compiler: vueTemplateCompiler as VueTemplateCompiler}
 		);
 

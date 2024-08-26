@@ -88,7 +88,7 @@ const configure = ({name, vueTarget, libraryTargetModule}) => async (env = {}, {
 		}
 	}));
 
-	const genSourcemap = false;
+	const genSourcemap = "inline";
 
 	let actualTargetsBrowsers = targetsBrowsers;
 

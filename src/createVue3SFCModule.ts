@@ -44,18 +44,22 @@ type PreprocessLang = SFCAsyncStyleCompileOptions['preprocessLang'];
  * the version of the library
  */
 import { version, vueVersion } from './index'
+import { RawSourceMap } from '@vue/component-compiler-utils/dist/types'
 
 // @ts-ignore
 const targetBrowserBabelPluginsHash : string = hash(...Object.keys({ ...(typeof ___targetBrowserBabelPlugins !== 'undefined' ? ___targetBrowserBabelPlugins : {}) }));
 
-const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
+const genSourcemap : boolean | "inline" = process.env.GEN_SOURCEMAP;
 
 /**
  * @internal
  */
 const isProd : boolean = process.env.NODE_ENV === 'production';
 
-
+/**
+ * @internal
+ */
+const buildMapComment = (map : RawSourceMap) => `//# sourceMappingURL=data:application/json;charset=utf-8;base64,${btoa(JSON.stringify(map))}`
 
 /**
  * @internal
@@ -87,7 +91,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 	// vue-loader next: https://github.com/vuejs/vue-loader/blob/next/src/index.ts#L91
 	const { descriptor, errors } = sfc_parse(source, {
 		filename: strFilename,
-		sourceMap: genSourcemap,
+		sourceMap: !!genSourcemap,
 	});
 
 
@@ -111,13 +115,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const compileTemplateOptions : SFCTemplateCompileOptions|undefined = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
+		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: !!genSourcemap }) },
 		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
 		filename: descriptor.filename,
 		isProd,
 		scoped: hasScoped,
 		id: scopeId,
 		slotted: descriptor.slotted,
+		inMap: descriptor.template.map,
 		compilerOptions: {
 			isCustomElement,
 			whitespace,
@@ -170,7 +175,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			// src: https://github.com/vuejs/vue-next/blob/15baaf14f025f6b1d46174c9713a2ec517741d0d/packages/compiler-sfc/src/compileScript.ts#L43
 			const scriptBlock = sfc_compileScript(descriptor, {
 				isProd,
-				sourceMap: genSourcemap,
+				sourceMap: !!genSourcemap,
 				id: scopeId,
 				// @ts-ignore (unstable resolution: node_modules/@babel/parser/typings/babel-parser vs node_modules/@types/babel__core/node_modules/@babel/parser/typings/babel-parser)
 				babelParserPlugins: [ ...contextBabelParserPlugins, ...additionalBabelParserPlugins ], //  [...babelParserDefaultPlugins, 'jsx'] + additionalBabelParserPlugins // babelParserDefaultPlugins = [ 'bigInt', 'optionalChaining', 'nullishCoalescingOperator' ]
@@ -180,6 +185,9 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 				templateOptions: compileTemplateOptions,
 			});
 
+			if(scriptBlock.map)
+				scriptBlock.content += `\r\n${buildMapComment(scriptBlock.map)}`
+			
 			// note:
 			//   scriptBlock.content is the script code after vue transformations
 			//   scriptBlock.scriptAst is the script AST before vue transformations
@@ -192,7 +200,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			compileTemplateOptions.compilerOptions.bindingMetadata = bindingMetadata;
 
 		await loadDeps(filename, depsList, options);
-		Object.assign(component, interopRequireDefault(createCJSModule(filename, transformedScriptSource, options).exports).default);
+		Object.assign(component, interopRequireDefault((await createCJSModule(filename, transformedScriptSource, options)).exports).default);
 	}
 
 
@@ -237,11 +245,14 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 			for ( const err of template.tips )
 				log?.('info', 'SFC template', err);
 
+			if(template.map)
+				template.code += `\r\n${buildMapComment(template.map)}`
+
 			return await transformJSCode(template.code, true, descriptor.filename, additionalBabelParserPlugins, additionalBabelPlugins, log, devMode);
 		});
 
 		await loadDeps(filename, templateDepsList, options);
-		Object.assign(component, createCJSModule(filename, templateTransformedSource, options).exports);
+		Object.assign(component, (await createCJSModule(filename, templateTransformedSource, options)).exports);
 	}
 
 
