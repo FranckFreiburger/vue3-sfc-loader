@@ -44,7 +44,7 @@ import { createSFCModule } from './createSFCModule'
 /**
  * @internal
  */
-const genSourcemap : boolean = !!process.env.GEN_SOURCEMAP;
+const genSourcemap : boolean | "inline" = process.env.GEN_SOURCEMAP;
 
 const version : string = process.env.VERSION as string;
 
@@ -120,7 +120,7 @@ export async function withCache( cacheInstance : Cache|undefined, key : any[], v
 
 	const hashedKey = hash(...key);
 	const valueStr = await cacheInstance.get(hashedKey);
-	if ( valueStr !== undefined )
+	if ( typeof valueStr === 'string' )
 		return JSON.parse(valueStr);
 
 	const value = await valueFactory(api);
@@ -253,7 +253,7 @@ export async function transformJSCode(source : string, moduleSourceType : boolea
 		comments: devMode,
 		retainLines: devMode,
 		//envName: devMode ? 'development' : 'production', see 'process.env.BABEL_ENV': JSON.stringify(mode),
-
+		filename: filename.toString(),
 		//minified,
 		sourceType: moduleSourceType ? 'module' : 'script',
 	});
@@ -324,7 +324,7 @@ export async function loadModuleInternal(pathCx : PathContext, options : Options
  * Create a cjs module
  * @internal
  */
-export function defaultCreateCJSModule(refPath : AbstractPath, source : string, options : Options) : Module {
+export async function defaultCreateCJSModule(refPath : AbstractPath, source : string, options : Options) : Promise<Module> {
 
 	const { moduleCache, pathResolve, getResource } = options;
 
@@ -348,8 +348,31 @@ export function defaultCreateCJSModule(refPath : AbstractPath, source : string, 
 
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L195-L198
 	// see https://github.com/nodejs/node/blob/a46b21f556a83e43965897088778ddc7d46019ae/lib/internal/modules/cjs/loader.js#L1102
-	const moduleFunction = Function('exports', 'require', 'module', '__filename', '__dirname', '__vsfcl_import__', source);
-	moduleFunction.call(module.exports, module.exports, require, module, refPath, pathResolve({ refPath, relPath: '.' }, options), importFunction);
+	const wrappedSource = `(exports, require, module, __filename, __dirname, __vsfcl_import__) => { ${source} \r\n }`
+
+	let ast = babel_parse(wrappedSource, {
+		sourceType: 'module',
+		sourceFilename: refPath.toString(),
+	});
+
+	const transformedScript = await babel_transformFromAstAsync(ast, wrappedSource, {
+		sourceMaps: "inline",
+		babelrc: false,
+		configFile: false,
+		highlightCode: false,
+		filename: refPath.toString(),
+		sourceType: 'module',
+	});
+
+	if ( transformedScript === null || transformedScript.code == null ) { // == null or undefined
+
+		const msg = `unable to transform script "${refPath.toString()}"`;
+		options.log?.('error', msg);
+		throw new Error(msg)
+	}
+
+
+	eval(transformedScript.code)(module.exports, require, module, refPath, pathResolve({ refPath, relPath: '.' }, options), importFunction)
 
 	return module;
 }
@@ -379,7 +402,7 @@ export async function createJSModule(source : string, moduleSourceType : boolean
 	});
 
 	await loadDeps(filename, depsList, options);
-	return createCJSModule(filename, transformedSource, options).exports;
+	return (await createCJSModule(filename, transformedSource, options)).exports;
 }
 
 
