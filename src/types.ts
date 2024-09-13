@@ -325,7 +325,7 @@ export type Options = {
  *		},
  *		get(key) {
  *	
- *			return window.localStorage.getItem(key);
+ *			return window.localStorage.getItem(key) ?? undefined;
  *		},
  *	},
  *	...

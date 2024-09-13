@@ -221,7 +221,7 @@ In the following examples, for convenience, we just returns static content as fi
         },
         get(key) {
 
-          return window.localStorage.getItem(key);
+          return window.localStorage.getItem(key) ?? undefined;
         },
       },
 

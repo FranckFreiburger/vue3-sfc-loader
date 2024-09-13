@@ -374,7 +374,7 @@ Maybe (not tested), the following libraries may help you to gain more space [pak
 		},
 		get(key) {
 	
-			return window.localStorage.getItem(key);
+			return window.localStorage.getItem(key) ?? undefined;
 		},
 	},
 	...
