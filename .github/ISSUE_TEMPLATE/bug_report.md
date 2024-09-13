@@ -11,6 +11,7 @@ assignees: ''
   - Use English language !
   - If you have a question or need assistance, use  https://github.com/FranckFreiburger/vue3-sfc-loader/discussions?discussions_q=category%3AQ%26A  instead.
   - https://jsfiddle.net/h2ft9cqd/  can help you create your test case.
+  - before submitting the problem, try it without using wue3-scf-loader: https://play.vuejs.org/
 -->
 
 
