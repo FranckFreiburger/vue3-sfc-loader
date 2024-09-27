@@ -111,7 +111,7 @@ export async function createSFCModule(source : string, filename : AbstractPath, 
 
 	const compileTemplateOptions : SFCTemplateCompileOptions|undefined = descriptor.template ? {
 		// hack, since sourceMap is not configurable an we want to get rid of source-map dependency. see genSourcemap
-		compiler: { ...vue_CompilerDOM, compile: (template, options) => vue_CompilerDOM.compile(template, { ...options, sourceMap: genSourcemap }) },
+		compiler: { ...vue_CompilerDOM, compile: (template, opts) => vue_CompilerDOM.compile(template, { ...opts, sourceMap: genSourcemap }) },
 		source: descriptor.template.src ? (await (await getResource({ refPath: filename, relPath: descriptor.template.src }, options).getContent()).getContentData(false)) as string : descriptor.template.content,
 		filename: descriptor.filename,
 		isProd,
