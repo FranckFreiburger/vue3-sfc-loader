@@ -377,7 +377,7 @@ export type Options = {
  * creates a CommonJS module from JS source string.
  * *(optional)* 
  */
-	createCJSModule(refPath : AbstractPath, source : string, options : Options) : Module,
+	createCJSModule(refPath : AbstractPath, source : string, options : Options) : Promise<Module>,
 
 
 
