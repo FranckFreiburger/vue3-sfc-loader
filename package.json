@@ -28,9 +28,11 @@
   "exports": {
     ".": {
       "node": {
+        "types": "./dist/types/vue3-esm/index.d.ts",
         "import": "./dist/vue3-sfc-loader-node.mjs",
         "require": "./dist/vue3-sfc-loader-node.js"
       },
+      "types": "./dist/types/vue3-esm/index.d.ts",
       "import": "./dist/vue3-sfc-loader.esm.js",
       "require": "./dist/vue3-sfc-loader.js"
     },
